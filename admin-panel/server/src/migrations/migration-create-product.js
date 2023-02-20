@@ -22,10 +22,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       catId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       supplierId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       description: {
         type: Sequelize.TEXT,

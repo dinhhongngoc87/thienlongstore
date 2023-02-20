@@ -14,10 +14,10 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       userId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       productId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       totalProduct: {
         type: Sequelize.INTEGER,

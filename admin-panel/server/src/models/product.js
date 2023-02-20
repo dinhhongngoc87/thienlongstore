@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   Product.init(
     {
       productName: DataTypes.STRING,
-      catId: DataTypes.STRING,
-      supplierId: DataTypes.STRING,
+      catId: DataTypes.INTEGER,
+      supplierId: DataTypes.INTEGER,
       description: DataTypes.TEXT,
       images: DataTypes.STRING,
       color: DataTypes.STRING,
