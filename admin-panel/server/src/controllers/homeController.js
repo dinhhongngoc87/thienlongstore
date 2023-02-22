@@ -50,7 +50,6 @@ let putCRUD = async (req, res) => {
 //delete user by id
 let getDeleteCRUD = async (req, res) => {
   let userId = req.query.id;
-  console.log("User id ==========================>", req);
   if (userId) {
     await CRUDServices.deleteUserById(userId);
     return res.send("Delete successfully");
