@@ -20,6 +20,21 @@ let getAllProduct = () => {
     }
   });
 };
+let getProductById = (productId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (productId) {
+        let productInfo = await db.Product.findOne({
+          where: { id: productId },
+        });
+        resolve(productInfo);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   getAllProduct: getAllProduct,
+  getProductById: getProductById,
 };

@@ -15,6 +15,7 @@ let initWebRoutes = (app) => {
 
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-products", productController.handleGetAllProducts);
+  router.get("/api/get-product-byid", productController.handleGetProductById);
 
   return app.use("/", router);
 };

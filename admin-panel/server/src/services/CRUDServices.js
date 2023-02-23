@@ -61,21 +61,21 @@ let getUerInfoById = (userId) => {
 let updateUserData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let user = await db.User.findOne({
-        where: {
-          id: data.id,
+      await db.User.update(
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          phone: data.phone,
         },
-      });
-      if (user) {
-        (user.firstName = data.firstName),
-          (user.lastName = data.lastName),
-          (user.address = data.address),
-          (user.phone = data.phone);
-        await user.save();
-        resolve();
-      } else {
-        reject();
-      }
+        {
+          where: {
+            id: data.id,
+          },
+        }
+      )
+        .then(resolve())
+        .catch(reject());
     } catch (e) {
       console.log(e);
     }
@@ -83,23 +83,29 @@ let updateUserData = (data) => {
 };
 //DELETE user
 let deleteUserById = (userId) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let user = await db.User.findOne({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (user) {
-        await user.destroy();
-      }
-
-      resolve();
-    } catch (e) {
+  return db.User.destroy({ where: { id: userId } }).then((rows) =>
+    Promise.resolve(rows === 1).catch((e) => {
       reject(e);
-    }
-  });
+    })
+  );
+
+  // return new Promise(async (resolve, reject) => {
+  //   try {
+  //     let user = await db.User.findOne({
+  //       where: {
+  //         id: userId,
+  //       },
+  //     });
+
+  //     if (user) {
+  //       await user.destroy();
+  //     }
+
+  //     resolve();
+  //   } catch (e) {
+  //     reject(e);
+  //   }
+  // });
 };
 module.exports = {
   createNewUser: createNewUser,
