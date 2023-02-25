@@ -1,0 +1,16 @@
+.wrapper {
+    margin-top: 50px;
+
+    .container {
+        display: flex;
+        width: var(--default-layout-content-width);
+        
+        ul {
+            padding: 0;
+            li {
+                list-style: none;
+            }
+        }
+    }
+
+}
