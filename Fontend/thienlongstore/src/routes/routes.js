@@ -7,7 +7,7 @@ import MyThuat from '../pages/MyThuat';
 import VanPhongPham from '../pages/VanPhongPham';
 import ButViet from '../pages/ButViet';
 import BoDungCuMyThuat from '../pages/BoDungCuMyThuat/BoDungCuMyThuat';
-import Cart from '../pages/Cart';
+import CartCheckout from '../pages/Cart';
 import ProductDetail from '../pages/ProductDetail';
 import { HeaderOnly } from '../layouts';
 import { Login, SignUp } from '../pages/Auth';
@@ -21,7 +21,7 @@ const publicRoutes = [
     { path: config.routes.dochoi, component: DoChoi },
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.signup, component: SignUp, layout: null },
-    { path: config.routes.cart, component: Cart, layout: HeaderOnly },
+    { path: config.routes.cart, component: CartCheckout, layout: HeaderOnly },
     { path: config.routes.chitietsanpham, component: ProductDetail, layout: HeaderOnly },
     { path: config.routes.bodungcumythuat, component: BoDungCuMyThuat },
     { path: config.routes.search, component: Search, layout: null },

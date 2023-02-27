@@ -11,12 +11,20 @@ let handleGetProductById = async (req, res) => {
   let data = await productService.getProductById(productId);
   res.send(data);
 };
+//UPDATE AND CREATEproduct
 let handlePutProduct = async (req, res) => {
   let data = req.body;
-  console.log("UPDATE INFOR:", data);
-  await productService.updateProductData(data);
-  return res.send("update done");
+  if (data.id) {
+    console.log("UPDATE INFOR:", data);
+    await productService.updateProductData(data);
+    return res.send("update done");
+  } else {
+    let message = await productService.createNewProduct(data);
+    console.log(message);
+    return res.send("create done");
+  }
 };
+//DELETE
 let handleDeleteProduct = async (req, res) => {
   let productId = req.query.id;
   if (productId) {
@@ -26,6 +34,7 @@ let handleDeleteProduct = async (req, res) => {
     return res.send(`Not found user`);
   }
 };
+//FETCH BY ID
 let handleGetProductByCategory = async (req, res) => {
   let catId = req.query.id;
   if (catId) {

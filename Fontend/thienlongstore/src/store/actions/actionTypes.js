@@ -12,6 +12,8 @@ const actionTypes = Object.freeze({
     USER_LOGIN_SUCCESS: 'USER_LOGIN_SUCCESS',
     USER_LOGIN_FAIL: 'USER_LOGIN_FAIL',
     PROCESS_LOGOUT: 'PROCESS_LOGOUT',
+    BUY_PRODUCT: 'buy_product',
+    DELETE_PRODUCT: 'delete_product',
 });
 
 export default actionTypes;

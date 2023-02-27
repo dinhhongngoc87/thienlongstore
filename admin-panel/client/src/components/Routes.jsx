@@ -7,6 +7,7 @@ import Customers from "../pages/Customers";
 import Products from "../pages/Products";
 import DetailUser from "../pages/DetailUser";
 import DetailProduct from "../pages/DetailProduct";
+import CreateUser from "../pages/CreateUser";
 const Routes = () => {
   return (
     <Switch>
@@ -15,6 +16,7 @@ const Routes = () => {
       <Route path="/products" component={Products} />
       <Route path="/detail-user" component={DetailUser} />
       <Route path="/detail-product" component={DetailProduct} />
+      <Route path="/create-user" component={CreateUser} />
     </Switch>
   );
 };

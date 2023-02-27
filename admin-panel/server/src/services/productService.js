@@ -44,6 +44,7 @@ let updateProductData = (data) => {
           catId: data.category,
           supplierId: data.supplier,
           description: data.description,
+          images: data.images,
           price: data.price,
           discount: data.discount,
           quantity: data.quantity,
@@ -82,10 +83,32 @@ let getProductByCategory = (catId) => {
     }
   });
 };
+let createNewProduct = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.Product.create({
+        productName: data.productName,
+        catId: data.category,
+        supplierId: data.supplier,
+        description: data.description,
+        images: data.images,
+        price: data.price ? data.price : "",
+        discount: data.discount,
+        stockId: data.quantity > 0 ? "SK1" : "SK2",
+        quantity: data.quantity,
+      });
+
+      resolve("create product successfully");
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   getAllProduct: getAllProduct,
   getProductById: getProductById,
   updateProductData: updateProductData,
   deleteProductById: deleteProductById,
   getProductByCategory: getProductByCategory,
+  createNewProduct: createNewProduct,
 };

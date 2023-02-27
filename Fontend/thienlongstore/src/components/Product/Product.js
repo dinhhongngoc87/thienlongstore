@@ -2,11 +2,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import className from 'classnames/bind';
 import styles from './Product.module.scss';
 import Image from '../../components/Image';
-import { Link } from 'react-router-dom';
-import config from '../../config';
-import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { byProduct } from '../../store/actions';
 const cx = className.bind(styles);
 function Product(data) {
+    const product_current = data.data;
     const navigate = useNavigate();
     const handleDetail = (e, id) => {
         e.preventDefault();
@@ -19,12 +19,14 @@ function Product(data) {
     // const handleEdit = (id) => {
     //     history.push(`/detail-product?id=${id}`);
     // };
-
+    const hanldReload = (e) => {
+        e.preventDefault();
+    };
     return (
-        <div onClick={(e) => handleDetail(e, data.data.id)} className={cx('col', 'l-2', 'm-4', 'c-1')}>
+        <div className={cx('col', 'l-2', 'm-4', 'c-1')}>
             <div className={cx('product-item')}>
                 <div className={cx('product-thumbnail')}>
-                    <a href="/" className={cx('product-thumbnail-link')}>
+                    <a onClick={(e) => hanldReload(e)} href="/" className={cx('product-thumbnail-link')}>
                         <Image className={cx('product-thumbnail-image')} src={data.data.images} alt="product"></Image>
                     </a>
                 </div>
@@ -38,11 +40,19 @@ function Product(data) {
                             ).toLocaleString()}
                         </div>
                         &nbsp;
-                        <div className={cx('sale')}>{parseFloat(data.data.price).toLocaleString()}</div>
+                        {data.data.discount === 0 ? (
+                            <></>
+                        ) : (
+                            <div className={cx('sale')}>{parseFloat(data.data.price).toLocaleString()}</div>
+                        )}
                     </div>
                     <div className={cx('product-action')}>
-                        <button className={cx('mua', 'btn')}>MUA NHANH</button>
-                        <button className={cx('xem', 'btn')}>XEM NHANH</button>
+                        <button onClick={() => data.buyProduct(product_current)} className={cx('mua', 'btn')}>
+                            MUA NHANH
+                        </button>
+                        <button onClick={(e) => handleDetail(e, data.data.id)} className={cx('xem', 'btn')}>
+                            XEM NHANH
+                        </button>
                     </div>
                 </div>
             </div>
@@ -50,4 +60,19 @@ function Product(data) {
     );
 }
 
-export default Product;
+const mapStateToProps = (state) => {
+    console.log('Đến map state to props đây ', state);
+    return {
+        cart: state.cart.cartAr,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    console.log('Đến dispatch to props nè');
+
+    return {
+        buyProduct: (product_current) => dispatch(byProduct(product_current)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Product);

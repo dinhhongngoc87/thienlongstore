@@ -13,6 +13,8 @@ let createNewUser = async (data) => {
         lastName: data.lastName,
         email: data.email,
         password: hashPasswordFromBcrypt,
+        address: data.address ? data.address : "",
+        phone: data.phone ? data.phone : "",
         roleId: data.roleId,
       });
 

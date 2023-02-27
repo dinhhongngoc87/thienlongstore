@@ -9,7 +9,6 @@ const customerTableHead = [
   "email",
   "phone",
   "address",
-  "avatar",
   "role",
   "action",
 ];
@@ -47,6 +46,9 @@ const Customers = () => {
   const handleEdit = (id) => {
     history.push(`/detail-user?id=${id}`);
   };
+  const handleCreate = () => {
+    history.push(`/create-user`);
+  };
   const handleDelete = (id) => {
     axios
       .get(`/delete-crud`, {
@@ -62,6 +64,13 @@ const Customers = () => {
   return (
     <div>
       <h2 className="page-header">customers</h2>
+      <div class="row">
+        <div className="mb-3">
+          <Button onClick={handleCreate} success large type="sub">
+            Create a new user
+          </Button>
+        </div>
+      </div>
       <div className="row">
         <div className="col-12">
           <div className="card">
@@ -84,7 +93,6 @@ const Customers = () => {
                       <td>{user.email}</td>
                       <td>{user.phone}</td>
                       <td>{user.address}</td>
-                      <td>{user.avatar}</td>
                       <td>{user.roleId === "R1" ? "admin" : "user"}</td>
                       <td>
                         <Button

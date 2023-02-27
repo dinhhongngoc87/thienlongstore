@@ -13,11 +13,14 @@ function DetailProduct() {
   const product_id = params.get("id");
   //   const [state, setState] = useState();
   useEffect(() => {
-    fetch(`/api/get-product-byid?id=${product_id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setState(data);
-      });
+    if (product_id) {
+      fetch(`/api/get-product-byid?id=${product_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setState(data);
+        });
+    }
+
     fetch("/api/get-all-products")
       .then((response) => response.json())
       .then((data) => {
@@ -65,7 +68,7 @@ function DetailProduct() {
             <Form.Label>Product name</Form.Label>
             <Form.Control
               type="text"
-              value={state.productName}
+              value={state.productName ? state.productName : ""}
               name="productName"
               onChange={handleChange}
             />
@@ -79,7 +82,7 @@ function DetailProduct() {
                 <>
                   <option
                     key={category.id}
-                    value={category.id}
+                    value={category.id ? category.id : ""}
                     onChange={changeValueCategory}
                     selected={category.id === state.catId}
                   >
@@ -99,7 +102,7 @@ function DetailProduct() {
               {suppliers.map((supplier) => (
                 <option
                   key={supplier.id}
-                  value={supplier.id}
+                  value={supplier.id ? supplier.id : ""}
                   selected={supplier.id === state.supplierId}
                 >
                   {supplier.supplierName}
@@ -113,7 +116,7 @@ function DetailProduct() {
             <Form.Label>Description</Form.Label>
             <Form.Control
               name="description"
-              value={state.description}
+              value={state.description ? state.description : ""}
               onChange={handleChange}
               as="textarea"
               style={{ height: "150px" }}
@@ -122,13 +125,13 @@ function DetailProduct() {
         </Row>
         <Row>
           <Form.Group as={Col} controlId="formGridImage">
-            {/* <Form.Label>Image</Form.Label>
+            <Form.Label>Image</Form.Label>
             <Form.Control
               name="images"
-              value={state.images}
+              value={state.images ? state.images : ""}
               onChange={handleChange}
-              type="file"
-            /> */}
+              type="text"
+            />
           </Form.Group>
         </Row>
         <Row>
@@ -136,31 +139,33 @@ function DetailProduct() {
             <Form.Label>Price</Form.Label>
             <Form.Control
               name="price"
-              value={state.price}
+              value={state.price ? state.price : ""}
               onChange={handleChange}
               type="number"
             />
             <Form.Label>Discount(%)</Form.Label>
             <Form.Control
               name="discount"
-              value={state.discount}
+              value={state.discount ? state.discount : ""}
               onChange={handleChange}
               type="number"
             />
           </Form.Group>
         </Row>
+        {/* {product_id ? (<></>):(<>
+        </>)} */}
         <Row>
           <Form.Group as={Col} controlId="formGridQuantity">
             <Form.Label>Quantity</Form.Label>
             <Form.Control
               name="quantity"
-              value={state.quantity}
+              value={state.quantity ? state.quantity : ""}
               onChange={handleChange}
               type="number"
             />
           </Form.Group>
         </Row>
-        <input value={state.id} name="id" type="text" hidden />
+        <input value={state.id ? state.id : ""} name="id" type="text" hidden />
         <Button variant="primary" type="submit">
           Submit
         </Button>

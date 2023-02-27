@@ -6,9 +6,8 @@ import Product from '../../components/Product';
 import Slick from '../../components/Slick';
 import Button from '../../components/Button';
 import { OpenCartIcon } from '../../components/Icons';
-
-import axios from 'axios';
-
+import { connect } from 'react-redux';
+import { byProduct } from '../../store/actions';
 const cx = classNames.bind(styles);
 function ProductDetail(props) {
     const [productInfo, setProductInfo] = useState({});
@@ -21,6 +20,7 @@ function ProductDetail(props) {
     const [productId, setProductId] = useState(prodId);
     const [relateProducts, setRelateProduct] = useState([]);
     const sliderImages = [productInfo.images];
+    const product_current = productInfo;
     useEffect(() => {
         fetch(`/api/get-product-byid?id=${productId}`)
             .then((response) => response.json())
@@ -33,8 +33,6 @@ function ProductDetail(props) {
                 fetch(`/api/get-products-bycategory?id=${data.catId}`)
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log('SAME PRODUCTS ');
-                        console.log(data);
                         setRelateProduct(data);
                     });
             });
@@ -99,13 +97,21 @@ function ProductDetail(props) {
                                     ).toLocaleString()}
                                     ₫
                                 </div>
-                                <div className={cx('sale')}>{parseFloat(productInfo.price).toLocaleString()}</div>
+                                {productInfo.discount === 0 ? (
+                                    <></>
+                                ) : (
+                                    <div className={cx('sale')}>{parseFloat(productInfo.price).toLocaleString()}</div>
+                                )}
                             </div>
-                            <div className={cx('discount')}>
-                                <span>
-                                    Tiết kiệm<strong>{productInfo.discount}%</strong>
-                                </span>
-                            </div>
+                            {productInfo.discount === 0 ? (
+                                <></>
+                            ) : (
+                                <div className={cx('discount')}>
+                                    <span>
+                                        Tiết kiệm<strong>{productInfo.discount}%</strong>
+                                    </span>
+                                </div>
+                            )}
                         </div>
                         <div className={cx('quantity')}>
                             <span>
@@ -115,7 +121,15 @@ function ProductDetail(props) {
                             </span>
                         </div>
                         <div className={cx('action')}>
-                            <Button primary className={cx('themvaogio')} leftIcon={<OpenCartIcon />}>
+                            <Button
+                                onClick={() => {
+                                    console.log('PROPS=================>', props);
+                                    props.byProduct(product_current);
+                                }}
+                                primary
+                                className={cx('themvaogio')}
+                                leftIcon={<OpenCartIcon />}
+                            >
                                 Thêm vào giỏ
                             </Button>
                             <Button outline className={cx('muangay')}>
@@ -188,4 +202,16 @@ function ProductDetail(props) {
     );
 }
 
-export default ProductDetail;
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart.cartAr,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        buyProduct: (product_current) => dispatch(byProduct(product_current)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
