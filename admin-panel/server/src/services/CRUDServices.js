@@ -7,7 +7,6 @@ let createNewUser = async (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-      console.log("data from service ");
       await db.User.create({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -17,7 +16,6 @@ let createNewUser = async (data) => {
         phone: data.phone ? data.phone : "",
         roleId: data.roleId,
       });
-
       resolve("create user successfully");
     } catch (e) {
       reject(e);
@@ -62,6 +60,7 @@ let getUerInfoById = (userId) => {
 // UPDATE user
 let updateUserData = (data) => {
   return new Promise(async (resolve, reject) => {
+    console.log("SERVEICE ", data);
     try {
       await db.User.update(
         {

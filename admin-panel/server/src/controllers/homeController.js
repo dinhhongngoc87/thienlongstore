@@ -22,10 +22,10 @@ let getCRUD = (req, res) => {
 //create new user
 let postCRUD = async (req, res) => {
   let message = await CRUDServices.createNewUser(req.body);
-  console.log(message);
-  return res.send("post crud from server");
+
+  return res.send("ok");
 };
-//fetch all usera
+//fetch all users
 let displayGetCRUD = async (req, res) => {
   let data = await CRUDServices.getAllUser();
   return res.send(data);

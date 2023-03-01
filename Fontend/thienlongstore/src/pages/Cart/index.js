@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { deleteProduct, byProduct } from '../../store/actions';
+import React, { useEffect, useState } from 'react';
+import { deleteProduct, buyProduct } from '../../store/actions';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import {
     MDBBtn,
     MDBCard,
@@ -18,8 +19,56 @@ import Button from '../../components/Button';
 import './Cart.module.scss';
 
 function CartCheckout(props) {
-    const [propducts, setTotal] = useState(props.cart);
-    console.log(propducts);
+    const [productsId, setProductId] = useState([props.cart]);
+    const completeFormData = new FormData();
+    const [user, setUser] = useState();
+    const [state, setState] = useState({
+        address: '',
+        userName: '',
+        phone: '',
+        products: props.cart.map((p) => ({
+            id: p.id,
+            productName: p.productName,
+            qty: p?.qty || 1,
+        })),
+    });
+    completeFormData.append('products', state.products);
+
+    useEffect(() => {
+        const Currentuser = localStorage.getItem('user');
+        console.log(user);
+        setUser(Currentuser);
+    }, []);
+    console.log('STATE: ', state);
+
+    const handleChange = (e) => {
+        setState({
+            ...state,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handleChangeQty = (e) => {
+        setState({
+            ...state,
+        });
+
+        axios.post(`/post-order-crud`, {
+            address: state.address,
+            userName: state.userName,
+            phone: state.phone,
+            products: state.products,
+        });
+    };
+    const handleClickBuyNow = async (e) => {
+        e.preventDefault();
+        axios.post(`/post-order-crud`, {
+            address: state.address,
+            userName: state.userName,
+            phone: state.phone,
+            products: state.products,
+            email: user,
+        });
+    };
     return (
         <section className="h-100 h-custom">
             <MDBContainer className="h-100 py-5">
@@ -28,6 +77,7 @@ function CartCheckout(props) {
                         <MDBCard className="shopping-cart" style={{ borderRadius: '15px' }}>
                             <MDBCardBody className="text-black">
                                 <MDBRow>
+                                    {/* action="/post-order-crud" */}
                                     <MDBCol lg="7" className="px-5 py-4">
                                         <MDBTypography
                                             tag="h3"
@@ -59,7 +109,7 @@ function CartCheckout(props) {
                                                         style={{ fontSize: '1.6rem' }}
                                                         className="text-primary"
                                                     >
-                                                        {product.name}
+                                                        {product.productName}
                                                     </MDBTypography>
 
                                                     <div className="d-flex align-items-center">
@@ -72,13 +122,24 @@ function CartCheckout(props) {
                                                             <input
                                                                 className="quantity fw-bold text-black"
                                                                 min={0}
-                                                                defaultValue={product.qty}
+                                                                defaultValue={product?.qty || 1}
+                                                                onChange={handleChangeQty}
                                                                 type="number"
                                                             />
                                                             <button className="plus"></button>
                                                         </div>
+
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="d-flex align-items-left">
+                                                                <p className="fw-bold mb-0 me-5 pe-3 mb-30">
+                                                                    {product?.totalprice}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <input value={product.id} hidden name="productId" />
                                             </div>
                                         ))}
                                         <hr
@@ -99,7 +160,7 @@ function CartCheckout(props) {
                                             style={{ backgroundColor: '#e1f5fe' }}
                                         >
                                             <MDBTypography tag="h3" className="fw-bold mb-0">
-                                                Total:{props.total}
+                                                Total:{props.totalprice}
                                             </MDBTypography>
                                             <MDBTypography tag="h3" className="fw-bold mb-0"></MDBTypography>
                                         </div>
@@ -116,6 +177,9 @@ function CartCheckout(props) {
                                             <MDBTextArea
                                                 id="textAreaExample"
                                                 placeholder="Địa chỉ nhận hàng"
+                                                name="address"
+                                                value={state.address}
+                                                onChange={handleChange}
                                                 rows={4}
                                                 style={{ marginBottom: '30px', fontSize: '1.6rem' }}
                                             />
@@ -124,18 +188,30 @@ function CartCheckout(props) {
                                                 className="mb-5"
                                                 type="text"
                                                 placeholder="Tên người nhận"
+                                                name="userName"
+                                                value={state.userName}
                                                 style={{ fontSize: '1.6rem' }}
+                                                onChange={handleChange}
                                                 size="lg"
                                             />
                                             <MDBInput
                                                 className="mb-5"
                                                 type="text"
+                                                name="phone"
+                                                value={state.phone}
+                                                onChange={handleChange}
                                                 placeholder="Số điện thoại"
                                                 style={{ fontSize: '1.6rem' }}
                                                 size="lg"
                                             />
 
-                                            <Button primary extraLarge size="lg">
+                                            <Button
+                                                onClick={(e) => handleClickBuyNow(e)}
+                                                primary
+                                                type="submit"
+                                                extraLarge
+                                                size="lg"
+                                            >
                                                 Buy now
                                             </Button>
 
@@ -144,7 +220,7 @@ function CartCheckout(props) {
                                                 className="fw-bold mb-5"
                                                 style={{ position: 'absolute', bottom: '0' }}
                                             >
-                                                <a href="#!">
+                                                <a href="/">
                                                     <MDBIcon style={{ color: '#bbb' }} fas icon="angle-left me-2" />
                                                     Back to shopping
                                                 </a>
@@ -171,6 +247,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         deleteProduct: (product_current) => dispatch(deleteProduct(product_current)),
+        buyProduct: (product_current) => dispatch(buyProduct(product_current)),
     };
 };
 

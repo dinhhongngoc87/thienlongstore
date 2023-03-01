@@ -1,6 +1,6 @@
 import actionTypes from './actionTypes';
 
-export const byProduct = (product) => {
+export const buyProduct = (product) => {
     return {
         type: actionTypes.BUY_PRODUCT,
         payload: product,

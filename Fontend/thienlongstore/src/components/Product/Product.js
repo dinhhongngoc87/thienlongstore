@@ -3,15 +3,15 @@ import className from 'classnames/bind';
 import styles from './Product.module.scss';
 import Image from '../../components/Image';
 import { connect } from 'react-redux';
-import { byProduct } from '../../store/actions';
+import { buyProduct } from '../../store/actions';
 const cx = className.bind(styles);
 function Product(data) {
     const product_current = data.data;
     const navigate = useNavigate();
     const handleDetail = (e, id) => {
-        e.preventDefault();
+        // e.preventDefault();
         navigate(`/sanpham/chitietsanpham?id=${id}`);
-        window.location.reload(true);
+        // window.location.reload(true);
     };
     // useEffect({
 
@@ -61,17 +61,14 @@ function Product(data) {
 }
 
 const mapStateToProps = (state) => {
-    console.log('Đến map state to props đây ', state);
     return {
         cart: state.cart.cartAr,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    console.log('Đến dispatch to props nè');
-
     return {
-        buyProduct: (product_current) => dispatch(byProduct(product_current)),
+        buyProduct: (product_current) => dispatch(buyProduct(product_current)),
     };
 };
 

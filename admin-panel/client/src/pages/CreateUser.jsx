@@ -1,28 +1,50 @@
-import { useLayoutEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-
+import axios from "axios";
 function CreateUser() {
-  const [state, setState] = useState({});
+  const history = useHistory();
+  const [state, setState] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    address: "",
+    phone: "",
+    roleId: "",
+  });
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-
   const handleChange = (e) => {
-    // setState({
-    //   ...state,
-    //   [e.target.name]: e.target.value,
-    // });
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
   };
+  console.log(state);
   const handleSubmit = (e) => {
-    // history.push("/customers");
+    axios
+      .post("/post-crud", {
+        firstName: state.firstName,
+        lastName: state.lastName,
+        email: state.email,
+        password: state.password,
+        address: state.address,
+        phone: state.phone,
+        roleId: state.roleId,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          history.push("/customers");
+        }
+      });
   };
   return (
     <>
-      <Form onSubmit={handleSubmit} action="/post-crud" method="POST">
+      <Form action="/post-crud" method="POST">
         <Row className="mb-3">
           <div className="col-12 mt-3 mb-3">
             <h2>Create new user</h2>
@@ -114,7 +136,7 @@ function CreateUser() {
         </Row>
 
         <input value={state.id} name="id" type="text" hidden />
-        <Button variant="primary" type="submit">
+        <Button onClick={handleSubmit} variant="primary">
           Submit
         </Button>
       </Form>

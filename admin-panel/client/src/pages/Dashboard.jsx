@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import Table from "../components/table/Table";
 import Badge from "../components/badge/Badge";
 
 import statusCards from "../assets/JsonData/status-card-data.json";
+import axios from "axios";
 
 const chartOptions = {
   series: [44, 55, 41, 17, 15],
@@ -61,7 +62,7 @@ const chartOptions = {
 };
 
 const topCustomers = {
-  head: ["user", "total orders", "total spending"],
+  head: ["product", "total orders", "total spending"],
   body: [
     {
       username: "john doe",
@@ -165,7 +166,12 @@ const renderOrderBody = (item, index) => (
 
 const Dashboard = () => {
   const themeReducer = useSelector((state) => state.ThemeReducer.mode);
-
+  const [topProduct, setTopProduct] = useState([]);
+  useEffect(() => {
+    axios.get(`api/top-seller`).then((response) => {
+      console.log(response);
+    });
+  }, []);
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>
@@ -186,7 +192,7 @@ const Dashboard = () => {
         <div className="col-6">
           <div className="card full-height">
             <div className="card__header">
-              <h3>best seller category</h3>
+              <h3>categories</h3>
             </div>
             <div className="card__body">
               <Chart
@@ -211,7 +217,7 @@ const Dashboard = () => {
         <div className="col-4">
           <div className="card">
             <div className="card__header">
-              <h3>top customers</h3>
+              <h3>Best seller</h3>
             </div>
             <div className="card__body">
               <Table

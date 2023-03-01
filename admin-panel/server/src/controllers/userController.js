@@ -11,6 +11,7 @@ let handleLogin = async (req, res) => {
     });
   }
   let userData = await userService.handleUserLogin(email, password);
+  console.log("HandleLoginin server: ", userData);
   //compare password
   //return userInfo
   //access token:JWT

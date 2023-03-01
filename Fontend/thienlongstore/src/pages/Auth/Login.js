@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { handleLoginApi } from '../../services/userService';
 import Button from '../../components/Button';
@@ -8,10 +9,11 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import * as actions from '../../store/actions';
 import { Eye, EyeSlash } from '../../components/Icons';
-
+import { userService } from '../../services';
 const cx = classNames.bind(styles);
 function Login({ toggle }) {
     const userRef = useRef();
+    const navigate = useNavigate();
     // const [success, setSuccess] = useState(false);
     const [state, setState] = useState({
         email: '',
@@ -29,14 +31,12 @@ function Login({ toggle }) {
             ...state,
             email: e.target.value,
         });
-        console.log(state);
     };
     const handleOnchangePassword = (e) => {
         setState({
             ...state,
             password: e.target.value,
         });
-        console.log(state);
     };
     const handleShowHidePassword = () => {
         setState({
@@ -65,7 +65,12 @@ function Login({ toggle }) {
             }
             if (data.data && data.data.errCode === 0) {
                 actions.userLoginSuccess(data.data.user);
-                console.log('Login successful');
+                console.log('EMAIL: ', data.data.user.user.email);
+                if (data.data.user.user.email) {
+                    localStorage.setItem('user', data.data.user.user.email);
+                }
+                alert('Login successful');
+                navigate('/');
             }
         } catch (e) {
             if (e.response) {

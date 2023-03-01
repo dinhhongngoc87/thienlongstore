@@ -11,17 +11,17 @@ let handleGetProductById = async (req, res) => {
   let data = await productService.getProductById(productId);
   res.send(data);
 };
-//UPDATE AND CREATEproduct
+//UPDATE AND CREATE product
 let handlePutProduct = async (req, res) => {
   let data = req.body;
-  if (data.id) {
-    console.log("UPDATE INFOR:", data);
-    await productService.updateProductData(data);
-    return res.send("update done");
-  } else {
+  if (!data.id) {
     let message = await productService.createNewProduct(data);
     console.log(message);
     return res.send("create done");
+  } else {
+    console.log("UPDATE INFOR:", data);
+    await productService.updateProductData(data);
+    return res.send("update done");
   }
 };
 //DELETE

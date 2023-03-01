@@ -8,12 +8,14 @@ import Products from "../pages/Products";
 import DetailUser from "../pages/DetailUser";
 import DetailProduct from "../pages/DetailProduct";
 import CreateUser from "../pages/CreateUser";
+import Orders from "../pages/Orders";
 const Routes = () => {
   return (
     <Switch>
       <Route path="/" exact component={Dashboard} />
       <Route path="/customers" component={Customers} />
       <Route path="/products" component={Products} />
+      <Route path="/orders" component={Orders} />
       <Route path="/detail-user" component={DetailUser} />
       <Route path="/detail-product" component={DetailProduct} />
       <Route path="/create-user" component={CreateUser} />

@@ -14,4 +14,9 @@ export {
     OpenCartIcon,
     EyeSlash,
     Eye,
+    Ruler,
+    Art,
+    Toys,
+    Book,
+    Pen,
 } from './Icons';

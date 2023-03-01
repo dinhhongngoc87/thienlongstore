@@ -1,16 +1,15 @@
 import classNames from 'classnames/bind';
 import Product from '../../components/Product/Product';
-import styles from './VanPhongPham.module.scss';
+import styles from './Sach.module.scss';
 import { useState, useEffect } from 'react';
 
 const cx = classNames.bind(styles);
-function VanPhongPham() {
+function Sach() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
-        fetch(`/api/get-products-bycategory?id=2`)
+        fetch(`/api/get-products-bycategory?id=7`)
             .then((response) => response.json())
             .then((data) => {
-                console.log('CATEGORY: ', data);
                 setProducts(data);
             });
     }, []);
@@ -34,4 +33,4 @@ function VanPhongPham() {
     );
 }
 
-export default VanPhongPham;
+export default Sach;

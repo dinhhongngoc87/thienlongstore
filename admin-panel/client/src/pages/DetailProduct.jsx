@@ -4,8 +4,20 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import axios from "axios";
+
 function DetailProduct() {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    id: "",
+    productName: "",
+    catId: "",
+    supplierId: "",
+    description: "",
+    images: "",
+    price: "",
+    discount: "",
+    quantity: "",
+  });
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const location = useLocation();
@@ -29,14 +41,31 @@ function DetailProduct() {
       });
   }, []);
 
+  const handleSubmit = (e) => {
+    axios
+      .post(`/api/put-product-crud`, {
+        id: state.id,
+        productName: state.productName,
+        catId: state.catId,
+        supplierId: state.supplierId,
+        description: state.description,
+        images: state.images,
+        price: state.price,
+        discount: state.discount,
+        quantity: state.quantity,
+      })
+      .then((response) => {
+        alert("Success");
+      });
+    // history.push("/customers");
+  };
+  console.log(state);
+
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
-  };
-  const handleSubmit = (e) => {
-    // history.push("/customers");
   };
   const changeValueCategory = (e) => {
     setState({
@@ -50,16 +79,13 @@ function DetailProduct() {
       supplierId: e.target.value,
     });
   };
+
   return (
     <>
       {/* <form>
         <input type="text" value={state.productName} />
       </form> */}
-      <Form
-        onSubmit={handleSubmit}
-        action="/api/put-product-crud"
-        method="POST"
-      >
+      <Form>
         <Row className="mb-3">
           <div className="col-12 mt-3 mb-3">
             <h2>Edit product's information</h2>
@@ -77,13 +103,16 @@ function DetailProduct() {
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridCategory">
             <Form.Label>Category</Form.Label>
-            <Form.Select aria-label="Default select example" name="category">
+            <Form.Select
+              aria-label="Default select example"
+              onChange={changeValueCategory}
+              name="category"
+            >
               {categories.map((category) => (
                 <>
                   <option
                     key={category.id}
                     value={category.id ? category.id : ""}
-                    onChange={changeValueCategory}
                     selected={category.id === state.catId}
                   >
                     {category.catName}
@@ -166,7 +195,7 @@ function DetailProduct() {
           </Form.Group>
         </Row>
         <input value={state.id ? state.id : ""} name="id" type="text" hidden />
-        <Button variant="primary" type="submit">
+        <Button onClick={handleSubmit} variant="primary">
           Submit
         </Button>
       </Form>

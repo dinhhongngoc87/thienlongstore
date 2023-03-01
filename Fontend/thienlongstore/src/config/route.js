@@ -5,7 +5,7 @@ const routes = {
     butviet: '/sanpham/butviet',
     mythuat: '/sanpham/mythuat',
     dochoi: '/sanpham/dochoi',
-    bodungcumythuat: '/sanpham/bodungcumythuat',
+    sach: '/sanpham/sach',
     search: '/search',
     live: '/live',
     chitietsanpham: '/sanpham/chitietsanpham',

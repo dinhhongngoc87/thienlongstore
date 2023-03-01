@@ -21,43 +21,20 @@ import { PaperPlaneIcon, Message, CartIcon } from '../../../components/Icons';
 import Search from '../Search';
 import config from '../../../config';
 import { useModal } from '../../../hooks';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 // bind styles trả về một function cho cx
 const cx = classNames.bind(styles);
 
-const MENU_ITEMs = [
-    {
-        icon: <FontAwesomeIcon icon={faEarthAsia} />,
-        title: 'English',
-        children: {
-            title: 'Language',
-            data: [
-                {
-                    code: 'en',
-                    title: 'English',
-                },
-                {
-                    code: 'vi',
-                    title: 'Tiếng việt',
-                },
-            ],
-        },
-    },
-    {
-        icon: <FontAwesomeIcon icon={faCircleQuestion} />,
-        title: 'Feedback and Help',
-        to: '/feedback',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faKeyboard} />,
-        title: 'Keyboard shortcuts',
-    },
-];
-
 function Header() {
-    const currentUser = false;
+    const [currentUser, setCurrentUser] = useState(false);
     const { isShowing, toggle } = useModal();
     console.log('loginOpen: ', isShowing);
+    const deleteStorage = () => {
+        localStorage.setItem('user', '');
+        alert('Delete user ');
+    };
     const userMenu = [
         {
             icon: <FontAwesomeIcon icon={faUser} />,
@@ -67,10 +44,49 @@ function Header() {
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
             title: 'Logout',
+            to: '/login',
             openLogin: isShowing,
+            onClick: deleteStorage,
             separate: true,
         },
     ];
+    const MENU_ITEMs = [
+        {
+            icon: <FontAwesomeIcon icon={faEarthAsia} />,
+            title: 'English',
+            children: {
+                title: 'Language',
+                data: [
+                    {
+                        code: 'en',
+                        title: 'English',
+                    },
+                    {
+                        code: 'vi',
+                        title: 'Tiếng việt',
+                    },
+                ],
+            },
+        },
+        {
+            icon: <FontAwesomeIcon icon={faCircleQuestion} />,
+            title: 'Feedback and Help',
+            to: '/feedback',
+        },
+        {
+            icon: <FontAwesomeIcon icon={faKeyboard} />,
+            title: 'Keyboard shortcuts',
+        },
+    ];
+
+    useEffect(() => {
+        const userEmail = localStorage.getItem('user');
+        if (userEmail) {
+            setCurrentUser(true);
+        } else {
+            setCurrentUser(false);
+        }
+    }, []);
     const handleMenuChange = () => {};
     return (
         <header className={cx('wrapper')}>
@@ -96,7 +112,7 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <div className={cx('contact')}>
+                            <div className={cx('contact')} style={{ marginRight: '30px' }}>
                                 <span>Hỗ trợ khách hàng</span>
                                 <br />
                                 <b>1900 866 819</b>
@@ -116,7 +132,7 @@ function Header() {
                     {currentUser ? (
                         <>
                             <Menu
-                                items={currentUser ? userMenu : MENU_ITEMs}
+                                items={currentUser ? MENU_ITEMs : userMenu}
                                 onChange={handleMenuChange}
                                 onClick={toggle}
                             >
@@ -133,15 +149,15 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <Menu
-                                items={currentUser ? userMenu : MENU_ITEMs}
+                            {/* <Menu
+                                items={currentUser ? MENU_ITEMs : userMenu}
                                 onChange={handleMenuChange}
                                 onClick={toggle}
                             >
                                 <button className={cx('more-btn')}>
                                     <FontAwesomeIcon icon={faEllipsisVertical} />
                                 </button>
-                            </Menu>
+                            </Menu> */}
                             {/* <ModalPopup isShowing={isShowing}> */}
                             {/* <SignUp toggle={toggle}></SignUp> */}
                             {/* <Login toggle={toggle}></Login>
@@ -149,7 +165,7 @@ function Header() {
                         </>
                     )}
 
-                    <Link to="/cart">
+                    <Link style={{ marginLeft: '15px' }} to="/cart">
                         <CartIcon />
                     </Link>
                 </div>

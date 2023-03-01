@@ -6,11 +6,11 @@ import DoChoi from '../pages/DoChoi';
 import MyThuat from '../pages/MyThuat';
 import VanPhongPham from '../pages/VanPhongPham';
 import ButViet from '../pages/ButViet';
-import BoDungCuMyThuat from '../pages/BoDungCuMyThuat/BoDungCuMyThuat';
 import CartCheckout from '../pages/Cart';
 import ProductDetail from '../pages/ProductDetail';
 import { HeaderOnly } from '../layouts';
 import { Login, SignUp } from '../pages/Auth';
+import Sach from '../pages/Sach';
 //public routes
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -23,7 +23,7 @@ const publicRoutes = [
     { path: config.routes.signup, component: SignUp, layout: null },
     { path: config.routes.cart, component: CartCheckout, layout: HeaderOnly },
     { path: config.routes.chitietsanpham, component: ProductDetail, layout: HeaderOnly },
-    { path: config.routes.bodungcumythuat, component: BoDungCuMyThuat },
+    { path: config.routes.sach, component: Sach },
     { path: config.routes.search, component: Search, layout: null },
 ];
 //private routes

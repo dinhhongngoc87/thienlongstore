@@ -7,12 +7,13 @@ import Slick from '../../components/Slick';
 import Button from '../../components/Button';
 import { OpenCartIcon } from '../../components/Icons';
 import { connect } from 'react-redux';
-import { byProduct } from '../../store/actions';
+import { buyProduct } from '../../store/actions';
 const cx = classNames.bind(styles);
 function ProductDetail(props) {
     const [productInfo, setProductInfo] = useState({});
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
+    const [products, setProducts] = useState([]);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const prodId = params.get('id');
@@ -40,6 +41,7 @@ function ProductDetail(props) {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                setProducts(data.products);
                 setCategories(data.categories);
                 setSuppliers(data.suppliers);
             });
@@ -123,8 +125,8 @@ function ProductDetail(props) {
                         <div className={cx('action')}>
                             <Button
                                 onClick={() => {
-                                    console.log('PROPS=================>', props);
-                                    props.byProduct(product_current);
+                                    console.log('PROPS: ', productInfo);
+                                    return productInfo.buyProduct(productInfo);
                                 }}
                                 primary
                                 className={cx('themvaogio')}
@@ -210,7 +212,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        buyProduct: (product_current) => dispatch(byProduct(product_current)),
+        buyProduct: (productInfo) => dispatch(buyProduct(productInfo)),
     };
 };
 

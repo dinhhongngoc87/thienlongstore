@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-
+import axios from "axios";
 const validate = (values) => {
   const errors = {};
   if (!values.firstName) {
@@ -31,10 +31,16 @@ function DetailUser() {
     lastName: "",
     address: "",
     phone: "",
+    id: "",
   });
   let history = useHistory();
   useLayoutEffect(() => {
-    fetch(`/edit-user-crud?id=${user_id}`)
+    fetch(`/edit-user-crud?id=${user_id}`, {
+      firstName: state.firstName,
+      lastName: state.lastName,
+      address: state.address,
+      phone: state.phone,
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -49,10 +55,23 @@ function DetailUser() {
   };
   const handleSubmit = (e) => {
     // history.push("/customers");
+    axios
+      .post("/put-crud", {
+        id: state.id,
+        firstName: state.firstName,
+        lastName: state.lastName,
+        address: state.address,
+        phone: state.phone,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          history.push("/customers");
+        }
+      });
   };
   return (
     <>
-      <Form onSubmit={handleSubmit} action="/put-crud" method="POST">
+      <Form>
         <Row className="mb-3">
           <div className="col-12 mt-3 mb-3">
             <h2>Edit user's information</h2>
@@ -100,7 +119,7 @@ function DetailUser() {
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group>
         <input value={state.id} name="id" type="text" hidden />
-        <Button variant="primary" type="submit">
+        <Button onClick={handleSubmit} variant="primary">
           Submit
         </Button>
       </Form>

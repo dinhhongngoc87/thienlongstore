@@ -41,8 +41,8 @@ let updateProductData = (data) => {
       await db.Product.update(
         {
           productName: data.productName,
-          catId: data.category,
-          supplierId: data.supplier,
+          catId: data.catId,
+          supplierId: data.supplierId,
           description: data.description,
           images: data.images,
           price: data.price,
@@ -59,6 +59,28 @@ let updateProductData = (data) => {
         .catch(reject());
     } catch (e) {
       console.log(e);
+    }
+  });
+};
+
+let createNewProduct = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.Product.create({
+        productName: data.productName,
+        catId: data.catId,
+        supplierId: data.supplierId,
+        description: data.description,
+        images: data.images,
+        price: data.price ? data.price : "",
+        discount: data.discount,
+        stockId: data.quantity > 0 ? "SK1" : "SK2",
+        quantity: data.quantity,
+      });
+
+      resolve("create product successfully");
+    } catch (e) {
+      rs;
     }
   });
 };
@@ -83,27 +105,7 @@ let getProductByCategory = (catId) => {
     }
   });
 };
-let createNewProduct = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await db.Product.create({
-        productName: data.productName,
-        catId: data.category,
-        supplierId: data.supplier,
-        description: data.description,
-        images: data.images,
-        price: data.price ? data.price : "",
-        discount: data.discount,
-        stockId: data.quantity > 0 ? "SK1" : "SK2",
-        quantity: data.quantity,
-      });
 
-      resolve("create product successfully");
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 module.exports = {
   getAllProduct: getAllProduct,
   getProductById: getProductById,
