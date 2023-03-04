@@ -26,7 +26,7 @@ function SignUp({ toggle }) {
                     Đăng ký
                 </Button>
                 <div className={cx('form-footer')}>
-                    Already have an account? &nbsp; <Link to="/login">Log In</Link>
+                    Bạn đã có tài khoản? &nbsp; <Link to="/login">Đăng nhập</Link>
                 </div>
                 <p>Hoặc đăng nhập bằng </p>
                 <Button className={cx('google')} extraLarge>

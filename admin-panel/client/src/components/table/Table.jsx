@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./table.css";
 
@@ -22,6 +22,7 @@ const Table = (props) => {
 
   const [currPage, setCurrPage] = useState(0);
 
+  useEffect(() => {}, []);
   const selectPage = (page) => {
     const start = Number(props.limit) * page;
     const end = start + Number(props.limit);
@@ -46,7 +47,9 @@ const Table = (props) => {
           ) : null}
           {props.bodyData && props.renderBody ? (
             <tbody>
-              {dataShow.map((item, index) => props.renderBody(item, index))}
+              {props.bodyData.map((item, index) =>
+                props.renderBody(item, index)
+              )}
             </tbody>
           ) : null}
         </table>

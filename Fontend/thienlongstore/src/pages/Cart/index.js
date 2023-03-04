@@ -3,7 +3,6 @@ import { deleteProduct, buyProduct } from '../../store/actions';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
-    MDBBtn,
     MDBCard,
     MDBCardBody,
     MDBCardImage,
@@ -83,7 +82,7 @@ function CartCheckout(props) {
                                             tag="h3"
                                             className="mb-5 pt-2 text-center fw-bold text-uppercase"
                                         >
-                                            Your products
+                                            Sản phẩm của bạn
                                         </MDBTypography>
                                         {props.cart.map((product) => (
                                             <div key={product.id} className="d-flex align-items-center mb-5">
@@ -151,11 +150,11 @@ function CartCheckout(props) {
                                             }}
                                         />
 
-                                        <div className="d-flex justify-content-between px-x">
+                                        {/* <div className="d-flex justify-content-between px-x">
                                             <p className="fw-bold">Discount:</p>
                                             <p className="fw-bold"></p>
-                                        </div>
-                                        <div
+                                        </div> */}
+                                        {/* <div
                                             className="d-flex justify-content-between p-2 mb-2"
                                             style={{ backgroundColor: '#e1f5fe' }}
                                         >
@@ -163,14 +162,14 @@ function CartCheckout(props) {
                                                 Total:{props.totalprice}
                                             </MDBTypography>
                                             <MDBTypography tag="h3" className="fw-bold mb-0"></MDBTypography>
-                                        </div>
+                                        </div> */}
                                     </MDBCol>
                                     <MDBCol lg="5" className="px-5 py-4">
                                         <MDBTypography
                                             tag="h3"
                                             className="mb-5 pt-2 text-center fw-bold text-uppercase"
                                         >
-                                            Payment
+                                            Thanh toán
                                         </MDBTypography>
 
                                         <form className="mb-5">
@@ -222,7 +221,7 @@ function CartCheckout(props) {
                                             >
                                                 <a href="/">
                                                     <MDBIcon style={{ color: '#bbb' }} fas icon="angle-left me-2" />
-                                                    Back to shopping
+                                                    Tiếp tục mua
                                                 </a>
                                             </MDBTypography>
                                         </form>

@@ -31,7 +31,8 @@ let initWebRoutes = (app) => {
   router.get("/get-orders-crud", orderController.handleGetOrder);
 
   //DASHBOARD
-  router.get("api/top-seller", dashboardController.getTopSeller);
+  router.get("/api/top-seller", dashboardController.getTopSeller);
+  router.get("/api/top-category", dashboardController.getTopCategory);
   //fetch product's information
 
   return app.use("/", router);

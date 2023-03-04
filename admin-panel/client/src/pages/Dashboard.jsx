@@ -15,93 +15,6 @@ import Badge from "../components/badge/Badge";
 import statusCards from "../assets/JsonData/status-card-data.json";
 import axios from "axios";
 
-const chartOptions = {
-  series: [44, 55, 41, 17, 15],
-  options: {
-    series: [44, 55, 41, 17, 15],
-    options: {
-      chart: {
-        width: 380,
-        type: "donut",
-      },
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      fill: {
-        type: "gradient",
-      },
-      legend: {
-        formatter: function (val, opts) {
-          return val + " - " + opts.w.globals.series[opts.seriesIndex];
-        },
-      },
-      title: {
-        text: "Gradient Donut with custom Start-angle",
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-            legend: {
-              position: "bottom",
-            },
-          },
-        },
-      ],
-    },
-  },
-};
-
-const topCustomers = {
-  head: ["product", "total orders", "total spending"],
-  body: [
-    {
-      username: "john doe",
-      order: "490",
-      price: "$15,870",
-    },
-    {
-      username: "frank iva",
-      order: "250",
-      price: "$12,251",
-    },
-    {
-      username: "anthony baker",
-      order: "120",
-      price: "$10,840",
-    },
-    {
-      username: "frank iva",
-      order: "110",
-      price: "$9,251",
-    },
-    {
-      username: "anthony baker",
-      order: "80",
-      price: "$8,840",
-    },
-  ],
-};
-
-const renderCusomerHead = (item, index) => <th key={index}>{item}</th>;
-
-const renderCusomerBody = (item, index) => (
-  <tr key={index}>
-    <td>{item.username}</td>
-    <td>{item.order}</td>
-    <td>{item.price}</td>
-  </tr>
-);
-
 const latestOrders = {
   header: ["order id", "user", "total price", "date", "status"],
   body: [
@@ -165,13 +78,137 @@ const renderOrderBody = (item, index) => (
 );
 
 const Dashboard = () => {
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [topcategories, setTopCategories] = useState({
+    categoryId: [],
+    categoryName: [],
+    value: [],
+  });
   const themeReducer = useSelector((state) => state.ThemeReducer.mode);
-  const [topProduct, setTopProduct] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [topProducts, setTopProduct] = useState({
+    head: ["product", "total orders", "total spending"],
+    body: [{}],
+  });
   useEffect(() => {
-    axios.get(`api/top-seller`).then((response) => {
-      console.log(response);
-    });
+    fetch("/api/get-all-products")
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("PRODUCTS: ", data);
+        setProducts(data.products);
+        setCategories(data.categories);
+        setSuppliers(data.suppliers);
+      })
+      .then(() => {
+        // console.log(categories);
+      });
+
+    fetch(`/api/top-seller`)
+      .then((response) => response.json())
+      .then((data) => {
+        setTopProduct({
+          ...topProducts,
+          body: [...data],
+        });
+      });
   }, []);
+  useEffect(() => {
+    fetch(`/api/top-category`)
+      .then((response) => response.json())
+      .then((data) => {
+        let catName = [];
+        data.find((item) => {
+          categories.find((category) => {
+            if (category.id === item.catId) {
+              catName.push(category.catName);
+              return catName;
+            }
+          });
+        });
+        let catId = data.map((item) => item.catId);
+        let catValue = data.map((item) => item.totalProductOfCategory);
+
+        return { catName, catId, catValue };
+      })
+      .then((data) => {
+        console.log(data);
+        setTopCategories({
+          categoryId: data.catId,
+          categoryName: data.catName,
+          value: data.catValue,
+        });
+      })
+      .then(() => {
+        console.log("CATEGORY STATE: ", topcategories);
+      });
+  }, []);
+  const chartOptions = {
+    series: [...topcategories.value], //total product of category
+    options: {
+      series: [...topcategories.value],
+      labels: [...topcategories.categoryName],
+      options: {
+        chart: {
+          width: 380,
+          type: "donut",
+        },
+        plotOptions: {
+          pie: {
+            startAngle: -90,
+            endAngle: 270,
+          },
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        fill: {
+          type: "gradient",
+        },
+        legend: {
+          formatter: function (val, opts) {
+            return val + " - " + opts.w.globals.series[opts.seriesIndex];
+          },
+        },
+        title: {
+          text: "Gradient Donut with custom Start-angle",
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+
+  const renderCusomerBody = (item, index) => {
+    return (
+      <tr key={index}>
+        <td style={{ width: "300px", overflow: "hidden" }}>
+          {products.map((product) => {
+            if (product.id === item.productId) return product.productName;
+          })}
+        </td>
+        <td>{item.totalQty}</td>
+        <td>
+          {products.map((product) => {
+            if (product.id === item.productId)
+              return parseFloat(product.price * item.totalQty).toLocaleString();
+          })}
+        </td>
+      </tr>
+    );
+  };
+  const renderCusomerHead = (item, index) => <th key={index}>{item}</th>;
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>
@@ -220,10 +257,16 @@ const Dashboard = () => {
               <h3>Best seller</h3>
             </div>
             <div className="card__body">
+              {/* <Table>
+                {topProducts.header.map((product) => (
+                  <th>{product.header}</th>
+                ))}
+
+              </Table> */}
               <Table
-                headData={topCustomers.head}
+                headData={topProducts.head}
                 renderHead={(item, index) => renderCusomerHead(item, index)}
-                bodyData={topCustomers.body}
+                bodyData={topProducts.body}
                 renderBody={(item, index) => renderCusomerBody(item, index)}
               />
             </div>

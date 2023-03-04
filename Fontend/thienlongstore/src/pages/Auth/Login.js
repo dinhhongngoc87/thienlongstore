@@ -134,7 +134,7 @@ function Login({ toggle }) {
                     </Button>
 
                     <p className={cx('form-footer')}>
-                        Nedd an Account? &nbsp; <Link to="/signup">Sign up</Link>
+                        Bạn chưa có tài khoản? &nbsp; <Link to="/signup">Đăng ký</Link>
                     </p>
                     <p>Hoặc đăng nhập bằng </p>
                     <Button className={cx('google')} extraLarge>

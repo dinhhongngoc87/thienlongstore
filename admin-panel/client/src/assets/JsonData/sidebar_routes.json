@@ -5,7 +5,7 @@
         "icon": "bx bx-category-alt"
     },
     {
-        "display_name": "Customers",
+        "display_name": "Accounts",
         "route": "/customers",
         "icon": "bx bx-user-pin"
     },
