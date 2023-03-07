@@ -52,9 +52,9 @@ let getDeleteCRUD = async (req, res) => {
   let userId = req.query.id;
   if (userId) {
     await CRUDServices.deleteUserById(userId);
-    return res.send("Delete successfully");
+    return res.send("success");
   } else {
-    return res.send(`Not found user`);
+    return res.send(`faild`);
   }
 };
 module.exports = {

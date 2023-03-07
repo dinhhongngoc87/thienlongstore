@@ -33,7 +33,6 @@ function Header() {
     console.log('loginOpen: ', isShowing);
     const deleteStorage = () => {
         localStorage.setItem('user', '');
-        alert('Delete user ');
     };
     const userMenu = [
         {
@@ -132,7 +131,7 @@ function Header() {
                     {currentUser ? (
                         <>
                             <Menu
-                                items={currentUser ? MENU_ITEMs : userMenu}
+                                items={currentUser ? userMenu : MENU_ITEMs}
                                 onChange={handleMenuChange}
                                 onClick={toggle}
                             >

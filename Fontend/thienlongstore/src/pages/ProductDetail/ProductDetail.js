@@ -8,8 +8,11 @@ import Button from '../../components/Button';
 import { OpenCartIcon } from '../../components/Icons';
 import { connect } from 'react-redux';
 import { buyProduct } from '../../store/actions';
+import { CartContext } from '../../context/CartProvider';
+import { useContext } from 'react';
 const cx = classNames.bind(styles);
 function ProductDetail(props) {
+    const [cartItems, setCartItem] = useContext(CartContext);
     const [productInfo, setProductInfo] = useState({});
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
@@ -58,6 +61,21 @@ function ProductDetail(props) {
     };
     const handleOnchangeQuantity = (e) => {
         setQuantity(e.target.value);
+    };
+    const handleAddCartItem = (product) => {
+        const isExist = cartItems.find((item) => item.id === product.id);
+        if (!isExist) {
+            console.log('Chưa có trong giỏ hàng');
+            product.qtyInCart = 1;
+            console.log('Product', product);
+            setCartItem([...cartItems, product]);
+        } else {
+            isExist.qtyInCart += 1;
+            console.log('Product 2', isExist);
+            console.log('Tăng thêm 1 ở product detail component');
+        }
+
+        console.log('CART ITEM', cartItems);
     };
     return (
         <div className={cx('wrapper', 'col-12')}>
@@ -124,9 +142,12 @@ function ProductDetail(props) {
                         </div>
                         <div className={cx('action')}>
                             <Button
+                                // onClick={() => {
+                                //     console.log('PROPS: ', productInfo);
+                                //     return productInfo.buyProduct(productInfo);
+                                // }}
                                 onClick={() => {
-                                    console.log('PROPS: ', productInfo);
-                                    return productInfo.buyProduct(productInfo);
+                                    handleAddCartItem(productInfo);
                                 }}
                                 primary
                                 className={cx('themvaogio')}

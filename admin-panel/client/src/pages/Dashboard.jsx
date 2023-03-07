@@ -95,7 +95,6 @@ const Dashboard = () => {
     fetch("/api/get-all-products")
       .then((response) => response.json())
       .then((data) => {
-        // console.log("PRODUCTS: ", data);
         setProducts(data.products);
         setCategories(data.categories);
         setSuppliers(data.suppliers);
@@ -117,30 +116,15 @@ const Dashboard = () => {
     fetch(`/api/top-category`)
       .then((response) => response.json())
       .then((data) => {
-        let catName = [];
-        data.find((item) => {
-          categories.find((category) => {
-            if (category.id === item.catId) {
-              catName.push(category.catName);
-              return catName;
-            }
-          });
-        });
+        let catName = data.map((item) => item.catName);
         let catId = data.map((item) => item.catId);
         let catValue = data.map((item) => item.totalProductOfCategory);
 
-        return { catName, catId, catValue };
-      })
-      .then((data) => {
-        console.log(data);
         setTopCategories({
-          categoryId: data.catId,
-          categoryName: data.catName,
-          value: data.catValue,
+          categoryId: catId,
+          categoryName: catName,
+          value: catValue,
         });
-      })
-      .then(() => {
-        console.log("CATEGORY STATE: ", topcategories);
       });
   }, []);
   const chartOptions = {

@@ -5,6 +5,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function CreateUser() {
   const history = useHistory();
   const [state, setState] = useState({
@@ -37,8 +39,20 @@ function CreateUser() {
         roleId: state.roleId,
       })
       .then((response) => {
+        toast.success("Create successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         if (response.status === 200) {
-          history.push("/customers");
+          setTimeout(() => {
+            history.push("/customers");
+          }, 2500);
         }
       });
   };
@@ -140,6 +154,20 @@ function CreateUser() {
           Submit
         </Button>
       </Form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </>
   );
 }

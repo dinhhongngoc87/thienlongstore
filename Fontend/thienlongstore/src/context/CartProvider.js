@@ -6,6 +6,7 @@ const CartProvider = ({ children }) => {
 
     return <CartContext.Provider value={[cartItem, setCartItem]}>{children}</CartContext.Provider>;
 };
+export { CartContext };
 export default CartProvider;
 // import { createContext, useState } from "react";
 

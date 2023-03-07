@@ -68,8 +68,8 @@ let createNewProduct = (data) => {
     try {
       await db.Product.create({
         productName: data.productName,
-        catId: data.catId,
-        supplierId: data.supplierId,
+        catId: data?.catId,
+        supplierId: data?.supplierId,
         description: data.description,
         images: data.images,
         price: data.price ? data.price : "",
@@ -80,7 +80,7 @@ let createNewProduct = (data) => {
 
       resolve("create product successfully");
     } catch (e) {
-      rs;
+      reject(e);
     }
   });
 };

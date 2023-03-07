@@ -4,8 +4,12 @@ import styles from './Product.module.scss';
 import Image from '../../components/Image';
 import { connect } from 'react-redux';
 import { buyProduct } from '../../store/actions';
+import { CartContext } from '../../context/CartProvider';
+import { useContext } from 'react';
 const cx = className.bind(styles);
 function Product(data) {
+    const [cartItems, setCartItem] = useContext(CartContext);
+    console.log('CARTITEM FROM PRODUCT: ', cartItems);
     const product_current = data.data;
     const navigate = useNavigate();
     const handleDetail = (e, id) => {
@@ -21,6 +25,21 @@ function Product(data) {
     // };
     const hanldReload = (e) => {
         e.preventDefault();
+    };
+    const handleAddCartItem = (product) => {
+        const isExist = cartItems.find((item) => item.id === product.id);
+        if (!isExist) {
+            console.log('Chưa có trong giỏ hàng');
+            product.qtyInCart = 1;
+            console.log('Product', product);
+            setCartItem([...cartItems, product]);
+        } else {
+            isExist.qtyInCart += 1;
+            console.log('Product 2', isExist);
+            console.log('Tăng thêm 1 ở product componet');
+        }
+
+        console.log('CART ITEM', cartItems);
     };
     return (
         <div className={cx('col', 'l-2', 'm-4', 'c-1')}>
@@ -47,9 +66,16 @@ function Product(data) {
                         )}
                     </div>
                     <div className={cx('product-action')}>
-                        <button onClick={() => data.buyProduct(product_current)} className={cx('mua', 'btn')}>
+                        <button
+                            // onClick={() => data.buyProduct(product_current)}
+                            onClick={() => {
+                                handleAddCartItem(data.data);
+                            }}
+                            className={cx('mua', 'btn')}
+                        >
                             MUA NHANH
                         </button>
+
                         <button onClick={(e) => handleDetail(e, data.data.id)} className={cx('xem', 'btn')}>
                             XEM NHANH
                         </button>

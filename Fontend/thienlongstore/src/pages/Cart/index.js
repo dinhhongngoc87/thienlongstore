@@ -16,8 +16,12 @@ import {
 } from 'mdb-react-ui-kit';
 import Button from '../../components/Button';
 import './Cart.module.scss';
+import { CartContext } from '../../context/CartProvider';
+import { useContext } from 'react';
 
 function CartCheckout(props) {
+    const [cartItems, setCartItem] = useContext(CartContext);
+    const [totalCharge, setTotalCharge] = useState(0);
     const [productsId, setProductId] = useState([props.cart]);
     const completeFormData = new FormData();
     const [user, setUser] = useState();
@@ -25,10 +29,11 @@ function CartCheckout(props) {
         address: '',
         userName: '',
         phone: '',
-        products: props.cart.map((p) => ({
+        products: cartItems.map((p) => ({
             id: p.id,
             productName: p.productName,
-            qty: p?.qty || 1,
+            price: p.price,
+            qty: p?.qtyInCart || 1,
         })),
     });
     completeFormData.append('products', state.products);
@@ -46,20 +51,36 @@ function CartCheckout(props) {
             [e.target.name]: e.target.value,
         });
     };
-    const handleChangeQty = (e) => {
-        setState({
+    const handleChangeQty = async (e, product) => {
+        // setState({3
+        //     ...state,
+        // });
+        // console.log('change value: ', e.target.value);
+        product.qtyInCart = e.target.value;
+        await setState({
             ...state,
+            products: cartItems.map((p) => ({
+                id: p.id,
+                productName: p.productName,
+                price: p.price,
+                qty: p.qtyInCart || 1,
+            })),
         });
+        // console.log('qty: ', product.qtyInCart);
+        // console.log('CART ITEM: ', cartItems);
+        // console.log('product state: ', state.products);
 
-        axios.post(`/post-order-crud`, {
-            address: state.address,
-            userName: state.userName,
-            phone: state.phone,
-            products: state.products,
-        });
+        // axios.post(`/post-order-crud`, {
+        //     address: state.address,
+        //     userName: state.userName,
+        //     phone: state.phone,
+        //     products: state.products,
+        // });
     };
+
     const handleClickBuyNow = async (e) => {
         e.preventDefault();
+        console.log('PRODUCT ORDER ', state);
         axios.post(`/post-order-crud`, {
             address: state.address,
             userName: state.userName,
@@ -84,7 +105,7 @@ function CartCheckout(props) {
                                         >
                                             Sản phẩm của bạn
                                         </MDBTypography>
-                                        {props.cart.map((product) => (
+                                        {cartItems.map((product) => (
                                             <div key={product.id} className="d-flex align-items-center mb-5">
                                                 <div className="flex-shrink-0">
                                                     <MDBCardImage
@@ -98,7 +119,12 @@ function CartCheckout(props) {
                                                 <div className="flex-grow-1 ms-3">
                                                     <a
                                                         href="#!"
-                                                        onClick={() => props.deleteProduct(product)}
+                                                        // onClick={() => props.deleteProduct(product)}
+                                                        onClick={() => {
+                                                            setCartItem(
+                                                                cartItems.filter((item) => item.id !== product.id),
+                                                            );
+                                                        }}
                                                         className="float-end text-black"
                                                     >
                                                         <MDBIcon style={{ color: '#bbb' }} fas icon="times" />
@@ -117,15 +143,22 @@ function CartCheckout(props) {
                                                         </p>
 
                                                         <div className="def-number-input number-input safari_only">
-                                                            <button className="minus"></button>
+                                                            {/* <button
+                                                                onClick={handleIncreaseQty(product)}
+                                                                className="increase"
+                                                            ></button> */}
                                                             <input
                                                                 className="quantity fw-bold text-black"
                                                                 min={0}
-                                                                defaultValue={product?.qty || 1}
-                                                                onChange={handleChangeQty}
+                                                                defaultValue={product?.qtyInCart || 1}
+                                                                value={state.products.qty}
+                                                                onChange={(e) => handleChangeQty(e, product)}
                                                                 type="number"
                                                             />
-                                                            <button className="plus"></button>
+                                                            {/* <button
+                                                                onClick={handleDecreaseQty(product)}
+                                                                className="decrease"
+                                                            ></button> */}
                                                         </div>
 
                                                         <div className="d-flex align-items-center">
@@ -149,20 +182,26 @@ function CartCheckout(props) {
                                                 opacity: 1,
                                             }}
                                         />
-
-                                        {/* <div className="d-flex justify-content-between px-x">
+                                        {/* 
+                                        <div className="d-flex justify-content-between px-x">
                                             <p className="fw-bold">Discount:</p>
                                             <p className="fw-bold"></p>
                                         </div> */}
-                                        {/* <div
+                                        <div
                                             className="d-flex justify-content-between p-2 mb-2"
                                             style={{ backgroundColor: '#e1f5fe' }}
                                         >
                                             <MDBTypography tag="h3" className="fw-bold mb-0">
-                                                Total:{props.totalprice}
+                                                Total:
+                                                {cartItems
+                                                    .reduce((acc, current) => {
+                                                        console.log(acc);
+                                                        return acc + parseFloat(current.qtyInCart * current.price);
+                                                    }, 0)
+                                                    .toLocaleString()}
                                             </MDBTypography>
                                             <MDBTypography tag="h3" className="fw-bold mb-0"></MDBTypography>
-                                        </div> */}
+                                        </div>
                                     </MDBCol>
                                     <MDBCol lg="5" className="px-5 py-4">
                                         <MDBTypography

@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
+import Notifications from "../components/toast/Toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const customerTableHead = [
   "No.",
   "name",
@@ -33,7 +36,11 @@ const customerTableHead = [
 const Customers = () => {
   let history = useHistory();
   const [users, setUsers] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [deleteToast, setDeleteToast] = useState(false);
 
+  const toggleDeleteToast = () => setDeleteToast(!deleteToast);
+  const handleCloseDeleteToast = () => setDeleteToast(false);
   useEffect(() => {
     fetch("/get-crud")
       .then((response) => response.json())
@@ -41,7 +48,7 @@ const Customers = () => {
         console.log(data);
         setUsers(data);
       });
-  }, []);
+  }, [isUpdate]);
 
   const handleEdit = (id) => {
     history.push(`/detail-user?id=${id}`);
@@ -57,12 +64,25 @@ const Customers = () => {
         },
       })
       .then((response) => {
-        alert(response.data);
-        window.location.reload();
+        response.status === 200 &&
+          response.data === "success" &&
+          setDeleteToast(true);
+
+        setIsUpdate(!isUpdate);
+        toast.success("Delete successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <h2 className="page-header">customers</h2>
       <div class="row">
         <div className="mb-3">
@@ -123,6 +143,28 @@ const Customers = () => {
           </div>
         </div>
       </div>
+      {/* <Notifications
+        show={deleteToast}
+        onClose={handleCloseDeleteToast}
+        position="top-end"
+        animation
+        title="Notice"
+        content="Delete successfully"
+        bg="Success"
+        autohide="true"
+      ></Notifications> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

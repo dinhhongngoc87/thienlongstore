@@ -32,6 +32,7 @@ let topCategory = () => {
       const bestSeller = await db.Product.findAll({
         attributes: [
           "catId",
+
           [
             sequelize.fn("COUNT", sequelize.col("catId")),
             "totalProductOfCategory",
@@ -42,7 +43,20 @@ let topCategory = () => {
         limit: 5,
         order: [[sequelize.col("totalProductOfCategory"), "DESC"]],
       });
-      console.log("BESST CATEGORY: ", bestSeller);
+      //find categories in db
+      let categories = await db.Category.findAll({
+        raw: true,
+      });
+      //find name of top categories
+      let categoryTopName = [];
+      bestSeller.map((item) => {
+        categories.find((category) => {
+          if (item.catId === category.id)
+            categoryTopName.push(category.catName);
+        });
+      });
+      //add name property into bestSeller
+      bestSeller.map((item, index) => (item.catName = categoryTopName[index]));
       resolve(bestSeller);
     } catch (e) {
       reject(e);

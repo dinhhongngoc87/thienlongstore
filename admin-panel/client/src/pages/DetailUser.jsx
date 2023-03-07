@@ -6,6 +6,9 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
+import Notifications from "../components/toast/Toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const validate = (values) => {
   const errors = {};
   if (!values.firstName) {
@@ -26,6 +29,8 @@ function DetailUser() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const user_id = params.get("id");
+  const [editToast, setEditToast] = useState(false);
+
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -47,6 +52,8 @@ function DetailUser() {
         setState(data);
       });
   }, []);
+  const toggleEditToast = () => setEditToast(!editToast);
+  const handleCloseEditToast = () => setEditToast(false);
   const handleChange = (e) => {
     setState({
       ...state,
@@ -64,8 +71,21 @@ function DetailUser() {
         phone: state.phone,
       })
       .then((response) => {
+        // setEditToast(true);
+        toast.success("Edit successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         if (response.status === 200) {
-          history.push("/customers");
+          setTimeout(() => {
+            history.push("/customers");
+          }, 2500);
         }
       });
   };
@@ -123,71 +143,20 @@ function DetailUser() {
           Submit
         </Button>
       </Form>
-
-      {/* </Formik> */}
-      {/* <Form noValidate action="/put-crud" method="PUT">
-        <Row className="mb-3">
-          <div className="col-12 mt-3 mb-3">
-            <h2>Edit user's information</h2>
-          </div>
-
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>First name</Form.Label>
-            <Form.Control
-              type="text"
-              value={user.firstName}
-              name="firstName"
-              placeholder="ex: Doe"
-            />
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Last name</Form.Label>
-            <Form.Control
-              type="text"
-              value={user.lastName}
-              name="lastName"
-              placeholder="ex: John"
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formGridAddress1">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              name="address"
-              value={user.address}
-              placeholder="1234 Main St"
-            />
-          </Form.Group>
-          <Form.Group as={Col} controlId="formGridAddress1">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              name="phone"
-              value={user.phone}
-              placeholder="039 456 ...."
-            />
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} controlId="formGridState">
-            <Form.Label>Gender</Form.Label>
-            <Form.Select defaultValue="Choose...">
-              <option>Choose...</option>
-              <option value="1">Male</option>
-              <option value="0">Female</option>
-            </Form.Select>
-          </Form.Group>
-        </Row>
-
-        <Form.Group className="mb-3" id="formGridCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
     </>
   );
 }

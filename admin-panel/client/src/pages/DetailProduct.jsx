@@ -112,7 +112,7 @@ function DetailProduct() {
                 <>
                   <option
                     key={category.id}
-                    value={category.id ? category.id : ""}
+                    value={category.id ? category.id : categories[0].id}
                     selected={category.id === state.catId}
                   >
                     {category.catName}
@@ -131,7 +131,7 @@ function DetailProduct() {
               {suppliers.map((supplier) => (
                 <option
                   key={supplier.id}
-                  value={supplier.id ? supplier.id : ""}
+                  value={supplier.id ? supplier.id : suppliers[0].id}
                   selected={supplier.id === state.supplierId}
                 >
                   {supplier.supplierName}
