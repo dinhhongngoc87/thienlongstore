@@ -41,6 +41,12 @@ const Layout = () => {
                 <Routes />
               </div>
             </div>
+            <ToastContainer
+              newestOnTop={false}
+              rtl={false}
+              pauseOnFocusLoss
+              theme="light"
+            />
           </div>
         )}
       />

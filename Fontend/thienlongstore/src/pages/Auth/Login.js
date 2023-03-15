@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import * as actions from '../../store/actions';
 import { Eye, EyeSlash } from '../../components/Icons';
-import { userService } from '../../services';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 function Login({ toggle }) {
     const userRef = useRef();
@@ -65,12 +66,22 @@ function Login({ toggle }) {
             }
             if (data.data && data.data.errCode === 0) {
                 actions.userLoginSuccess(data.data.user);
-                console.log('EMAIL: ', data.data.user.user.email);
                 if (data.data.user.user.email) {
                     localStorage.setItem('user', data.data.user.user.email);
                 }
-                alert('Login successful');
-                navigate('/');
+                toast.success('Login successfully', {
+                    position: 'top-center',
+                    autoClose: 1000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+                setTimeout(() => {
+                    navigate('/');
+                }, 1500);
             }
         } catch (e) {
             if (e.response) {
@@ -144,6 +155,7 @@ function Login({ toggle }) {
                         Facebook
                     </Button>
                 </form>
+                <ToastContainer newestOnTop={false} rtl={false} pauseOnFocusLoss theme="light" />
                 <></>
             </div>
         </>

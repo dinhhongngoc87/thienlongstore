@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Product.module.scss";
 
 const productTableHead = [
@@ -21,6 +23,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [update, setUpdate] = useState(false);
   const [allcode, setAllcode] = useState([]);
   useEffect(() => {
     fetch("/api/get-all-products")
@@ -31,7 +34,7 @@ const Products = () => {
         setCategories(data.categories);
         setSuppliers(data.suppliers);
       });
-  }, []);
+  }, [update]);
 
   const handleEdit = (id) => {
     history.push(`/detail-product?id=${id}`);
@@ -47,8 +50,22 @@ const Products = () => {
         },
       })
       .then((response) => {
-        alert(response.data);
-        window.location.reload();
+        if (
+          response.status === 200 &&
+          response.data === "Delete successfully"
+        ) {
+          setUpdate(!update);
+          toast.success("Delete successfully", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       });
   };
   return (

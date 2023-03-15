@@ -5,11 +5,12 @@
     flex-direction: column;
     position: relative;
     background-color: var(--white);
-    margin: 0 auto ;
+    margin: 0 auto;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     margin-top: 5%;
-    input{
+
+    input {
         height: 30px;
         width: 150px;
         border: 1px solid #ccc;
@@ -17,85 +18,106 @@
     }
 
     .close-btn {
-       position: absolute;
-       top: 24px;
-       border-radius: 50%;
-       display: flex;
-       -webkit-box-align: center;
-       align-items: center;
-       -webkit-box-pack: center;
-       justify-content: center;
-       z-index: 1;
-       right: 24px;
-       width: 24px;
-       height: 24px;
-       background: rgba(22, 24, 35, 0.03);
-       cursor: pointer;
-    }       
-    .form{
-       width: 375px;
-       height: 400px;
-       padding: 48px 0px 0px;
-       margin: 0 auto;
-
-       .title {
-        color: rgb(22, 24, 35);
-        font-family: SofiaPro, Arial, Tahoma, PingFangSC, sans-serif;
-        font-size: 32px;
-        margin: 16px auto;
-        font-weight: bold;
-        text-align: center;
-        overflow-wrap: break-word;
-       }
-       .email,.password,.userName {
-            width: 100%;
-            
-       }
-       .userName{
-         display: flex;
-         .firstName{
-            margin-right: 9px;
-         }
-       }
-    
-       input{
-        border-radius: 2px;
-        background-color: rgba(22, 24, 35, 0.06);
-        border: none rgba(22, 24, 35, 0.12);
-        padding-inline-start: 12px;
-        color: rgb(22, 24, 35);
-        line-height: 100%;
-        outline: none;
-        font-size: 16px;
-        height: 44px;
-        caret-color: rgb(254, 44, 85);
-        width: 100%;
-        padding-inline-end: unset;
-        margin-bottom: 9px;
-       }
-       
-       .signup{
-        width: 100%;
-        height: 44px;
+        position: absolute;
+        top: 24px;
+        border-radius: 50%;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        z-index: 1;
+        right: 24px;
+        width: 24px;
+        height: 24px;
+        background: rgba(22, 24, 35, 0.03);
         cursor: pointer;
-        margin-top: 25px;
-        margin-bottom: 25px;
-       }
-    }     
+    }
+
+    .form {
+        width: 375px;
+        height: 400px;
+        padding: 48px 0px 0px;
+        margin: 0 auto;
+
+        .title {
+            color: rgb(22, 24, 35);
+            font-family: SofiaPro, Arial, Tahoma, PingFangSC, sans-serif;
+            font-size: 32px;
+            margin: 16px auto;
+            font-weight: bold;
+            text-align: center;
+            overflow-wrap: break-word;
+        }
+
+        .email,
+        .password,
+        .userName {
+            width: 100%;
+
+        }
+
+        .userName {
+            display: flex;
+
+            .firstName {
+                margin-right: 9px;
+            }
+        }
+
+        .password {
+            position: relative;
+
+            .eye-icon {
+                position: absolute;
+                right: 8px;
+                top: 20%;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+        }
+
+        input {
+            border-radius: 2px;
+            background-color: rgba(22, 24, 35, 0.06);
+            border: none rgba(22, 24, 35, 0.12);
+            padding-inline-start: 12px;
+            color: rgb(22, 24, 35);
+            line-height: 100%;
+            outline: none;
+            font-size: 16px;
+            height: 44px;
+            caret-color: rgb(254, 44, 85);
+            width: 100%;
+            padding-inline-end: unset;
+            margin-bottom: 9px;
+        }
+
+        .signup {
+            width: 100%;
+            height: 44px;
+            cursor: pointer;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+    }
 
     .facebook {
         background: #DE3F32;
         border: 1px solid #DE3F32;
     }
-    .google{
+
+    .google {
         background: #49669C;
         border: 1px solid #49669C;
     }
-    .facebook,.google {
+
+    .facebook,
+    .google {
         display: inline-block;
         border-radius: 5px;
         color: #fff;
-        margin:5px 0;
+        margin: 5px 0;
     }
 
 
@@ -106,7 +128,7 @@
         font-size: 15px;
         display: flex;
         justify-content: center;
-       
+
     }
 
 }

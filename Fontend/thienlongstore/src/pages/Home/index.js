@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 const cx = classNames.bind(styles);
 function Home() {
     const [products, setProducts] = useState([]);
+
     useEffect(() => {
         fetch('/api/get-all-products')
             .then((response) => response.json())

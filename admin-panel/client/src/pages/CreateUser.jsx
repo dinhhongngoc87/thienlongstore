@@ -13,10 +13,13 @@ function CreateUser() {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
+    password1: "",
+    password2: "",
     address: "",
     phone: "",
-    roleId: "",
+    image: "",
+    errMessage: "",
+    roleId: "R2",
   });
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
@@ -26,39 +29,62 @@ function CreateUser() {
       [e.target.name]: e.target.value,
     });
   };
-  console.log(state);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     axios
       .post("/post-crud", {
         firstName: state.firstName,
         lastName: state.lastName,
         email: state.email,
-        password: state.password,
+        password1: state.password1,
+        password2: state.password2,
         address: state.address,
         phone: state.phone,
+        image: state.image,
         roleId: state.roleId,
       })
       .then((response) => {
-        toast.success("Create successfully", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        if (response.status === 200) {
+        if (response.data && response.data.errCode === 0) {
+          console.log("Thành công");
+          toast.success("Create successfully", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
           setTimeout(() => {
             history.push("/customers");
           }, 2500);
         }
+        if (response.data && response.data.errCode !== 0) {
+          setState({
+            ...state,
+            errMessage: response.data.message,
+          });
+        }
+      })
+      .catch((e) => {
+        if (e.response.data) {
+          setState({
+            ...state,
+            errMessage: e.response.data.message,
+          });
+        }
       });
+  };
+  const handlePreviewImage = (e) => {
+    setState({
+      ...state,
+      image: e.target.files[0],
+    });
+    console.log("STATE: ", state);
   };
   return (
     <>
-      <Form action="/post-crud" method="POST">
+      <Form encType="multipart/form-data">
         <Row className="mb-3">
           <div className="col-12 mt-3 mb-3">
             <h2>Create new user</h2>
@@ -96,8 +122,17 @@ function CreateUser() {
             <Form.Label>Mật khẩu</Form.Label>
             <Form.Control
               type="password"
-              name="password"
-              value={state.password}
+              name="password1"
+              value={state.password1}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group as={Col} controlId="formGridPassword">
+            <Form.Label>Nhập lại khẩu</Form.Label>
+            <Form.Control
+              type="password"
+              name="password2"
+              value={state.password2}
               onChange={handleChange}
             />
           </Form.Group>
@@ -129,17 +164,20 @@ function CreateUser() {
             <Form.Control
               type="file"
               name="image"
-              value={state.image}
-              onChange={handleChange}
-              placeholder="039 456 ...."
+              // value={state.image}
+              onChange={handlePreviewImage}
             />
           </Form.Group>
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridRole">
             <Form.Label>Role</Form.Label>
-            <Form.Select aria-label="Default select example" name="roleId">
-              <option key={1} value="R2">
+            <Form.Select
+              aria-label="Default select example"
+              name="roleId"
+              onChange={handleChange}
+            >
+              <option key={1} value="R2" selected>
                 User
               </option>
               <option key={2} value="R1">
@@ -150,6 +188,7 @@ function CreateUser() {
         </Row>
 
         <input value={state.id} name="id" type="text" hidden />
+        <div style={{ color: "red" }}>{state.errMessage}</div>
         <Button onClick={handleSubmit} variant="primary">
           Submit
         </Button>

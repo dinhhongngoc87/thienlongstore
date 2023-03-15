@@ -5,25 +5,26 @@ import Image from '../../components/Image';
 import { connect } from 'react-redux';
 import { buyProduct } from '../../store/actions';
 import { CartContext } from '../../context/CartProvider';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = className.bind(styles);
 function Product(data) {
     const [cartItems, setCartItem] = useContext(CartContext);
-    console.log('CARTITEM FROM PRODUCT: ', cartItems);
-    const product_current = data.data;
+    const [product_current, setProductCurrent] = useState(data.data);
+
     const navigate = useNavigate();
     const handleDetail = (e, id) => {
         // e.preventDefault();
         navigate(`/sanpham/chitietsanpham?id=${id}`);
         // window.location.reload(true);
     };
-    // useEffect({
 
-    // }, []);
+    useEffect(() => {}, [product_current]);
     // const handleEdit = (id) => {
     //     history.push(`/detail-product?id=${id}`);
     // };
-    const hanldReload = (e) => {
+    const handleReload = (e) => {
         e.preventDefault();
     };
     const handleAddCartItem = (product) => {
@@ -35,9 +36,17 @@ function Product(data) {
             setCartItem([...cartItems, product]);
         } else {
             isExist.qtyInCart += 1;
-            console.log('Product 2', isExist);
-            console.log('Tăng thêm 1 ở product componet');
         }
+        toast.success('Thêm vào giỏ thành công', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+        });
 
         console.log('CART ITEM', cartItems);
     };
@@ -45,43 +54,48 @@ function Product(data) {
         <div className={cx('col', 'l-2', 'm-4', 'c-1')}>
             <div className={cx('product-item')}>
                 <div className={cx('product-thumbnail')}>
-                    <a onClick={(e) => hanldReload(e)} href="/" className={cx('product-thumbnail-link')}>
-                        <Image className={cx('product-thumbnail-image')} src={data.data.images} alt="product"></Image>
+                    <a onClick={(e) => handleReload(e)} href="/" className={cx('product-thumbnail-link')}>
+                        <Image
+                            className={cx('product-thumbnail-image')}
+                            src={product_current.images}
+                            alt="product"
+                        ></Image>
                     </a>
                 </div>
                 <div className={cx('product-info')}>
-                    <div className={cx('product-name')}>{data.data.productName}</div>
+                    <div className={cx('product-name')}>{product_current.productName}</div>
                     <div className={cx('product-price')}>
                         <div className={cx('current')}>
                             {(
-                                parseFloat(data.data.price) *
-                                (1 - parseFloat(data.data.discount) / 100)
+                                parseFloat(product_current.price) *
+                                (1 - parseFloat(product_current.discount) / 100)
                             ).toLocaleString()}
                         </div>
                         &nbsp;
-                        {data.data.discount === 0 ? (
+                        {product_current.discount === 0 ? (
                             <></>
                         ) : (
-                            <div className={cx('sale')}>{parseFloat(data.data.price).toLocaleString()}</div>
+                            <div className={cx('sale')}>{parseFloat(product_current.price).toLocaleString()}</div>
                         )}
                     </div>
                     <div className={cx('product-action')}>
                         <button
                             // onClick={() => data.buyProduct(product_current)}
                             onClick={() => {
-                                handleAddCartItem(data.data);
+                                handleAddCartItem(product_current);
                             }}
                             className={cx('mua', 'btn')}
                         >
                             MUA NHANH
                         </button>
 
-                        <button onClick={(e) => handleDetail(e, data.data.id)} className={cx('xem', 'btn')}>
+                        <button onClick={(e) => handleDetail(e, product_current.id)} className={cx('xem', 'btn')}>
                             XEM NHANH
                         </button>
                     </div>
                 </div>
             </div>
+            {/* <ToastContainer newestOnTop={false} rtl={false} pauseOnFocusLoss theme="light" /> */}
         </div>
     );
 }

@@ -21,12 +21,11 @@ function ProductDetail(props) {
     const params = new URLSearchParams(location.search);
     const prodId = params.get('id');
     const [quantity, setQuantity] = useState(1);
-    const [productId, setProductId] = useState(prodId);
     const [relateProducts, setRelateProduct] = useState([]);
     const sliderImages = [productInfo.images];
-    const product_current = productInfo;
     useEffect(() => {
-        fetch(`/api/get-product-byid?id=${productId}`)
+        console.log('RUN USE EFFECT');
+        fetch(`/api/get-product-byid?id=${prodId}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log('ProductInfo: ', data);
@@ -48,7 +47,7 @@ function ProductDetail(props) {
                 setCategories(data.categories);
                 setSuppliers(data.suppliers);
             });
-    }, []);
+    }, [prodId]);
     const handleIncrease = () => {
         setQuantity(quantity + 1);
     };

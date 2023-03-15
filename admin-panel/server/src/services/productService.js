@@ -97,6 +97,7 @@ let getProductByCategory = (catId) => {
       if (catId) {
         let products = await db.Product.findAll({
           where: { catId: catId },
+          limit: 5,
         });
         resolve(products);
       }

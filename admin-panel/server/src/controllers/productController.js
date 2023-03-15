@@ -34,7 +34,7 @@ let handleDeleteProduct = async (req, res) => {
     return res.send(`Not found user`);
   }
 };
-//FETCH BY ID
+//FETCH BY category
 let handleGetProductByCategory = async (req, res) => {
   let catId = req.query.id;
   if (catId) {

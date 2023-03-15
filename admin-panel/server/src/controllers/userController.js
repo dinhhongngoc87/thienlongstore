@@ -7,11 +7,10 @@ let handleLogin = async (req, res) => {
   if (!email || !password) {
     res.status(500).json({
       errCode: 1,
-      message: "Missing inputs parameter!",
+      message: "Vui lòng điền đủ thông tin!",
     });
   }
   let userData = await userService.handleUserLogin(email, password);
-  console.log("HandleLoginin server: ", userData);
   //compare password
   //return userInfo
   //access token:JWT

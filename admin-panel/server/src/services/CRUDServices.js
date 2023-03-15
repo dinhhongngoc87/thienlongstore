@@ -4,21 +4,51 @@ const salt = bcrypt.genSaltSync(10);
 
 //CREATE user
 let createNewUser = async (data) => {
+  console.log("CRUD DATA: ", data);
   return new Promise(async (resolve, reject) => {
     try {
-      let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-      await db.User.create({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: hashPasswordFromBcrypt,
-        address: data.address ? data.address : "",
-        phone: data.phone ? data.phone : "",
-        roleId: data.roleId,
-      });
-      resolve("create user successfully");
+      let infor = {};
+      let hashPasswordFromBcrypt = await hashUserPassword(data.password1);
+      let isExist = await findUserInDB(data.email);
+      console.log("Kiểm tra tồn tại : ", isExist);
+      if (!isExist) {
+        console.log("Email không tồn tại");
+        await db.User.create({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: hashPasswordFromBcrypt,
+          address: data.address ? data.address : "",
+          phone: data.phone ? data.phone : "",
+          roleId: data.roleId,
+        });
+        infor.errCode = 0;
+        infor.message = "Đăng ký thành công";
+      } else {
+        console.log("Email tồn tại");
+        infor.errCode = 3;
+        infor.message = "Email đã tồn tại";
+      }
+      resolve(infor);
     } catch (e) {
       reject(e);
+    }
+  });
+};
+//check if user exist in DB
+let findUserInDB = (email) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { email: email },
+      });
+      if (user) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(false);
     }
   });
 };

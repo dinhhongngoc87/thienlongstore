@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
-import Notifications from "../components/toast/Toast";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const customerTableHead = [
@@ -37,10 +36,9 @@ const Customers = () => {
   let history = useHistory();
   const [users, setUsers] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
-  const [deleteToast, setDeleteToast] = useState(false);
-
-  const toggleDeleteToast = () => setDeleteToast(!deleteToast);
-  const handleCloseDeleteToast = () => setDeleteToast(false);
+  //const [deleteToast, setDeleteToast] = useState(false);
+  //const toggleDeleteToast = () => setDeleteToast(!deleteToast);
+  //const handleCloseDeleteToast = () => setDeleteToast(false);
   useEffect(() => {
     fetch("/get-crud")
       .then((response) => response.json())
@@ -66,9 +64,7 @@ const Customers = () => {
       .then((response) => {
         response.status === 200 &&
           response.data === "success" &&
-          setDeleteToast(true);
-
-        setIsUpdate(!isUpdate);
+          setIsUpdate(!isUpdate);
         toast.success("Delete successfully", {
           position: "top-right",
           autoClose: 2000,
@@ -154,15 +150,9 @@ const Customers = () => {
         autohide="true"
       ></Notifications> */}
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
         newestOnTop={false}
-        closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        draggable
-        pauseOnHover
         theme="light"
       />
     </div>

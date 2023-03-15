@@ -21,9 +21,42 @@ let getCRUD = (req, res) => {
 
 //create new user
 let postCRUD = async (req, res) => {
-  let message = await CRUDServices.createNewUser(req.body);
+  console.log("arrive controller => data: ", req.body);
+  console.log("arrive controller => data: ", req.file);
+  if (
+    !req.body.lastName ||
+    !req.body.firstName ||
+    !req.body.email ||
+    !req.body.password1 ||
+    !req.body.password2
+  ) {
+    res.status(500).json({
+      errCode: 1,
+      message: "Vui lòng điền đủ thông tin!",
+    });
+  } else if (req.body.password1 !== req.body.password2) {
+    res.status(500).json({
+      errCode: 2,
+      message: "Mật khẩu không trùng khớp",
+    });
+  } else if (!checkEmail(req.body.email)) {
+    return res.status(500).json({
+      errCode: 2,
+      message: "Email không hợp lệ",
+    });
+  }
+  let response = await CRUDServices.createNewUser(req.body);
+  return res.status(200).json({
+    errCode: response.errCode,
+    message: response.message,
+  });
+};
 
-  return res.send("ok");
+//check email input
+let checkEmail = (email) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
 };
 //fetch all users
 let displayGetCRUD = async (req, res) => {
