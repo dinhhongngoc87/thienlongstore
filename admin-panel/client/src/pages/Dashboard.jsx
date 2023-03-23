@@ -102,15 +102,15 @@ const Dashboard = () => {
       .then(() => {
         // console.log(categories);
       });
-
-    fetch(`/api/top-seller`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTopProduct({
-          ...topProducts,
-          body: [...data],
-        });
-      });
+    //Lấy top sản phẩm từ bảng order_detail
+    // fetch(`/api/top-seller`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setTopProduct({
+    //       ...topProducts,
+    //       body: [...data],
+    //     });
+    //   });
   }, []);
   useEffect(() => {
     fetch(`/api/top-category`)

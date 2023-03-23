@@ -87,7 +87,7 @@ function SignUp({ toggle }) {
     return (
         <div className={cx('wrapper')}>
             <form className={cx('form')}>
-                <h3 className={cx('title')}>Sign up to flexOffice</h3>
+                <h3 className={cx('title')}>Đăng ký</h3>
                 <div className={cx('userName')}>
                     <input
                         type="text"

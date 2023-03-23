@@ -3,15 +3,17 @@ import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
+import moment from "moment";
+import "moment-timezone";
 const customerTableHead = [
   "No.",
   "email",
-  "phone",
-  "address",
-  "product name",
-  "Quantity",
-  "Status",
-  "action",
+  "Điện thoai",
+  "Địa chỉ",
+  "Ngày đặt hàng",
+  "Số lượng",
+  "Tình trạng",
+  "Hành động",
 ];
 
 // const renderHead = (item, index) => <th key={index}>{item}</th>;
@@ -96,11 +98,7 @@ const Orders = () => {
                       <td>{order.phone}</td>
                       <td>{order.address}</td>
                       <td>
-                        {products.map((product) => {
-                          return product.id === order.productId
-                            ? product.productName
-                            : "";
-                        })}
+                        {moment(order.createdAt).format("DD/MM/YYYY hh:mm")}
                       </td>
                       <td>{order.totalProduct}</td>
                       <td>{order.statusId === "S1" ? "Pending" : "Unknown"}</td>
@@ -113,7 +111,17 @@ const Orders = () => {
                           small
                           type="sub"
                         >
-                          Accept
+                          Xác nhận
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            handleEdit(order.id);
+                          }}
+                          success
+                          small
+                          type="sub"
+                        >
+                          Chi tiết
                         </Button>
                       </td>
                     </tr>

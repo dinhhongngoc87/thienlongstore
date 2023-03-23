@@ -9,13 +9,13 @@ import "./Product.module.scss";
 
 const productTableHead = [
   "No.",
-  "product name",
-  "category",
-  "supplier",
-  "price",
-  "discount",
-  "stock",
-  "action",
+  "Tên SP",
+  "Loại",
+  "Nhà CC",
+  "giá",
+  "Giảm giá",
+  "Tồn kho",
+  "Hành động",
 ];
 
 const Products = () => {

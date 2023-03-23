@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import Image from "react-bootstrap/esm/Image";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,27 +22,51 @@ function CreateUser() {
     errMessage: "",
     roleId: "R2",
   });
-  const [categories, setCategories] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
+  const [avatar, setAvatar] = useState();
+  const [update, setUpdate] = useState(false);
+  useEffect(() => {
+    return () => {
+      avatar && URL.revokeObjectURL(avatar.preview);
+    };
+  }, [avatar]);
+  const handlePreviewImage = (e) => {
+    setState({
+      ...state,
+      image: e.target.files[0],
+    });
+    console.log(" CHANGE IMAGE: ", state);
+
+    //preview
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatar(file);
+  };
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
+    console.log("HANEL CHANGE: ", state);
   };
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("firstName", state.firstName);
+    formData.append("lastName", state.lastName);
+    formData.append("email", state.email);
+    formData.append("password1", state.password1);
+    formData.append("password2", state.password2);
+    formData.append("address", state.address);
+    formData.append("phone", state.phone);
+    formData.append("image", state.image);
+    formData.append("roleId", state.roleId);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
     axios
-      .post("/post-crud", {
-        firstName: state.firstName,
-        lastName: state.lastName,
-        email: state.email,
-        password1: state.password1,
-        password2: state.password2,
-        address: state.address,
-        phone: state.phone,
-        image: state.image,
-        roleId: state.roleId,
-      })
+      .post("/post-crud", formData, config)
       .then((response) => {
         if (response.data && response.data.errCode === 0) {
           console.log("Thành công");
@@ -75,13 +100,7 @@ function CreateUser() {
         }
       });
   };
-  const handlePreviewImage = (e) => {
-    setState({
-      ...state,
-      image: e.target.files[0],
-    });
-    console.log("STATE: ", state);
-  };
+
   return (
     <>
       <Form encType="multipart/form-data">
@@ -168,6 +187,20 @@ function CreateUser() {
               onChange={handlePreviewImage}
             />
           </Form.Group>
+          <Form.Group as={Col} controlId="formGridAddress1">
+            {avatar && (
+              <Image
+                class="img-thumbnail"
+                style={{ width: "10rem", height: "10rem" }}
+                thumbnail
+                rounded
+                alt="avatar"
+                src={avatar.preview}
+              />
+            )}
+          </Form.Group>
+          <Form.Group as={Col} controlId="formGridAddress1"></Form.Group>
+          <Form.Group as={Col} controlId="formGridAddress1"></Form.Group>
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridRole">

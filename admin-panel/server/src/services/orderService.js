@@ -10,7 +10,6 @@ let createNewOrder = async (data) => {
     try {
       data.products.map(async (product) => {
         await db.Order.create({
-          productId: product.id,
           totalProduct: product.qty,
           address: data.address,
           statusId: "S1",

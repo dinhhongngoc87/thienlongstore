@@ -107,7 +107,7 @@ function Login({ toggle }) {
             ) : ( */}
             <div className={cx('wrapper')}>
                 <form onSubmit={handleSubmit} className={cx('form')} method="POST">
-                    <h3 className={cx('title')}>Login to flexOffice</h3>
+                    <h3 className={cx('title')}>Đăng nhập</h3>
 
                     <div className={cx('email')}>
                         <input

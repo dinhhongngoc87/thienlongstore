@@ -33,10 +33,11 @@ function Slick({ sliderImages }) {
         //         )}
         //     </Slider>
         // </div>
+
         <Carousel>
             {sliderImages.map((sliderImage, index) => (
                 <Carousel.Item key={index}>
-                    <img className="d-block w-100" src={sliderImage} alt="" />
+                    <img className="d-block w-100" src={`http://localhost:3000/${sliderImage}`} alt="" />
                 </Carousel.Item>
             ))}
         </Carousel>

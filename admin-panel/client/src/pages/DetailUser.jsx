@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -6,7 +6,8 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
-import Notifications from "../components/toast/Toast";
+import Image from "react-bootstrap/Image";
+import noImage from "../assets/images/no-image.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const validate = (values) => {
@@ -29,65 +30,83 @@ function DetailUser() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const user_id = params.get("id");
-  const [editToast, setEditToast] = useState(false);
-
+  const [avatarPreview, setAvatarPreview] = useState();
+  const [update, setUpdate] = useState(false);
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
     address: "",
+    avatar: "",
     phone: "",
     id: "",
   });
   let history = useHistory();
-  useLayoutEffect(() => {
-    fetch(`/edit-user-crud?id=${user_id}`, {
-      firstName: state.firstName,
-      lastName: state.lastName,
-      address: state.address,
-      phone: state.phone,
-    })
+  useEffect(() => {
+    return () => {
+      avatarPreview && URL.revokeObjectURL(avatarPreview.preview);
+    };
+  }, [avatarPreview]);
+  useEffect(() => {
+    fetch(`/edit-user-crud?id=${user_id}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setState(data);
       });
   }, []);
-  const toggleEditToast = () => setEditToast(!editToast);
-  const handleCloseEditToast = () => setEditToast(false);
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
+  //handle choose avatar
+  const handleChangeAvatar = (e) => {
+    setState({
+      ...state,
+      avatar: e.target.files[0],
+    });
+
+    console.log("FILE : ", e.target.files[0]);
+    console.log("CHANGE AVATAR: ", state);
+    setUpdate(!update);
+
+    //handle preview avatar
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatarPreview(file);
+  };
   const handleSubmit = (e) => {
-    // history.push("/customers");
-    axios
-      .post("/put-crud", {
-        id: state.id,
-        firstName: state.firstName,
-        lastName: state.lastName,
-        address: state.address,
-        phone: state.phone,
-      })
-      .then((response) => {
-        // setEditToast(true);
-        toast.success("Edit successfully", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        if (response.status === 200) {
-          setTimeout(() => {
-            history.push("/customers");
-          }, 2500);
-        }
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", state.id);
+    formData.append("firstName", state.firstName);
+    formData.append("lastName", state.lastName);
+    formData.append("address", state.address);
+    formData.append("avatar", state.avatar);
+    formData.append("phone", state.phone);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios.post("/put-crud", formData, config).then((response) => {
+      toast.success("Successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
+      if (response.status === 200) {
+        setTimeout(() => {
+          history.push("/customers");
+        }, 2500);
+      }
+    });
   };
   return (
     <>
@@ -96,6 +115,44 @@ function DetailUser() {
           <div className="col-12 mt-3 mb-3">
             <h2>Edit user's information</h2>
           </div>
+          <Form.Group
+            as={Col}
+            controlId="formGridPassword"
+            style={{ position: "relative" }}
+          >
+            {avatarPreview ? (
+              <Image
+                class="img-thumbnail"
+                style={{ width: "10rem", height: "10rem" }}
+                thumbnail
+                rounded
+                alt="avatar"
+                src={avatarPreview.preview}
+              />
+            ) : (
+              <Image
+                class="img-thumbnail"
+                style={{ width: "10rem", height: "10rem" }}
+                thumbnail
+                rounded
+                alt="avatr"
+                src={
+                  state.avatar
+                    ? `http://localhost:3000/${state.avatar}`
+                    : noImage
+                }
+              />
+            )}
+
+            <input
+              type="file"
+              name="avatar"
+              onChange={handleChangeAvatar}
+              style={{ position: "absolute", bottom: 0 }}
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridEmail">
             <Form.Label>First name</Form.Label>
             <Form.Control

@@ -81,6 +81,7 @@ function ProductDetail(props) {
             <div className={cx('product_detail', 'col-12')}>
                 <div className={cx('product_images', 'col-4')}>
                     <Slick sliderImages={sliderImages} />
+                    {console.log('SLIDER IMAGE: ', sliderImages)}
                 </div>
                 <div className={cx('product-infor', 'col-4')}>
                     <div className={cx('product-name')}>

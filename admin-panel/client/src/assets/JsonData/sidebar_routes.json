@@ -1,28 +1,28 @@
 [
     {
-        "display_name": "Dashboard",
+        "display_name": "Tổng quan",
         "route": "/",
         "icon": "bx bx-category-alt"
     },
     {
-        "display_name": "Accounts",
+        "display_name": "Tài khoản",
         "route": "/customers",
         "icon": "bx bx-user-pin"
     },
     {
-        "display_name": "Products",
+        "display_name": "Sản phẩm",
         "route": "/products",
         "icon": "bx bx-package"
     },
     {
-        "display_name": "Orders",
-        "route": "/orders",
-        "icon": "bx bx-cart"
-    },
-    {
-        "display_name": "categories",
+        "display_name": "Loại hàng",
         "route": "/categories",
         "icon": "bx bx-list-ol"
+    },
+    {
+        "display_name": "Đơn hàng",
+        "route": "/orders",
+        "icon": "bx bx-cart"
     },
     {
         "display_name": "settings",

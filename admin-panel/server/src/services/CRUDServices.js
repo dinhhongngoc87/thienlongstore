@@ -3,7 +3,7 @@ import db from "../models";
 const salt = bcrypt.genSaltSync(10);
 
 //CREATE user
-let createNewUser = async (data) => {
+let createNewUser = async (data, imageUrl = null) => {
   console.log("CRUD DATA: ", data);
   return new Promise(async (resolve, reject) => {
     try {
@@ -20,6 +20,7 @@ let createNewUser = async (data) => {
           password: hashPasswordFromBcrypt,
           address: data.address ? data.address : "",
           phone: data.phone ? data.phone : "",
+          avatar: imageUrl,
           roleId: data.roleId,
         });
         infor.errCode = 0;
@@ -88,7 +89,7 @@ let getUerInfoById = (userId) => {
   });
 };
 // UPDATE user
-let updateUserData = (data) => {
+let updateUserData = (data, imageUrl = null) => {
   return new Promise(async (resolve, reject) => {
     console.log("SERVEICE ", data);
     try {
@@ -97,6 +98,7 @@ let updateUserData = (data) => {
           firstName: data.firstName,
           lastName: data.lastName,
           address: data.address,
+          avatar: imageUrl,
           phone: data.phone,
         },
         {

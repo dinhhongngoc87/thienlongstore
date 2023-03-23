@@ -4,7 +4,12 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Image from "react-bootstrap/Image";
+import noImage from "../assets/images/no-image.png";
 
 function DetailProduct() {
   const [state, setState] = useState({
@@ -20,9 +25,11 @@ function DetailProduct() {
   });
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [avatarPreview, setAvatarPreview] = useState();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const product_id = params.get("id");
+  let history = useHistory();
   //   const [state, setState] = useState();
   useEffect(() => {
     if (product_id) {
@@ -42,21 +49,40 @@ function DetailProduct() {
   }, []);
 
   const handleSubmit = (e) => {
-    axios
-      .post(`/api/put-product-crud`, {
-        id: state.id,
-        productName: state.productName,
-        catId: state.catId,
-        supplierId: state.supplierId,
-        description: state.description,
-        images: state.images,
-        price: state.price,
-        discount: state.discount,
-        quantity: state.quantity,
-      })
-      .then((response) => {
-        alert("Success");
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", state.id);
+    formData.append("productName", state.productName);
+    formData.append("catId", state.catId);
+    formData.append("supplierId", state.supplierId);
+    formData.append("description", state.description);
+    formData.append("images", state.images);
+    formData.append("price", state.price);
+    formData.append("discount", state.discount);
+    formData.append("quantity", state.quantity);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    axios.post(`/api/put-product-crud`, formData, config).then((response) => {
+      toast.success("Edit successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
       });
+      if (response.status === 200) {
+        setTimeout(() => {
+          history.push("/products");
+        }, 2500);
+      }
+    });
     // history.push("/customers");
   };
   console.log(state);
@@ -66,6 +92,7 @@ function DetailProduct() {
       ...state,
       [e.target.name]: e.target.value,
     });
+    console.log("STATE: ", state);
   };
   const changeValueCategory = (e) => {
     setState({
@@ -78,6 +105,16 @@ function DetailProduct() {
       ...state,
       supplierId: e.target.value,
     });
+  };
+  const handleChangeAvatar = (e) => {
+    setState({
+      ...state,
+      images: e.target.files[0],
+    });
+
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatarPreview(file);
   };
 
   return (
@@ -153,13 +190,40 @@ function DetailProduct() {
           </Form.Group>
         </Row>
         <Row>
-          <Form.Group as={Col} controlId="formGridImage">
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-              name="images"
-              value={state.images ? state.images : ""}
-              onChange={handleChange}
-              type="text"
+          <Form.Group
+            as={Col}
+            controlId="formGridPassword"
+            style={{ position: "relative" }}
+          >
+            {avatarPreview ? (
+              <Image
+                class="img-thumbnail"
+                style={{ width: "10rem", height: "10rem" }}
+                thumbnail
+                rounded
+                alt="avatar"
+                src={avatarPreview.preview}
+              />
+            ) : (
+              <Image
+                class="img-thumbnail"
+                style={{ width: "10rem", height: "10rem" }}
+                thumbnail
+                rounded
+                alt="avatr"
+                src={
+                  state.images
+                    ? `http://localhost:3000/${state.images}`
+                    : noImage
+                }
+              />
+            )}
+
+            <input
+              type="file"
+              name="avatar"
+              onChange={handleChangeAvatar}
+              style={{ position: "absolute", bottom: 0 }}
             />
           </Form.Group>
         </Row>

@@ -35,7 +35,7 @@ let getProductById = (productId) => {
   });
 };
 
-let updateProductData = (data) => {
+let updateProductData = (data, imageUrl) => {
   return new Promise(async (resolve, reject) => {
     try {
       await db.Product.update(
@@ -44,7 +44,7 @@ let updateProductData = (data) => {
           catId: data.catId,
           supplierId: data.supplierId,
           description: data.description,
-          images: data.images,
+          images: imageUrl,
           price: data.price,
           discount: data.discount,
           quantity: data.quantity,
@@ -63,7 +63,7 @@ let updateProductData = (data) => {
   });
 };
 
-let createNewProduct = (data) => {
+let createNewProduct = (data, imageUrl) => {
   return new Promise(async (resolve, reject) => {
     try {
       await db.Product.create({
@@ -71,7 +71,7 @@ let createNewProduct = (data) => {
         catId: data?.catId,
         supplierId: data?.supplierId,
         description: data.description,
-        images: data.images,
+        images: imageUrl,
         price: data.price ? data.price : "",
         discount: data.discount,
         stockId: data.quantity > 0 ? "SK1" : "SK2",

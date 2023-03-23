@@ -14,13 +14,16 @@ let handleGetProductById = async (req, res) => {
 //UPDATE AND CREATE product
 let handlePutProduct = async (req, res) => {
   let data = req.body;
+  const imageUrl = req.file?.path;
+  console.log("DATA: ", data);
+  console.log("IMAGE: ", imageUrl);
   if (!data.id) {
-    let message = await productService.createNewProduct(data);
+    let message = await productService.createNewProduct(data, imageUrl);
     console.log(message);
     return res.send("create done");
   } else {
     console.log("UPDATE INFOR:", data);
-    await productService.updateProductData(data);
+    await productService.updateProductData(data, imageUrl);
     return res.send("update done");
   }
 };

@@ -57,7 +57,7 @@ function Product(data) {
                     <a onClick={(e) => handleReload(e)} href="/" className={cx('product-thumbnail-link')}>
                         <Image
                             className={cx('product-thumbnail-image')}
-                            src={product_current.images}
+                            src={`http://localhost:3000/${product_current.images}`}
                             alt="product"
                         ></Image>
                     </a>

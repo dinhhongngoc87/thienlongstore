@@ -45,7 +45,8 @@ let postCRUD = async (req, res) => {
       message: "Email không hợp lệ",
     });
   }
-  let response = await CRUDServices.createNewUser(req.body);
+  const imageUrl = req.file?.path;
+  let response = await CRUDServices.createNewUser(req.body, imageUrl);
   return res.status(200).json({
     errCode: response.errCode,
     message: response.message,
@@ -75,8 +76,11 @@ let getEditCRUD = async (req, res) => {
 };
 //update user
 let putCRUD = async (req, res) => {
+  console.log("EDIT CONTROLLER body: ", req.body);
+  console.log("EDIT CONTROLLER file: ", req.file);
+  const imageUrl = req.file?.path;
   let data = req.body;
-  await CRUDServices.updateUserData(data);
+  await CRUDServices.updateUserData(data, imageUrl);
   return res.send("update done");
 };
 

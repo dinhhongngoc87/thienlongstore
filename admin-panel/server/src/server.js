@@ -3,8 +3,6 @@ import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectdb";
-const multer = require(multer);
-const upload = multer({ dest: "uploads" });
 require("dotenv").config();
 
 let app = express();
@@ -12,7 +10,7 @@ let app = express();
 //congif app
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use("/uploads", express.static("uploads"));
 viewEngine(app);
 initWebRoutes(app);
 

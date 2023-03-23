@@ -7,12 +7,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const customerTableHead = [
   "No.",
-  "name",
+  "Tên",
   "email",
-  "phone",
-  "address",
-  "role",
-  "action",
+  "Điện thoại",
+  "Địa chỉ",
+  "Quyền",
+  "Hành động",
 ];
 
 // const renderHead = (item, index) => <th key={index}>{item}</th>;
