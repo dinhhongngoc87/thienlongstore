@@ -5,6 +5,9 @@ import axios from "axios";
 import Button from "../components/button/Button";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Plus } from "../components/Icons";
+import ModalEditUser from "./ModalEditUser";
+import ModalCreateUser from "./ModalCreateUser";
 const customerTableHead = [
   "No.",
   "Tên",
@@ -33,12 +36,18 @@ const customerTableHead = [
 // );
 
 const Customers = () => {
-  let history = useHistory();
   const [users, setUsers] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [state, setState] = useState({
+    isOpenEditModal: false,
+    isOpenCreateModal: false,
+    errMessage: "",
+    userEdit: {},
+  });
   //const [deleteToast, setDeleteToast] = useState(false);
   //const toggleDeleteToast = () => setDeleteToast(!deleteToast);
   //const handleCloseDeleteToast = () => setDeleteToast(false);
+
   useEffect(() => {
     fetch("/get-crud")
       .then((response) => response.json())
@@ -46,13 +55,99 @@ const Customers = () => {
         console.log(data);
         setUsers(data);
       });
+    return () => {
+      setState({
+        ...state,
+        errMessage: "",
+      });
+    };
   }, [isUpdate]);
 
-  const handleEdit = (id) => {
-    history.push(`/detail-user?id=${id}`);
+  const handleEdit = (user) => {
+    // history.push(`/detail-user?id=${user.id}`);
+    setState({ ...state, isOpenEditModal: true, userEdit: user });
   };
   const handleCreate = () => {
-    history.push(`/create-user`);
+    // history.push(`/create-user`);
+    setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
+  };
+
+  const doEditUser = (formdata, config) => {
+    console.log("check user from child : ", config);
+    axios.post("/put-crud", formdata, config).then((response) => {
+      toast.success("Successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      if (response.data.errCode === 0 && response.status === 200) {
+        setState({ ...state, isOpenEditModal: !state.isOpenEditModal });
+        setIsUpdate(!isUpdate);
+      }
+    });
+  };
+  const doCreateUser = (formdata, config) => {
+    console.log("check user from child : ", config);
+    axios
+      .post("/post-crud", formdata, config)
+      .then((response) => {
+        if (response.data.errCode === 0 && response.status === 200) {
+          toast.success("Successfully", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
+          setIsUpdate(!isUpdate);
+        }
+        if (response.data && response.data.errCode !== 0) {
+          toast.error(response.data.message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.response.data) {
+          toast.error(e.response.data.message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+  };
+
+  const toggleEditModal = () => {
+    console.log("Toggle");
+    setState({ ...state, isOpenEditModal: !state.isOpenEditModal });
+  };
+  const toggleCreateModal = () => {
+    console.log("Toggle");
+    setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
   };
   const handleDelete = (id) => {
     axios
@@ -79,11 +174,17 @@ const Customers = () => {
   };
   return (
     <div style={{ position: "relative" }}>
-      <h2 className="page-header">customers</h2>
+      <h2 className="page-header">Tài khoản</h2>
       <div class="row">
         <div className="mb-3">
-          <Button onClick={handleCreate} success large type="sub">
-            Create a new user
+          <Button
+            onClick={handleCreate}
+            success
+            large
+            type="sub"
+            leftIcon={<Plus />}
+          >
+            Thêm tài khoản
           </Button>
         </div>
       </div>
@@ -113,13 +214,13 @@ const Customers = () => {
                       <td>
                         <Button
                           onClick={() => {
-                            handleEdit(user.id);
+                            handleEdit(user);
                           }}
                           warning
                           small
                           type="sub"
                         >
-                          Edit
+                          Sửa
                         </Button>
                         <Button
                           // href={`/delete-crud?id=${user.id}`}
@@ -128,12 +229,28 @@ const Customers = () => {
                           small
                           type="button"
                         >
-                          Delete
+                          Xóa
                         </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
+                {state.isOpenEditModal && (
+                  <ModalEditUser
+                    toggleModal={toggleEditModal}
+                    isOpen={state.isOpenEditModal}
+                    userInfor={state.userEdit}
+                    editUser={doEditUser}
+                  />
+                )}
+                {state.isOpenCreateModal && (
+                  <ModalCreateUser
+                    toggleModal={toggleCreateModal}
+                    isOpen={state.isOpenCreateModal}
+                    createUser={doCreateUser}
+                    errMessage={state.errMessage}
+                  />
+                )}
               </table>
             </div>
           </div>

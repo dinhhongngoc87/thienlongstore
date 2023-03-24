@@ -22,8 +22,8 @@ function CreateUser() {
     errMessage: "",
     roleId: "R2",
   });
+
   const [avatar, setAvatar] = useState();
-  const [update, setUpdate] = useState(false);
   useEffect(() => {
     return () => {
       avatar && URL.revokeObjectURL(avatar.preview);

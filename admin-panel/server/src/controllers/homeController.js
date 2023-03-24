@@ -78,10 +78,13 @@ let getEditCRUD = async (req, res) => {
 let putCRUD = async (req, res) => {
   console.log("EDIT CONTROLLER body: ", req.body);
   console.log("EDIT CONTROLLER file: ", req.file);
-  const imageUrl = req.file?.path;
+  const imageUrl = req.file?.path || req.body.avatar;
   let data = req.body;
   await CRUDServices.updateUserData(data, imageUrl);
-  return res.send("update done");
+  return res.status(200).json({
+    errCode: 0,
+    message: "update done",
+  });
 };
 
 //delete user by id

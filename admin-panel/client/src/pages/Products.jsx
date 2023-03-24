@@ -6,6 +6,9 @@ import Button from "../components/button/Button";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Product.module.scss";
+import { Plus } from "../components/Icons";
+import ModalCreateProduct from "./ModalCreateProduct";
+import ModalEditProduct from "./ModalEditProduct";
 
 const productTableHead = [
   "No.",
@@ -24,23 +27,46 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [update, setUpdate] = useState(false);
-  const [allcode, setAllcode] = useState([]);
+  const [state, setState] = useState({
+    isOpenCreateProduct: false,
+    isOpenEditProduct: false,
+    currentEitProduct: {},
+  });
   useEffect(() => {
     fetch("/api/get-all-products")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProducts(data.products);
         setCategories(data.categories);
         setSuppliers(data.suppliers);
       });
   }, [update]);
-
-  const handleEdit = (id) => {
-    history.push(`/detail-product?id=${id}`);
+  console.log("PRODUCT", products);
+  const toggleCreateModal = () => {
+    setState({
+      ...state,
+      isOpenCreateProduct: !state.isOpenCreateProduct,
+    });
+  };
+  const toggleEditModal = () => {
+    setState({
+      ...state,
+      isOpenEditProduct: !state.isOpenEditProduct,
+    });
+  };
+  const handleEdit = (product) => {
+    setState({
+      ...state,
+      isOpenEditProduct: true,
+      currentEitProduct: product,
+    });
   };
   const handleCreate = () => {
-    history.push(`/detail-product`);
+    setState({
+      ...state,
+      isOpenCreateProduct: true,
+    });
+    console.log(state);
   };
   const handleDelete = (id) => {
     axios
@@ -50,12 +76,10 @@ const Products = () => {
         },
       })
       .then((response) => {
-        if (
-          response.status === 200 &&
-          response.data === "Delete successfully"
-        ) {
+        console.log(response);
+        if (response.status === 200 && response.data.errCode === 0) {
           setUpdate(!update);
-          toast.success("Delete successfully", {
+          toast.success(response.data.message, {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: true,
@@ -68,13 +92,123 @@ const Products = () => {
         }
       });
   };
+
+  const doEditProduct = (formdata, config) => {
+    axios
+      .post("/api/put-product-crud", formdata, config)
+      .then((response) => {
+        console.log(response);
+        if (response.data.errCode === 0 && response.status === 200) {
+          toast.success(response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          setState({
+            ...state,
+            isOpenEditProduct: !state.isOpenEditProduct,
+          });
+          setUpdate(!update);
+        }
+        if (response.data && response.data.errCode !== 0) {
+          toast.error(response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.response.data) {
+          toast.error(e.response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+  };
+  const doCreatProduct = (formdata, config) => {
+    console.log(config);
+    axios
+      .post("/api/put-product-crud", formdata, config)
+      .then((response) => {
+        console.log(response);
+        if (response.data.errCode === 0 && response.status === 200) {
+          setState({
+            ...state,
+            isOpenCreateProduct: false,
+          });
+          setUpdate(!update);
+          toast.success(response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        if (response.data && response.data.errCode !== 0) {
+          toast.error(response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.response.data) {
+          toast.error(e.response.data.message, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      });
+  };
   return (
     <div>
-      <h2 className="page-header">Product</h2>
+      <h2 className="page-header">Sản phẩm</h2>
       <div class="row">
         <div className="mb-3">
-          <Button onClick={handleCreate} success large type="sub">
-            Create a new product
+          <Button
+            onClick={handleCreate}
+            success
+            large
+            leftIcon={<Plus />}
+            type="sub"
+          >
+            Thêm sản phẩm
           </Button>
         </div>
       </div>
@@ -119,13 +253,13 @@ const Products = () => {
                       <td>
                         <Button
                           onClick={() => {
-                            handleEdit(product.id);
+                            handleEdit(product);
                           }}
                           warning
                           small
                           type="sub"
                         >
-                          Edit
+                          Sửa
                         </Button>
                         <Button
                           // href={`/delete-crud?id=${user.id}`}
@@ -134,12 +268,27 @@ const Products = () => {
                           small
                           type="button"
                         >
-                          Delete
+                          Xóa
                         </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
+                {state.isOpenCreateProduct && (
+                  <ModalCreateProduct
+                    toggleModal={toggleCreateModal}
+                    isOpen={state.isOpenCreateProduct}
+                    createProduct={doCreatProduct}
+                  />
+                )}
+                {state.isOpenEditProduct && (
+                  <ModalEditProduct
+                    toggleModal={toggleEditModal}
+                    isOpen={state.isOpenEditProduct}
+                    editProduct={doEditProduct}
+                    currentProduct={state.currentEitProduct}
+                  ></ModalEditProduct>
+                )}
               </table>
             </div>
           </div>

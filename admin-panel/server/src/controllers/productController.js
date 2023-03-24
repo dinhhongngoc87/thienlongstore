@@ -20,11 +20,11 @@ let handlePutProduct = async (req, res) => {
   if (!data.id) {
     let message = await productService.createNewProduct(data, imageUrl);
     console.log(message);
-    return res.send("create done");
+    return res.send(message);
   } else {
     console.log("UPDATE INFOR:", data);
-    await productService.updateProductData(data, imageUrl);
-    return res.send("update done");
+    let message = await productService.updateProductData(data, imageUrl);
+    return res.send(message);
   }
 };
 //DELETE
@@ -32,9 +32,12 @@ let handleDeleteProduct = async (req, res) => {
   let productId = req.query.id;
   if (productId) {
     await productService.deleteProductById(productId);
-    return res.send("Delete successfully");
+    res.status(200).json({
+      errCode: 0,
+      message: "Xóa thành công!",
+    });
   } else {
-    return res.send(`Not found user`);
+    return res.send(`Không tìm thấy sản phẩm`);
   }
 };
 //FETCH BY category

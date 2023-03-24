@@ -2,6 +2,7 @@ import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 import productController from "../controllers/productController";
+import categoryController from "../controllers/categoryController";
 import orderController from "../controllers/orderController";
 import dashboardController from "../controllers/dashboardController";
 const multer = require("multer");
@@ -32,6 +33,12 @@ let initWebRoutes = (app) => {
     "/api/get-products-bycategory",
     productController.handleGetProductByCategory
   );
+  //CATEGORIES
+  router.get(
+    "/api/get-all-categories",
+    categoryController.handleGetAllCategory
+  );
+  router.post("/api/put-category-crud", categoryController.handlePutCategory);
   //ORDER
   router.post("/post-order-crud", orderController.handlePostOrder);
   router.get("/get-orders-crud", orderController.handleGetOrder);

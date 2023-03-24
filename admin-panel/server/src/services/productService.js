@@ -4,7 +4,7 @@ let getAllProduct = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let products = await db.Product.findAll({
-        attributes: { exclude: ["description"] },
+        // attributes: { exclude: ["description"] },
       });
       let categories = await db.Category.findAll({
         attributes: ["id", "catName"],
@@ -38,6 +38,7 @@ let getProductById = (productId) => {
 let updateProductData = (data, imageUrl) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let infor = {};
       await db.Product.update(
         {
           productName: data.productName,
@@ -55,8 +56,16 @@ let updateProductData = (data, imageUrl) => {
           },
         }
       )
-        .then(resolve())
-        .catch(reject());
+        .then(() => {
+          infor.errCode = 0;
+          infor.message = "Sửa thành công";
+          resolve(infor);
+        })
+        .catch(() => {
+          infor.errCode = 1;
+          infor.message = "Lưu thất bại";
+          resolve(infor);
+        });
     } catch (e) {
       console.log(e);
     }
@@ -66,6 +75,7 @@ let updateProductData = (data, imageUrl) => {
 let createNewProduct = (data, imageUrl) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let infor = {};
       await db.Product.create({
         productName: data.productName,
         catId: data?.catId,
@@ -77,8 +87,9 @@ let createNewProduct = (data, imageUrl) => {
         stockId: data.quantity > 0 ? "SK1" : "SK2",
         quantity: data.quantity,
       });
-
-      resolve("create product successfully");
+      infor.errCode = 0;
+      infor.message = "Thêm thành công";
+      resolve(infor);
     } catch (e) {
       reject(e);
     }

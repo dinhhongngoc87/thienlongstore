@@ -5,27 +5,27 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import axios from "axios";
 import Image from "react-bootstrap/Image";
+import axios from "axios";
 import noImage from "../assets/images/no-image.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const validate = (values) => {
-  const errors = {};
-  if (!values.firstName) {
-    errors.firstName = "Required";
-  } else if (values.firstName.length > 15) {
-    errors.firstName = "Must be 15 characters or less";
-  }
+// const validate = (values) => {
+//   const errors = {};
+//   if (!values.firstName) {
+//     errors.firstName = "Required";
+//   } else if (values.firstName.length > 15) {
+//     errors.firstName = "Must be 15 characters or less";
+//   }
 
-  if (!values.lastName) {
-    errors.lastName = "Required";
-  } else if (values.lastName.length > 20) {
-    errors.lastName = "Must be 20 characters or less";
-  }
+//   if (!values.lastName) {
+//     errors.lastName = "Required";
+//   } else if (values.lastName.length > 20) {
+//     errors.lastName = "Must be 20 characters or less";
+//   }
 
-  return errors;
-};
+//   return errors;
+// };
 function DetailUser() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
