@@ -10,26 +10,32 @@ import { connect } from 'react-redux';
 import { buyProduct } from '../../store/actions';
 import { CartContext } from '../../context/CartProvider';
 import { useContext } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 function ProductDetail(props) {
-    const [cartItems, setCartItem] = useContext(CartContext);
-    const [productInfo, setProductInfo] = useState({});
+    // const [cartItems, setCartItem] = useContext(CartContext);
+    const [productInfo, setProductInfo] = useState({
+        AdditionalQty: 1,
+        data: {},
+    });
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const prodId = params.get('id');
     const [quantity, setQuantity] = useState(1);
     const [relateProducts, setRelateProduct] = useState([]);
-    const sliderImages = [productInfo.images];
+    const sliderImages = [productInfo.data?.images];
     useEffect(() => {
-        console.log('RUN USE EFFECT');
         fetch(`/api/get-product-byid?id=${prodId}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log('ProductInfo: ', data);
-                setProductInfo(data);
+                setProductInfo({
+                    ...productInfo,
+                    data: data,
+                });
                 return data;
             })
             .then((data) => {
@@ -42,50 +48,81 @@ function ProductDetail(props) {
         fetch('/api/get-all-products')
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
-                setProducts(data.products);
+                // setProducts(data.products);
                 setCategories(data.categories);
                 setSuppliers(data.suppliers);
             });
     }, [prodId]);
-    const handleIncrease = () => {
-        setQuantity(quantity + 1);
-    };
-    const handleDecrease = () => {
-        if (quantity === 1) {
-            return;
-        } else {
-            setQuantity(quantity - 1);
-        }
-    };
     const handleOnchangeQuantity = (e) => {
-        setQuantity(e.target.value);
+        // setQuantity(e.target.value);
+        setProductInfo({
+            ...productInfo,
+            AdditionalQty: Number(e.target.value),
+        });
     };
-    const handleAddCartItem = (product) => {
-        const isExist = cartItems.find((item) => item.id === product.id);
-        if (!isExist) {
-            console.log('Chưa có trong giỏ hàng');
-            product.qtyInCart = 1;
-            console.log('Product', product);
-            setCartItem([...cartItems, product]);
+    const handleAddToCart = () => {
+        const productInCart = props.cart.find((item) => item.id === productInfo.data.id);
+        if (productInCart) {
+            if (Number(productInfo.AdditionalQty + productInCart.qtyIncart) > Number(productInfo.data.quantity)) {
+                toast.warn('Quá số lượng cho phép', {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                props.buyProduct(productInfo);
+                toast.success('Thêm vào giỏ thành công', {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         } else {
-            isExist.qtyInCart += 1;
-            console.log('Product 2', isExist);
-            console.log('Tăng thêm 1 ở product detail component');
+            if (productInfo.AdditionalQty > productInfo.quantity) {
+                toast.warn('Quá số lượng cho phép', {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            } else {
+                props.buyProduct(productInfo);
+                toast.success('Thêm vào giỏ thành công', {
+                    position: 'top-center',
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                });
+            }
         }
-
-        console.log('CART ITEM', cartItems);
     };
     return (
         <div className={cx('wrapper', 'col-12')}>
             <div className={cx('product_detail', 'col-12')}>
                 <div className={cx('product_images', 'col-4')}>
                     <Slick sliderImages={sliderImages} />
-                    {console.log('SLIDER IMAGE: ', sliderImages)}
                 </div>
                 <div className={cx('product-infor', 'col-4')}>
                     <div className={cx('product-name')}>
-                        <h2>{productInfo.productName}</h2>
+                        <h2>{productInfo.data.productName}</h2>
                     </div>
                     <div className={cx('product-details')}>
                         <div className={cx('product-status')}>
@@ -93,62 +130,64 @@ function ProductDetail(props) {
                                 Thương hiệu: &nbsp;
                                 <span style={{ color: 'blue', cursor: 'pointer' }}>
                                     {suppliers.map((supplier) => {
-                                        if (supplier.id === productInfo.supplierId) return supplier.supplierName;
+                                        if (supplier.id === productInfo.data.supplierId) return supplier.supplierName;
                                     })}
                                 </span>
                             </span>
                             <span className="line">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
                             <span className={cx('status')}>
                                 Tình trạng:
-                                {productInfo.stockId === 'SK1' ? (
+                                {productInfo.data.stockId === 'SK1' ? (
                                     'Còn hàng'
                                 ) : (
                                     <span style={{ color: 'red' }}>Hết hàng</span>
                                 )}
                             </span>
-                            <p className={cx('product_id')}>Mã sản phẩm:SP0{productInfo.id} </p>
+                            <p className={cx('product_id')}>Mã sản phẩm:SP0{productInfo.data.id} </p>
                         </div>
                         <div className={cx('price-box')}>
                             <div className={cx('price')}>
                                 <div className={cx('current')}>
                                     {(
-                                        parseFloat(productInfo.price) *
-                                        (1 - parseFloat(productInfo.discount) / 100)
+                                        parseFloat(productInfo.data.price) *
+                                        (1 - parseFloat(productInfo.data.discount) / 100)
                                     ).toLocaleString()}
                                     ₫
                                 </div>
-                                {productInfo.discount === 0 ? (
+                                {productInfo.data.discount === 0 ? (
                                     <></>
                                 ) : (
-                                    <div className={cx('sale')}>{parseFloat(productInfo.price).toLocaleString()}</div>
+                                    <div className={cx('sale')}>
+                                        {parseFloat(productInfo.data.price).toLocaleString()}
+                                    </div>
                                 )}
                             </div>
-                            {productInfo.discount === 0 ? (
+                            {productInfo.data.discount === 0 ? (
                                 <></>
                             ) : (
                                 <div className={cx('discount')}>
                                     <span>
-                                        Tiết kiệm<strong>{productInfo.discount}%</strong>
+                                        Tiết kiệm<strong>{productInfo.data.discount}%</strong>
                                     </span>
                                 </div>
                             )}
                         </div>
                         <div className={cx('quantity')}>
                             <span>
-                                Số lượng :<button onClick={handleDecrease}>-</button>
-                                <input value={quantity} onChange={(e) => handleOnchangeQuantity(e)} type="text" />
-                                <button onClick={handleIncrease}>+</button>
+                                Số lượng :{/* <button onClick={handleDecrease}>-</button> */}
+                                <input
+                                    value={productInfo.AdditionalQty}
+                                    onChange={(e) => handleOnchangeQuantity(e)}
+                                    max={`${productInfo.quantity}`}
+                                    min="1"
+                                    type="number"
+                                />
+                                {/* <button onClick={handleIncrease}>+</button> */}
                             </span>
                         </div>
                         <div className={cx('action')}>
                             <Button
-                                // onClick={() => {
-                                //     console.log('PROPS: ', productInfo);
-                                //     return productInfo.buyProduct(productInfo);
-                                // }}
-                                onClick={() => {
-                                    handleAddCartItem(productInfo);
-                                }}
+                                onClick={handleAddToCart}
                                 primary
                                 className={cx('themvaogio')}
                                 leftIcon={<OpenCartIcon />}
@@ -185,7 +224,7 @@ function ProductDetail(props) {
                             <td>Tên danh mục</td>
                             <td>
                                 {categories.map((category) => {
-                                    if (category.id === productInfo.catId) return category.catName;
+                                    if (category.id === productInfo.data.catId) return category.catName;
                                 })}
                                  
                             </td>
@@ -194,31 +233,32 @@ function ProductDetail(props) {
                             <td>Thương hiệu </td>
                             <td>
                                 {suppliers.map((supplier) => {
-                                    if (supplier.id === productInfo.supplierId) return supplier.supplierName;
+                                    if (supplier.id === productInfo.data.supplierId) return supplier.supplierName;
                                 })}
                             </td>
                         </tr>
                         <tr>
                             <td>Số lượng còn</td>
-                            <td>{productInfo.quantity}</td>
+                            <td>{productInfo.data.quantity}</td>
                         </tr>
                     </table>
                     <h5>
-                        <b>Tính năng</b>
+                        <b>Mô tả</b>
                     </h5>
-                    <p>{productInfo.description}</p>
+                    <p>{productInfo.data.description}</p>
                 </div>
 
                 <div className={cx('suggestion', 'col-12')}>
                     <h2>
                         <b>Sản phẩm cùng loại</b>
                     </h2>
-                    <div className={cx('suggested-products')}>
+                    <div className={cx('suggested-products', 'grid-container')}>
                         {relateProducts.map((product, index) => (
                             <Product key={index} data={product} />
                         ))}
                     </div>
                 </div>
+                <ToastContainer newestOnTop={false} rtl={false} pauseOnFocusLoss theme="light" />
             </div>
         </div>
         // <>From detail {prodId}</>

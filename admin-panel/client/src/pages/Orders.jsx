@@ -1,137 +1,189 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
-import moment from "moment";
+import classNames from "classnames/bind";
 import "moment-timezone";
+import styles from "./Orders.module.scss";
+import { CartDown, Check, Delivery, Return } from "../components/Icons";
+import PendingOrder from "./PendingOrder";
+import ProcessingOrder from "./ProcessingOrder";
+import DeliveredOrder from "./DeliveredOrder";
+import Search from "../components/search/Search";
+import ReturnOrder from "./ReturnOrder";
 const customerTableHead = [
   "No.",
   "email",
-  "Điện thoai",
+  "Điện thoại",
   "Địa chỉ",
   "Ngày đặt hàng",
-  "Số lượng",
+  "Tổng tiền",
   "Tình trạng",
   "Hành động",
 ];
 
-// const renderHead = (item, index) => <th key={index}>{item}</th>;
-
-// const renderBody = (item, index) => (
-//   <tr key={index}>
-//     <td>{index}</td>
-//     <td>{item.name}</td>
-//     <td>{item.email}</td>
-//     <td>{item.phone}</td>
-//     <td>{item.address}</td>
-//     <td>{item.roleId}</td>
-//     <td>
-//       <a href="/">Delete</a>
-//       <a href="/">Edit</a>
-//     </td>
-//   </tr>
-// );
-
+const cx = classNames.bind(styles);
 const Orders = () => {
-  let history = useHistory();
   const [orders, setOrder] = useState([]);
-  const [products, setProducts] = useState([]);
-
+  const [searchValue, setSearchValue] = useState();
+  const [state, setState] = useState({
+    isOpenDetailModal: false,
+    currentDetailOrder: {},
+    orderstatus: "PendingOrder",
+  });
   useEffect(() => {
-    fetch("/get-orders-crud")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setOrder(data);
-      });
-    fetch("/api/get-all-products")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setProducts(data.products);
-      });
+    axios.get("/get-orders-crud").then((data) => {
+      if (data.data.errCode === 0) {
+        setOrder(data.data.orders);
+      }
+    });
   }, []);
-  console.log("ORDERS: ===>", orders);
-
-  const handleEdit = (id) => {
-    history.push(`/detail-order?id=${id}`);
+  const renderComponent = () => {
+    switch (state.orderstatus) {
+      case "PendingOrder":
+        return <PendingOrder search={search} searchValue={searchValue} />;
+      case "ProcessingOrder":
+        return <ProcessingOrder search={search} searchValue={searchValue} />;
+      case "DoneOrder":
+        return <DeliveredOrder search={search} searchValue={searchValue} />;
+      // case '4': return <ComponentFour/>;
+      case "ReturnOrder":
+        return <ReturnOrder search={search} searchValue={searchValue} />;
+      default:
+        return <PendingOrder search={search} searchValue={searchValue} />;
+    }
   };
-  const handleCreate = () => {
-    history.push(`/create-order`);
+  const search = (data) => {
+    return data.filter(
+      (item) =>
+        item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.phone.toLowerCase().includes(searchValue) ||
+        item.fullName.toLowerCase().includes(searchValue.toLowerCase())
+    );
   };
-  const handleDelete = (id) => {
-    axios
-      .get(`/delete-crud`, {
-        params: {
-          id: id,
-        },
-      })
-      .then((response) => {
-        alert(response.data);
-        window.location.reload();
-      });
+  const handleCartDownOnclick = () => {
+    setState({
+      ...state,
+      orderstatus: "PendingOrder",
+    });
+  };
+  const handleDeliveryOnclick = () => {
+    setState({
+      ...state,
+      orderstatus: "ProcessingOrder",
+    });
+  };
+  const handleDoneOnclick = () => {
+    setState({
+      ...state,
+      orderstatus: "DoneOrder",
+    });
+  };
+  const handleReturnOnclick = () => {
+    setState({
+      ...state,
+      orderstatus: "ReturnOrder",
+    });
   };
   return (
     <div>
-      <h2 className="page-header">Orders</h2>
-      <div class="row">
-        <div className="mb-3"></div>
-      </div>
+      <h2 className={cx("page-header")}>Đơn hàng</h2>
+
       <div className="row">
-        <div className="col-12">
-          <div className="card">
-            <div className="card__body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    {customerTableHead.map((title) => (
-                      <th scope="col">{title}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order, index) => (
-                    <tr>
-                      <td>{index}</td>
-                      <td>{order.email}</td>
-                      <td>{order.phone}</td>
-                      <td>{order.address}</td>
-                      <td>
-                        {moment(order.createdAt).format("DD/MM/YYYY hh:mm")}
-                      </td>
-                      <td>{order.totalProduct}</td>
-                      <td>{order.statusId === "S1" ? "Pending" : "Unknown"}</td>
-                      <td>
-                        <Button
-                          onClick={() => {
-                            handleEdit(order.id);
-                          }}
-                          warning
-                          small
-                          type="sub"
-                        >
-                          Xác nhận
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            handleEdit(order.id);
-                          }}
-                          success
-                          small
-                          type="sub"
-                        >
-                          Chi tiết
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className={cx("navigation")}>
+          <ul className={cx("navigation-list")}>
+            <li
+              className={cx(
+                "navigation-item",
+                state.orderstatus === "PendingOrder" ? "active" : null
+              )}
+            >
+              <Button
+                onClick={handleCartDownOnclick}
+                leftIcon={
+                  <span className={cx("CartDown-container")}>
+                    <CartDown
+                      className={cx("CartDown-icon")}
+                      width="1.5rem"
+                      height="1.5rem"
+                    />
+                  </span>
+                }
+              >
+                Đang chờ
+              </Button>
+            </li>
+            <li
+              className={cx(
+                "navigation-item",
+                state.orderstatus === "ProcessingOrder" ? "active" : null
+              )}
+            >
+              <Button
+                onClick={handleDeliveryOnclick}
+                leftIcon={
+                  <span className={cx("Delivery-container")}>
+                    <Delivery
+                      className={cx("Delivery-icon")}
+                      width="1.5rem"
+                      height="1.5rem"
+                    />
+                  </span>
+                }
+              >
+                Vận chuyển
+              </Button>
+            </li>
+            <li
+              className={cx(
+                "navigation-item",
+                state.orderstatus === "DoneOrder" ? "active" : null
+              )}
+            >
+              <Button
+                onClick={handleDoneOnclick}
+                leftIcon={
+                  <span className={cx("Check-container")}>
+                    <Check
+                      width="1.5rem"
+                      className={cx("Check-icon")}
+                      height="1.5rem"
+                    />
+                  </span>
+                }
+              >
+                Đã giao
+              </Button>
+            </li>
+            <li
+              className={cx(
+                "navigation-item",
+                state.orderstatus === "ReturnOrder" ? "active" : null
+              )}
+            >
+              <Button
+                onClick={handleReturnOnclick}
+                leftIcon={
+                  <span className={cx("Return-container")}>
+                    <Return
+                      className={cx("Return-icon")}
+                      width="1.5rem"
+                      height="1.5rem"
+                    />
+                  </span>
+                }
+              >
+                Hoàn lại
+              </Button>
+            </li>
+          </ul>
+        </div>
+        <div className="row">
+          <Search setSearchValue={setSearchValue} />
+          {console.log("SEARCH VALUE: ", searchValue)}
         </div>
       </div>
+      {renderComponent()}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,6 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { Plus } from "../components/Icons";
 import ModalEditUser from "./ModalEditUser";
 import ModalCreateUser from "./ModalCreateUser";
+import Search from "../components/search/Search";
+import Pagination from "../components/pagination/Pagination";
+import { update } from "lodash";
 const customerTableHead = [
   "No.",
   "Tên",
@@ -38,6 +40,8 @@ const customerTableHead = [
 const Customers = () => {
   const [users, setUsers] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [searchValue, setSearchValue] = useState();
+  const [currentItems, setCurrentItems] = useState([]);
   const [state, setState] = useState({
     isOpenEditModal: false,
     isOpenCreateModal: false,
@@ -54,6 +58,7 @@ const Customers = () => {
       .then((data) => {
         console.log(data);
         setUsers(data);
+        setCurrentItems(data.slice(0, 4));
       });
     return () => {
       setState({
@@ -61,7 +66,7 @@ const Customers = () => {
         errMessage: "",
       });
     };
-  }, [isUpdate]);
+  }, [isUpdate, searchValue]);
 
   const handleEdit = (user) => {
     // history.push(`/detail-user?id=${user.id}`);
@@ -71,7 +76,15 @@ const Customers = () => {
     // history.push(`/create-user`);
     setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
   };
-
+  const search = (data) => {
+    return data.filter(
+      (item) =>
+        item.email.toLowerCase().includes(searchValue) ||
+        item.firstName.includes(searchValue) ||
+        item.lastName.includes(searchValue) ||
+        item.phone.toLowerCase().includes(searchValue)
+    );
+  };
   const doEditUser = (formdata, config) => {
     console.log("check user from child : ", config);
     axios.post("/put-crud", formdata, config).then((response) => {
@@ -172,6 +185,10 @@ const Customers = () => {
         });
       });
   };
+  const changeCurrentItems = (items) => {
+    setCurrentItems(items);
+    // setIsUpdate(!update);
+  };
   return (
     <div style={{ position: "relative" }}>
       <h2 className="page-header">Tài khoản</h2>
@@ -189,6 +206,9 @@ const Customers = () => {
         </div>
       </div>
       <div className="row">
+        <Search setSearchValue={setSearchValue} />
+      </div>
+      <div className="row">
         <div className="col-12">
           <div className="card">
             <div className="card__body">
@@ -201,39 +221,73 @@ const Customers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, index) => (
-                    <tr>
-                      <td>{index}</td>
-                      <td>
-                        {user.firstName}&nbsp;{user.lastName}
-                      </td>
-                      <td>{user.email}</td>
-                      <td>{user.phone}</td>
-                      <td>{user.address}</td>
-                      <td>{user.roleId === "R1" ? "admin" : "user"}</td>
-                      <td>
-                        <Button
-                          onClick={() => {
-                            handleEdit(user);
-                          }}
-                          warning
-                          small
-                          type="sub"
-                        >
-                          Sửa
-                        </Button>
-                        <Button
-                          // href={`/delete-crud?id=${user.id}`}
-                          onClick={() => handleDelete(user.id)}
-                          danger
-                          small
-                          type="button"
-                        >
-                          Xóa
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                  {searchValue
+                    ? search(users).map((user, index) => (
+                        <tr>
+                          <td>{index}</td>
+                          <td>
+                            {user.firstName}&nbsp;{user.lastName}
+                          </td>
+                          <td>{user.email}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.address}</td>
+                          <td>{user.roleId === "R1" ? "admin" : "user"}</td>
+                          <td>
+                            <Button
+                              onClick={() => {
+                                handleEdit(user);
+                              }}
+                              warning
+                              small
+                              type="sub"
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              // href={`/delete-crud?id=${user.id}`}
+                              onClick={() => handleDelete(user.id)}
+                              danger
+                              small
+                              type="button"
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    : currentItems.map((user, index) => (
+                        <tr>
+                          <td>{index}</td>
+                          <td>
+                            {user.firstName}&nbsp;{user.lastName}
+                          </td>
+                          <td>{user.email}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.address}</td>
+                          <td>{user.roleId === "R1" ? "admin" : "user"}</td>
+                          <td>
+                            <Button
+                              onClick={() => {
+                                handleEdit(user);
+                              }}
+                              warning
+                              small
+                              type="sub"
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              // href={`/delete-crud?id=${user.id}`}
+                              onClick={() => handleDelete(user.id)}
+                              danger
+                              small
+                              type="button"
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
                 {state.isOpenEditModal && (
                   <ModalEditUser
@@ -252,6 +306,12 @@ const Customers = () => {
                   />
                 )}
               </table>
+              {users && (
+                <Pagination
+                  data={users}
+                  changeCurrentItems={changeCurrentItems}
+                />
+              )}
             </div>
           </div>
         </div>

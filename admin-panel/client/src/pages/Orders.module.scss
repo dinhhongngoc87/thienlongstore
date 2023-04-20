@@ -1,0 +1,103 @@
+.page-header {
+    margin-bottom: 1rem;
+}
+
+.navigation-list {
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.navigation-item {
+    border: 1px solid white;
+    width: 12rem;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    border-radius: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.navigation-item.active {
+    background-color: rgb(219, 219, 222);
+}
+
+.navigation-item button {
+    padding: 13px 24px;
+}
+
+.navigation-item:hover {
+    background-color: rgb(219, 219, 222);
+}
+
+.navigation-item:active {
+    background-color: rgb(241, 241, 242);
+}
+
+.CartDown-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 12rem;
+    display: block;
+    background-color: #ff5a1f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+
+}
+
+.CartDown-icon {
+    color: white;
+}
+
+.Check-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 12rem;
+    display: block;
+    background-color: rgb(14, 159, 110);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.Check-icon {
+    color: white;
+}
+
+.Delivery-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 12rem;
+    display: block;
+    background-color: rgb(63, 131, 248);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.Delivery-icon {
+    color: white;
+}
+
+.Return-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 12rem;
+    display: block;
+    background-color: rgb(247, 58, 58);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.Return-icon {
+    color: white;
+}

@@ -1,14 +1,14 @@
+import axios from 'axios';
 import * as httpRequest from '../utils/httpRequest';
 
-export const search = async (q, type = 'less') => {
+export const search = async (q) => {
     try {
-        const res = await httpRequest.get('users/search', {
+        const res = await httpRequest.get('/api/query-product', {
             params: {
                 q,
-                type,
             },
         });
-        return res.data;
+        return res;
     } catch (error) {
         console.log(error);
     }

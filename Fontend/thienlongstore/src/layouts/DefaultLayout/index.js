@@ -19,7 +19,13 @@ function DefaultLayout({ children }) {
                 <div className={cx('content')}>{children}</div>
             </div>
             <Footer />
-            <ToastContainer newestOnTop={false} rtl={false} pauseOnFocusLoss theme="light" />
+            <ToastContainer
+                className={cx('toastComponent')}
+                newestOnTop={false}
+                rtl={false}
+                pauseOnFocusLoss
+                theme="light"
+            />
         </div>
     );
 }

@@ -11,6 +11,10 @@ const routes = {
     chitietsanpham: '/sanpham/chitietsanpham',
     imageBaseUrl: '../../asset/images',
     cart: '/cart',
+    thongtintaikhoan: '/thongtintaikhoan',
+    donhang: '/donhang',
+    dathangthanhcong: '/reviewdonhang',
+    ketquatimkiem: '/ketquatimkiem',
     login: '/login',
     signup: '/signup',
 };

@@ -1,21 +1,19 @@
 import React, { useEffect } from "react";
-
 import "./layout.css";
-
 import Sidebar from "../sidebar/Sidebar";
 import TopNav from "../topnav/TopNav";
 import Routes from "../Routes";
-
 import { BrowserRouter, Route } from "react-router-dom";
-
 import { useSelector, useDispatch } from "react-redux";
-
 import ThemeAction from "../../redux/actions/ThemeAction";
-import { ToastContainer, toast } from "react-toastify";
+import appAction from "../../redux/actions/appAction";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { connect } from "react-redux";
 
-const Layout = () => {
+const Layout = (props) => {
   const themeReducer = useSelector((state) => state.ThemeReducer);
+  const appReducer = useSelector((state) => state.appReducer);
 
   const dispatch = useDispatch();
 
@@ -27,7 +25,9 @@ const Layout = () => {
     dispatch(ThemeAction.setMode(themeClass));
 
     dispatch(ThemeAction.setColor(colorClass));
-  }, [dispatch]);
+    dispatch(appAction.getUsers()); // use directly action in redux
+    props.getUsers(); // use redux action through prop
+  }, []);
 
   return (
     <BrowserRouter>
@@ -53,5 +53,15 @@ const Layout = () => {
     </BrowserRouter>
   );
 };
-
-export default Layout;
+const mapStateToProp = (state) => {
+  return {
+    data: state.users,
+  };
+};
+const mapDispathToProp = (dispatch) => {
+  return {
+    getUsers: () => dispatch(appAction.getUsers()),
+    addUser: (newUser) => dispatch(appAction.addUser(newUser)),
+  };
+};
+export default connect(mapStateToProp, mapDispathToProp)(Layout);

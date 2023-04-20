@@ -6,16 +6,16 @@ const sequelize = new Sequelize("stationery_store", "root", null, {
   logging: false,
 });
 //Query best seller product
-let topSeller = () => {
+let topSeller = (limit) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const bestSeller = await db.Order.findAll({
+      const bestSeller = await db.Order_detail.findAll({
         attributes: [
-          "productId",
-          [sequelize.fn("SUM", sequelize.col("totalProduct")), "totalQty"],
+          "product_Id",
+          [sequelize.fn("SUM", sequelize.col("quantity")), "totalQty"],
         ],
-        group: ["productId"],
-        limit: 5,
+        group: ["product_Id"],
+        limit: limit,
         order: [[sequelize.col("totalQty"), "DESC"]],
       });
 
@@ -63,8 +63,21 @@ let topCategory = () => {
     }
   });
 };
-
+let getNewArrival = (limit) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const newArrial = await db.Product.findAll({
+        limit: limit,
+        order: [[sequelize.col("createdAt"), "DESC"]],
+      });
+      resolve(newArrial);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   topSeller: topSeller,
   topCategory: topCategory,
+  getNewArrival: getNewArrival,
 };

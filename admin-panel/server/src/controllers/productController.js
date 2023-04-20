@@ -1,13 +1,12 @@
 import productService from "../services/productService";
 
 let handleGetAllProducts = async (req, res) => {
-  let data = await productService.getAllProduct();
+  let data = await productService.getAllProduct(req.query.sort);
   return res.send(data);
 };
 //fetch product by id
 let handleGetProductById = async (req, res) => {
   let productId = req.query.id;
-  console.log(productId);
   let data = await productService.getProductById(productId);
   res.send(data);
 };
@@ -15,14 +14,10 @@ let handleGetProductById = async (req, res) => {
 let handlePutProduct = async (req, res) => {
   let data = req.body;
   const imageUrl = req.file?.path;
-  console.log("DATA: ", data);
-  console.log("IMAGE: ", imageUrl);
   if (!data.id) {
     let message = await productService.createNewProduct(data, imageUrl);
-    console.log(message);
     return res.send(message);
   } else {
-    console.log("UPDATE INFOR:", data);
     let message = await productService.updateProductData(data, imageUrl);
     return res.send(message);
   }

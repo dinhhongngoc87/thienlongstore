@@ -6,8 +6,8 @@ const handleGetAllCategory = async (req, res) => {
   return res.status(200).json(data);
 };
 const handlePutCategory = async (req, res) => {
-  console.log("RESQUEST : ", req.body);
   let id = req.body?.id;
+  console.log("EDIT RES: ", req.body);
   if (!req.body.catName) {
     return res.send({
       errCode: 2,

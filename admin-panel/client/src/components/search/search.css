@@ -1,0 +1,31 @@
+.search__container {
+  position: relative;
+  height: 50px;
+  width: 20rem;
+  background-color: var(--main-bg);
+  display: flex;
+  align-items: center;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin: 10px 0;
+  left: 17px;
+  padding: 0;
+}
+
+.search__container > input {
+  height: 100%;
+  width: 100%;
+  padding: 10px 60px 10px 20px;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  color: var(--txt-color);
+  background-color: var(--main-bg);
+  outline: none;
+}
+
+.search__container > i {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 20px;
+}

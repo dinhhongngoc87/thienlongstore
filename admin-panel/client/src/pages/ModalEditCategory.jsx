@@ -1,18 +1,13 @@
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import noImage from "../assets/images/no-image.png";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Image from "react-bootstrap/Image";
-import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function ModalEditCategory({
   isOpen,
   toggleModal,
-  createCategory,
+  editCategory,
   currentCategory,
 }) {
   const toggle = () => toggleModal();
@@ -29,19 +24,18 @@ function ModalEditCategory({
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("state", state);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("id", state.id);
-    formData.append("catName", state.firstName);
+    formData.append("catName", state.catName);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
-    createCategory(formData, config);
+    editCategory(formData, config);
 
     // axios.post("/put-crud", formData, config).then((response) => {
     //   toast.success("Successfully", {

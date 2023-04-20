@@ -10,6 +10,7 @@ import DetailUser from "../pages/DetailUser";
 import DetailProduct from "../pages/DetailProduct";
 import CreateUser from "../pages/CreateUser";
 import Orders from "../pages/Orders";
+import PendingOrder from "../pages/PendingOrder";
 const Routes = () => {
   return (
     <Switch>

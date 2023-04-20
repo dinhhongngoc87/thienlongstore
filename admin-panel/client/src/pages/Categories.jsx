@@ -5,8 +5,6 @@ import Button from "../components/button/Button";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Plus } from "../components/Icons";
-import ModalEditUser from "./ModalEditUser";
-import ModalCreateUser from "./ModalCreateUser";
 import ModalCreateCategory from "./ModalCreateCategory";
 import ModalEditCategory from "./ModalEditCategory";
 const customerTableHead = ["No.", "Tên chủng loại", "Hành động"];
@@ -58,9 +56,9 @@ const Customers = () => {
     setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
   };
 
-  const doEditCategory = (formdata, config) => {
+  const doEditCategory = (formData, config) => {
     console.log("check user from child : ", config);
-    axios.post("/api/put-category-crud", formdata, config).then((response) => {
+    axios.post("/api/put-category-crud", formData, config).then((response) => {
       console.log("RES: ", response);
 
       toast.success(response.data.message, {
@@ -80,9 +78,9 @@ const Customers = () => {
       }
     });
   };
-  const doCreateCategory = (formdata) => {
+  const doCreateCategory = (formdata, config) => {
     axios
-      .post("/api/put-category-crud", formdata)
+      .post("/api/put-category-crud", formdata, config)
       .then((response) => {
         console.log("RES: ", response);
         if (response.data.errCode === 0 && response.status === 200) {
@@ -162,7 +160,7 @@ const Customers = () => {
   };
   return (
     <div style={{ position: "relative" }}>
-      <h2 className="page-header">Tài khoản</h2>
+      <h2 className="page-header">Danh mục</h2>
       <div class="row">
         <div className="mb-3">
           <Button
@@ -204,7 +202,7 @@ const Customers = () => {
                         >
                           Sửa
                         </Button>
-                        <Button
+                        {/* <Button
                           // href={`/delete-crud?id=${category.id}`}
                           onClick={() => handleDelete(category.id)}
                           danger
@@ -212,7 +210,7 @@ const Customers = () => {
                           type="button"
                         >
                           Xóa
-                        </Button>
+                        </Button> */}
                       </td>
                     </tr>
                   ))}
@@ -230,7 +228,7 @@ const Customers = () => {
                     toggleModal={toggleCreateModal}
                     isOpen={state.isOpenCreateModal}
                     createCategory={doCreateCategory}
-                    errMessage={state.errMessage}
+                    // errMessage={state.errMessage}
                   />
                 )}
               </table>

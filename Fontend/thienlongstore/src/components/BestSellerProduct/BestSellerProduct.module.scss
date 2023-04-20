@@ -1,0 +1,25 @@
+.slick-arrow {}
+
+.slick-prev {
+    color: #f5f5f5;
+
+}
+
+.slick-prev {}
+
+.next-arrow {}
+
+.slick-slider {
+
+    .slick-prev:before,
+    .slick-next:before {
+        content: '←';
+        font-family: 'slick';
+        font-size: 20px;
+        line-height: 1;
+        opacity: .75;
+        color: red;
+        -webkit-font-smoothing: antialiased;
+    }
+
+}

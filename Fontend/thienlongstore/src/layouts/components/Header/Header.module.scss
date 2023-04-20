@@ -22,51 +22,78 @@
     justify-content: space-between;
     padding: 0 var(--default-layout-horizontal-spacer);
 }
+
 .login {
     color: #fff;
 }
+
 .logo-link {
     display: flex;
     width: 200px;
+
     img {
         width: 100%;
     }
 }
 
 //Actions
-.actions{
+.actions {
     display: flex;
     align-items: center;
 }
+
 .action-btn {
     position: relative;
     background-color: transparent;
     font-size: 2.2rem;
-    color:grey ;
+    color: grey;
     padding: 4px 12px;
     cursor: pointer;
 }
+
+.cartBtn {
+    position: relative;
+}
+
 .badge {
     position: absolute;
     height: 1.8rem;
     width: 1.8rem;
     line-height: 1.8rem;
     background-color: var(--primary);
-    font-family: 'ProximaNova', sans-serif;
+    font-family: "ProximaNova", sans-serif;
     color: var(--white);
     font-weight: 600;
     font-size: 1.2rem;
     border-radius: 10px;
-    top: -3px;
-    right: 5px;
-    
-
+    top: -8px;
+    right: -6px;
+    display: flex;
+    justify-content: center;
 }
+
+.numberProInCart {
+    position: absolute;
+    height: 1.8rem;
+    width: 1.8rem;
+    line-height: 1.8rem;
+    background-color: var(--primary);
+    font-family: "ProximaNova", sans-serif;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    top: -8px;
+    right: -6px;
+    display: flex;
+    justify-content: center;
+}
+
 .more-btn {
     font-size: 2rem;
     margin-left: 28px;
-    background:transparent;
-    padding:4px 8px;
+    background: transparent;
+    padding: 4px 8px;
     cursor: pointer;
 }
 

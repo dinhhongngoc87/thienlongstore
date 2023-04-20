@@ -1,0 +1,41 @@
+.container {}
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.grid-container {
+    display: grid;
+    column-gap: 15px;
+    row-gap: 15px;
+    grid-template-columns: 20rem 20rem 20rem 20rem;
+}
+
+.product-items {
+    margin: 25px 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.select-sorter {
+
+    margin-bottom: 10px;
+    outline: none;
+    padding: 5px 5px
+}
+
+.product-list {
+    display: flex;
+    flex-direction: row;
+}
+
+.filter-container {
+    width: 250px;
+}
+
+.clear-filter {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+}

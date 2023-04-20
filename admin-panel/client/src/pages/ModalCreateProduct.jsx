@@ -1,19 +1,16 @@
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import noImage from "../assets/images/no-image.png";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function ModalCreateProduct({ isOpen, toggleModal, createProduct }) {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [avatarPreview, setAvatarPreview] = useState();
-  const [update, setUpdate] = useState(false);
   const [state, setState] = useState({
     id: "",
     productName: "",
@@ -38,30 +35,27 @@ function ModalCreateProduct({ isOpen, toggleModal, createProduct }) {
         });
       });
   }, []);
-  console.log(state);
-  const toggle = () => toggleModal();
+
   useEffect(() => {
     return () => {
       avatarPreview && URL.revokeObjectURL(avatarPreview.preview);
     };
   }, []);
+
+  const toggle = () => toggleModal();
+
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("state", state);
   };
   //handle choose avatar
   const handleChangeAvatar = (e) => {
     setState({
       ...state,
-      image: e.target.files[0],
+      images: e.target.files[0],
     });
-
-    console.log("FILE : ", e.target.files[0]);
-    console.log("CHANGE image: ", state);
-    setUpdate(!update);
 
     //handle preview avatar
     const file = e.target.files[0];
@@ -99,26 +93,10 @@ function ModalCreateProduct({ isOpen, toggleModal, createProduct }) {
       },
     };
     createProduct(formData, config);
-
-    // axios.post("/put-crud", formData, config).then((response) => {
-    //   toast.success("Successfully", {
-    //     position: "top-right",
-    //     autoClose: 2000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "light",
-    //   });
-
-    //   if (response.data.errCode === 0 && response.status === 200) {
-    //     setUpdate(!update);
-    //   }
-    // });
   };
   return (
     <>
+      {console.log("re-render: ", state)}
       <Modal
         size="lg"
         centered
@@ -262,7 +240,7 @@ function ModalCreateProduct({ isOpen, toggleModal, createProduct }) {
               </Form.Group>
             </Row>
             <input
-              value={state.id ? state.id : ""}
+              value={state.id ? state.id : null}
               name="id"
               type="text"
               hidden

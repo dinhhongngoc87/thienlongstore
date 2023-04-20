@@ -1,0 +1,58 @@
+.notation {
+    background-color: rgb(222, 247, 236);
+    text-align: center;
+    font-weight: 600;
+    color: rgb(14, 159, 110);
+    font-size: 3rem;
+}
+
+.order-infor {
+    line-height: 3.5rem;
+}
+
+.order-infor h2 {
+    text-align: center;
+    font-family: "Consolas";
+}
+
+.invoice {
+
+    width: 70rem;
+    justify-content: center;
+    margin: 0 auto;
+    font-family: "Consolas";
+}
+
+.header-invoice {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.body-invoice {}
+
+.body-invoice table {
+    width: 100%;
+    border: 1px solid #ccc;
+
+}
+
+.body-invoice table th {
+    font-size: 1.6rem;
+    font-weight: bold;
+    background-color: rgb(132, 176, 202);
+    color: white;
+
+}
+
+.body-invoice table tr td {
+    font-size: 1.6rem;
+}
+
+.footer-invoice {
+    text-align: right;
+    color: red;
+    font-size: 2rem;
+}
+
+.continue span {}

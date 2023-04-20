@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { handleLoginApi } from '../../services/userService';
 import Button from '../../components/Button';
 import styles from './Login.module.scss';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import * as actions from '../../store/actions';
 import { Eye, EyeSlash } from '../../components/Icons';
@@ -13,6 +13,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 function Login({ toggle }) {
+    const userReducer = useSelector((state) => state.user.userReducer);
+    const dispatch = useDispatch();
     const userRef = useRef();
     const navigate = useNavigate();
     // const [success, setSuccess] = useState(false);
@@ -65,9 +67,10 @@ function Login({ toggle }) {
                 });
             }
             if (data.data && data.data.errCode === 0) {
-                actions.userLoginSuccess(data.data.user);
                 if (data.data.user.user.email) {
+                    // dispatch(userReducer.userLoginSuccess(data.data.user.user));
                     localStorage.setItem('user', data.data.user.user.email);
+                    localStorage.setItem('user_id', data.data.user.user.id);
                 }
                 toast.success('Login successfully', {
                     position: 'top-center',

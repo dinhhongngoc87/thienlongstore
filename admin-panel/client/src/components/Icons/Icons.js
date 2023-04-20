@@ -71,6 +71,91 @@ export const Message = ({ width = "2.2rem", height = "2.2rem", className }) => {
     </svg>
   );
 };
+export const Next = ({ width = "2.2rem", height = "2.2rem", className }) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      <path d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z" />
+    </svg>
+  );
+};
+export const Ellipsis = ({
+  width = "2.2rem",
+  height = "2.2rem",
+  className,
+  color,
+}) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      fill={color}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 128 512"
+    >
+      <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z" />
+    </svg>
+  );
+};
+export const Infor = ({
+  width = "2.2rem",
+  height = "2.2rem",
+  className,
+  color,
+}) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      fill={color}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 192 512"
+    >
+      <path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32H96c17.7 0 32 14.3 32 32V448h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H64V256H32c-17.7 0-32-14.3-32-32z" />
+    </svg>
+  );
+};
+export const Ban = ({
+  width = "2.2rem",
+  height = "2.2rem",
+  className,
+  color,
+}) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      fill={color}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+    </svg>
+  );
+};
+export const Prev = ({ width = "2.2rem", height = "2.2rem", className }) => {
+  return (
+    <svg
+      className={className}
+      width={width}
+      height={height}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z" />
+    </svg>
+  );
+};
 
 export const SearchIcon = ({
   width = "2.4rem",
@@ -121,7 +206,71 @@ export const HomeIcon = ({
     </svg>
   );
 };
+export const CartDown = ({
+  width = "3.2rem",
+  height = "2.4rem",
+  className,
+}) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      className={className}
+      viewBox="0 0 576 512"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H69.5c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H199.7c-11.5 0-21.4-8.2-23.6-19.5L170.7 288H459.2c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32H360V134.1l23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23V32H120.1C111 12.8 91.6 0 69.5 0H24zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z" />
+    </svg>
+  );
+};
+export const Delivery = ({
+  width = "3.2rem",
+  height = "2.4rem",
+  className,
+}) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      className={className}
+      viewBox="0 0 640 512"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+    </svg>
+  );
+};
+export const Return = ({ width = "3.2rem", height = "2.4rem", className }) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      className={className}
+      viewBox="0 0 512 512"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M125.7 160H176c17.7 0 32 14.3 32 32s-14.3 32-32 32H48c-17.7 0-32-14.3-32-32V64c0-17.7 14.3-32 32-32s32 14.3 32 32v51.2L97.6 97.6c87.5-87.5 229.3-87.5 316.8 0s87.5 229.3 0 316.8s-229.3 87.5-316.8 0c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0c62.5 62.5 163.8 62.5 226.3 0s62.5-163.8 0-226.3s-163.8-62.5-226.3 0L125.7 160z" />
+    </svg>
+  );
+};
 
+export const Check = ({ width = "3.2rem", height = "2.4rem", className }) => {
+  return (
+    <svg
+      width={width}
+      height={height}
+      className={className}
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 448 512"
+    >
+      <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+    </svg>
+  );
+};
 export const NewsPaperIcon = ({
   width = "3.2rem",
   height = "2.4rem",

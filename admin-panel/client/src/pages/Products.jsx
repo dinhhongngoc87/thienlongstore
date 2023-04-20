@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/button/Button";
 import { toast } from "react-toastify";
@@ -9,7 +8,8 @@ import "./Product.module.scss";
 import { Plus } from "../components/Icons";
 import ModalCreateProduct from "./ModalCreateProduct";
 import ModalEditProduct from "./ModalEditProduct";
-
+import Search from "../components/search/Search";
+import Pagination from "../components/pagination/Pagination";
 const productTableHead = [
   "No.",
   "Tên SP",
@@ -21,12 +21,13 @@ const productTableHead = [
   "Hành động",
 ];
 
-const Products = () => {
-  let history = useHistory();
+const Products = (props) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [searchValue, setSearchValue] = useState();
+  const [currentItems, setCurrentItems] = useState([]);
   const [state, setState] = useState({
     isOpenCreateProduct: false,
     isOpenEditProduct: false,
@@ -39,14 +40,19 @@ const Products = () => {
         setProducts(data.products);
         setCategories(data.categories);
         setSuppliers(data.suppliers);
+        setCurrentItems(data.products.slice(0, 10));
       });
-  }, [update]);
-  console.log("PRODUCT", products);
+  }, [update, searchValue]);
   const toggleCreateModal = () => {
     setState({
       ...state,
       isOpenCreateProduct: !state.isOpenCreateProduct,
     });
+  };
+  const search = (data) => {
+    return data.filter((item) =>
+      item.productName.toLowerCase().includes(searchValue)
+    );
   };
   const toggleEditModal = () => {
     setState({
@@ -92,7 +98,9 @@ const Products = () => {
         }
       });
   };
-
+  const changeCurrentItems = (items) => {
+    setCurrentItems(items);
+  };
   const doEditProduct = (formdata, config) => {
     axios
       .post("/api/put-product-crud", formdata, config)
@@ -199,6 +207,7 @@ const Products = () => {
   return (
     <div>
       <h2 className="page-header">Sản phẩm</h2>
+
       <div class="row">
         <div className="mb-3">
           <Button
@@ -213,6 +222,9 @@ const Products = () => {
         </div>
       </div>
       <div className="row">
+        <Search setSearchValue={setSearchValue} />
+      </div>
+      <div className="row">
         <div className="col-12">
           <div className="card">
             <div className="card__body">
@@ -225,54 +237,103 @@ const Products = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product, index) => (
-                    <tr>
-                      <td>{index}</td>
-                      <td>{product.productName}</td>
-                      <td>
-                        {categories.map((category) =>
-                          category.id === product.catId
-                            ? category.catName
-                            : null
-                        )}
-                      </td>
-                      <td>
-                        {suppliers.map((supplier) =>
-                          supplier.id === product.supplierId
-                            ? supplier.supplierName
-                            : null
-                        )}
-                      </td>
-                      <td>{product.price}</td>
-                      <td>{product.discount}</td>
-                      <td>
-                        {product.stockId === "SK1"
-                          ? "stocking"
-                          : "out of stock"}
-                      </td>
-                      <td>
-                        <Button
-                          onClick={() => {
-                            handleEdit(product);
-                          }}
-                          warning
-                          small
-                          type="sub"
-                        >
-                          Sửa
-                        </Button>
-                        <Button
-                          // href={`/delete-crud?id=${user.id}`}
-                          onClick={() => handleDelete(product.id)}
-                          danger
-                          small
-                          type="button"
-                        >
-                          Xóa
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                  {searchValue
+                    ? search(products).map((product, index) => (
+                        <tr>
+                          <td>{index}</td>
+                          <td>{product.productName}</td>
+                          <td>
+                            {categories.map((category) =>
+                              category.id === product.catId
+                                ? category.catName
+                                : null
+                            )}
+                          </td>
+                          <td>
+                            {suppliers.map((supplier) =>
+                              supplier.id === product.supplierId
+                                ? supplier.supplierName
+                                : null
+                            )}
+                          </td>
+                          <td>{product.price.toLocaleString()}</td>
+                          <td>{product.discount}</td>
+                          <td>
+                            {product.stockId === "SK1"
+                              ? "còn hàng"
+                              : "Hết hàng"}
+                          </td>
+                          <td>
+                            <Button
+                              onClick={() => {
+                                handleEdit(product);
+                              }}
+                              warning
+                              small
+                              type="sub"
+                            >
+                              Sửa
+                            </Button>
+                            {/* <Button
+                              // href={`/delete-crud?id=${user.id}`}
+                              onClick={() => handleDelete(product.id)}
+                              danger
+                              small
+                              type="button"
+                            >
+                              Xóa
+                            </Button> */}
+                          </td>
+                        </tr>
+                      ))
+                    : currentItems.map((product, index) => (
+                        <tr>
+                          <td>{index}</td>
+                          <td>{product.productName}</td>
+                          <td>
+                            {categories.map((category) =>
+                              category.id === product.catId
+                                ? category.catName
+                                : null
+                            )}
+                          </td>
+                          <td>
+                            {suppliers.map((supplier) =>
+                              supplier.id === product.supplierId
+                                ? supplier.supplierName
+                                : null
+                            )}
+                          </td>
+                          <td>{product.price.toLocaleString()}</td>
+                          <td>{product.discount}</td>
+                          <td>
+                            {product.stockId === "SK1"
+                              ? "còn hàng"
+                              : "Hết hàng"}
+                          </td>
+                          <td>
+                            <Button
+                              onClick={() => {
+                                handleEdit(product);
+                              }}
+                              warning
+                              small
+                              type="sub"
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              // href={`/delete-crud?id=${user.id}`}
+                              onClick={() => handleDelete(product.id)}
+                              danger
+                              small
+                              type="button"
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
                 {state.isOpenCreateProduct && (
                   <ModalCreateProduct
@@ -283,13 +344,19 @@ const Products = () => {
                 )}
                 {state.isOpenEditProduct && (
                   <ModalEditProduct
-                    toggleModal={toggleEditModal}
                     isOpen={state.isOpenEditProduct}
+                    toggleModal={toggleEditModal}
                     editProduct={doEditProduct}
                     currentProduct={state.currentEitProduct}
                   ></ModalEditProduct>
                 )}
               </table>
+              {
+                <Pagination
+                  data={products}
+                  changeCurrentItems={changeCurrentItems}
+                />
+              }
             </div>
           </div>
         </div>
@@ -297,5 +364,4 @@ const Products = () => {
     </div>
   );
 };
-
 export default Products;

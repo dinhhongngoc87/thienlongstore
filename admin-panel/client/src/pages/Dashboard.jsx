@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
-
 import Chart from "react-apexcharts";
-
 import { useSelector } from "react-redux";
-
 import StatusCard from "../components/status-card/StatusCard";
-
 import Table from "../components/table/Table";
-
 import Badge from "../components/badge/Badge";
-
-import statusCards from "../assets/JsonData/status-card-data.json";
-
 const latestOrders = {
   header: ["order id", "user", "total price", "date", "status"],
   body: [
@@ -77,39 +68,64 @@ const renderOrderBody = (item, index) => (
 );
 
 const Dashboard = () => {
-  const [categories, setCategories] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  // const [suppliers, setSuppliers] = useState([]);
+  const themeReducer = useSelector((state) => state.ThemeReducer.mode);
+  const [products, setProducts] = useState([]);
+  const [state, setState] = useState({
+    totalSales: 0,
+    totalIncomes: 0,
+    totalOrder: 0,
+  });
   const [topcategories, setTopCategories] = useState({
     categoryId: [],
     categoryName: [],
     value: [],
   });
-  const themeReducer = useSelector((state) => state.ThemeReducer.mode);
-  const [products, setProducts] = useState([]);
   const [topProducts, setTopProduct] = useState({
     head: ["product", "total orders", "total spending"],
     body: [{}],
   });
+  const statusCards = [
+    {
+      icon: "bx bx-shopping-bag",
+      count: state.totalSales,
+      title: "Đơn đã bán",
+    },
+    {
+      icon: "bx bx-cart",
+      count: products.length,
+      title: "Tổng sản phẩm",
+    },
+    {
+      icon: "bx bx-dollar-circle",
+      count: state.totalIncomes,
+      title: "Doanh thu",
+    },
+    {
+      icon: "bx bx-receipt",
+      count: state.totalOrder,
+      title: "Tổng đơn hàng",
+    },
+  ];
   useEffect(() => {
     fetch("/api/get-all-products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.products);
-        setCategories(data.categories);
-        setSuppliers(data.suppliers);
-      })
-      .then(() => {
-        // console.log(categories);
+        // setCategories(data.categories);
+        // setSuppliers(data.suppliers);
       });
-    //Lấy top sản phẩm từ bảng order_detail
-    // fetch(`/api/top-seller`)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setTopProduct({
-    //       ...topProducts,
-    //       body: [...data],
-    //     });
-    //   });
+
+    // Lấy top sản phẩm từ bảng order_detail
+    fetch(`/api/top-seller?limit=5`)
+      .then((response) => response.json())
+      .then((data) => {
+        setTopProduct({
+          ...topProducts,
+          body: [...data],
+        });
+      });
   }, []);
   useEffect(() => {
     fetch(`/api/top-category`)
@@ -118,11 +134,21 @@ const Dashboard = () => {
         let catName = data.map((item) => item.catName);
         let catId = data.map((item) => item.catId);
         let catValue = data.map((item) => item.totalProductOfCategory);
-
         setTopCategories({
           categoryId: catId,
           categoryName: catName,
           value: catValue,
+        });
+      });
+
+    fetch(`/api/get-total-sale`)
+      .then((response) => response.json())
+      .then((response) => {
+        setState({
+          ...state,
+          totalSales: response.data.totalSales,
+          totalIncomes: response.data.totalIncomes,
+          totalOrder: response.data.totalOrder,
         });
       });
   }, []);
@@ -178,13 +204,14 @@ const Dashboard = () => {
       <tr key={index}>
         <td style={{ width: "300px", overflow: "hidden" }}>
           {products.map((product) => {
-            if (product.id === item.productId) return product.productName;
+            if (product.id === item.product_Id) return product.productName;
           })}
         </td>
         <td>{item.totalQty}</td>
         <td>
+          {console.log("PRODUCT: ", products)}
           {products.map((product) => {
-            if (product.id === item.productId)
+            if (product.id === item.product_Id)
               return parseFloat(product.price * item.totalQty).toLocaleString();
           })}
         </td>
@@ -194,7 +221,7 @@ const Dashboard = () => {
   const renderCusomerHead = (item, index) => <th key={index}>{item}</th>;
   return (
     <div>
-      <h2 className="page-header">Dashboard</h2>
+      <h2 className="page-header">Tổng quan</h2>
       <div className="row">
         <div className="col-6">
           <div className="row">
@@ -212,7 +239,7 @@ const Dashboard = () => {
         <div className="col-6">
           <div className="card full-height">
             <div className="card__header">
-              <h3>categories</h3>
+              <h3>Cơ cấu sản phẩm</h3>
             </div>
             <div className="card__body">
               <Chart
@@ -237,14 +264,13 @@ const Dashboard = () => {
         <div className="col-4">
           <div className="card">
             <div className="card__header">
-              <h3>Best seller</h3>
+              <h3>Sản phẩm bán chạy</h3>
             </div>
             <div className="card__body">
               {/* <Table>
                 {topProducts.header.map((product) => (
                   <th>{product.header}</th>
                 ))}
-
               </Table> */}
               <Table
                 headData={topProducts.head}
@@ -254,7 +280,7 @@ const Dashboard = () => {
               />
             </div>
             <div className="card__footer">
-              <Link to="/">view all</Link>
+              {/* <Link to="/">view all</Link> */}
             </div>
           </div>
         </div>

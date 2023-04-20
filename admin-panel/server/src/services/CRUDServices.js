@@ -74,14 +74,20 @@ let getAllUser = () => {
     }
   });
 };
-let getUerInfoById = (userId) => {
+let getUserInfoById = (userId) => {
   return new Promise(async (resolve, reject) => {
     try {
       let user = await db.User.findOne({ where: { id: userId }, raw: true });
       if (user) {
-        resolve(user);
+        resolve({
+          errCode: 0,
+          user: user,
+        });
       } else {
-        resolve({});
+        resolve({
+          errCode: 1,
+          message: "Khong ton tai user",
+        });
       }
     } catch (e) {
       reject(e);
@@ -143,7 +149,7 @@ let deleteUserById = (userId) => {
 module.exports = {
   createNewUser: createNewUser,
   getAllUser: getAllUser,
-  getUerInfoById: getUerInfoById,
+  getUserInfoById: getUserInfoById,
   updateUserData: updateUserData,
   deleteUserById: deleteUserById,
 };

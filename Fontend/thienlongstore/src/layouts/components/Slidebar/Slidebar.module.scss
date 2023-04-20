@@ -1,7 +1,8 @@
-.wrapper{
-    width: 100%;
-   img{
-    height: 320px;
-    width: 100%;
-   }
+.wrapper {
+    width: calc(var(--default-layout-width) - var(--default-sidebar-width));
+
+    img {
+        height: 320px;
+        width: 100%;
+    }
 }

@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={reduxStore}>
         <GlobalStyles>
-            <App />
+            <App persistor={persistor} />
         </GlobalStyles>
     </Provider>,
 );

@@ -20,4 +20,11 @@ export {
     Book,
     Pen,
     Plus,
+    ArrowLeft,
+    Edit,
+    Invoice,
+    CartDown,
+    Delivery,
+    Return,
+    Check,
 } from './Icons';

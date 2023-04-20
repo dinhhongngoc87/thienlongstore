@@ -8,10 +8,11 @@ import { useReducer, useRef } from 'react';
 
 import * as searchServices from '../../../services/searchService';
 import styles from './Search.module.scss';
-import AccountItem from '../../../components/AccountItem';
+import ProductItem from '../../../components/ProductItem';
 import { Wrapper as PopperWrapper } from '../../../components/Popper';
 import { SearchIcon } from '../../../components/Icons';
 import { useDebounce } from '../../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 //init
@@ -72,19 +73,20 @@ function Search() {
     const { currentSearch, searchedList } = state;
     const debouncedValue = useDebounce(currentSearch, 500); //when user stop typing , debouncedValue will be updated after 500ms
     const inputRef = useRef();
+    const navigate = useNavigate();
     useEffect(() => {
         if (!debouncedValue.trim()) {
             setSearchResult([]);
             return;
         }
-        // const fetchApi = async () => {
-        //     setLoading(true);
-        //     const result = await searchServices.search(debouncedValue);
-        //     console.log(result);
-        //     setSearchResult(result);
-        //     setLoading(false);
-        // };
-        // fetchApi();
+        const fetchApi = async () => {
+            setLoading(true);
+            const result = await searchServices.search(debouncedValue);
+            console.log('RESULT ', result);
+            setSearchResult(result);
+            setLoading(false);
+        };
+        fetchApi();
     }, [debouncedValue]);
 
     const handleClear = () => {
@@ -100,30 +102,33 @@ function Search() {
         if (!searchValue.startsWith(' ') && searchValue.trim()) {
             dispatch(setSearch(searchValue));
         }
+        console.log('SERACH VALUE: ', searchValue);
     };
     return (
         //for solving tippy warning
         <div>
             <HeadlessTippy
                 interactive
-                visible={showResult && searchResult.length > 0}
+                visible={searchResult && showResult && searchResult.length > 0}
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <div className={cx('searched-list')}>
-                                {searchedList.map((item, index) => {
+                                {/* {searchedList.map((item, index) => {
                                     return (
                                         <div key={index} className={cx('searched-child')}>
                                             <SearchIcon /> &nbsp;
                                             {item}
                                         </div>
                                     );
-                                })}
+                                })} */}
                             </div>
-                            <h4 className={cx('search-title')}>Accounts</h4>
-                            {searchResult.map((result) => (
-                                <AccountItem key={result.id} data={result} />
-                            ))}
+                            <h4 className={cx('search-title')}>Sản phẩm</h4>
+                            {searchResult ? (
+                                searchResult.map((result) => <ProductItem key={result.id} data={result} />)
+                            ) : (
+                                <span>Không tìm thấy sản phẩm</span>
+                            )}
                         </PopperWrapper>
                     </div>
                 )}
@@ -147,7 +152,10 @@ function Search() {
 
                     <button
                         onClick={() => {
-                            dispatch(addSearch(currentSearch));
+                            if (currentSearch) {
+                                navigate('/ketquatimkiem', { state: { result: searchResult } });
+                            }
+                            // dispatch(addSearch(currentSearch));
                         }}
                         className={cx('search-btn')}
                         onMouseDown={(e) => e.preventDefault()}

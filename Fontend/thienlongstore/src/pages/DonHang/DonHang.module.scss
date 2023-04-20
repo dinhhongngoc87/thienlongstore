@@ -1,0 +1,52 @@
+.orders-container {
+    color: #808080;
+
+    .orders-header {
+        margin: 50px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        .header-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transform: scale(1);
+        }
+
+        .header-icon.active {
+            color: rgb(60, 60, 60);
+            // border-bottom: 2px solid red;
+            transform: scale(1.1);
+            transition: transform 0.8s ease 0s;
+
+        }
+
+        .active {
+            border-bottom: 2px solid red;
+            transform: translate(100px 300px);
+            transition: transform 0.8s ease 0s;
+        }
+
+    }
+
+
+    .orders-body {
+        font-family: "Consolas";
+
+        table th {
+            font-weight: 600;
+            font-size: 2rem;
+
+        }
+
+        table td {
+            font-size: 1.6rem;
+        }
+    }
+
+
+
+}

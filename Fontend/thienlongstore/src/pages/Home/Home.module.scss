@@ -1,0 +1,42 @@
+.brand-img-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+}
+
+.brand-img-list img {
+    width: 28rem;
+    height: 12rem;
+    padding-left: 10px;
+    padding-right: 11px;
+}
+
+.banner img {
+    width: 100%;
+}
+
+.grid-container {
+    display: grid;
+    column-gap: 15px;
+    row-gap: 15px;
+    grid-template-columns: 20rem 20rem 20rem 20rem 20rem;
+}
+
+.grid-item {
+    padding: 20px;
+}
+
+.product-items {
+    margin: 25px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.select-sorter {
+    align-self: flex-end;
+    margin-bottom: 10px;
+    outline: none;
+    padding: 5px 5px
+}

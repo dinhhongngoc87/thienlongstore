@@ -10,16 +10,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Order.belongsTo(models.Allcode, {
+        foreignKey: "statusId",
+        as: "statusData",
+      });
+      // Order.hasMany(models.Order_detail, {
+      //   foreignKey: "order_id",
+      //   as: "orderData",
+      // });
+
+      // Order.belongsToMany(models.Product, { through: "Order_detail" });
     }
   }
   Order.init(
     {
       userId: DataTypes.INTEGER,
-      totalProduct: DataTypes.INTEGER,
       address: DataTypes.STRING,
       statusId: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
+      fullName: DataTypes.STRING,
+      totalMoney: DataTypes.INTEGER,
     },
     {
       sequelize,

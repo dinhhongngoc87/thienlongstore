@@ -20,6 +20,7 @@ a {
     background-color: var(--white);
     border: 1px solid transparent;
     user-select: none;
+    margin-left: 5px;
 
     +.wrapper {
         margin-left: 10px;
@@ -33,7 +34,7 @@ a {
 
 .icon+.title,
 .title+.icon {
-    margin-left: 8px;
+    margin-left: 25px;
 }
 
 .icon {

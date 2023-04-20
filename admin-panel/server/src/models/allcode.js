@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Allcode.hasMany(models.Order, {
+        foreignKey: "statusId",
+        as: "statusData",
+      });
     }
   }
   Allcode.init(

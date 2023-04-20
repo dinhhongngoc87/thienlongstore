@@ -1,0 +1,25 @@
+.pagesNumbers {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+}
+
+.pagesNumbers li {
+  padding: 0px 10px;
+  border: 1px solid white;
+  height: 2rem;
+  cursor: pointer;
+  color: #007bff;
+  border-radius: 3px;
+}
+
+.pagesNumbers li button {
+  color: #8c8a8a;
+}
+
+.pagesNumbers li.active {
+  border: 1px solid #ccc;
+  color: black;
+}

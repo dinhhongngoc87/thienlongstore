@@ -1,13 +1,11 @@
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from "reactstrap";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import noImage from "../assets/images/no-image.png";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function ModalEditUser({ isOpen, toggleModal, userInfor, editUser }) {
   const toggle = () => toggleModal();
@@ -51,9 +49,7 @@ function ModalEditUser({ isOpen, toggleModal, userInfor, editUser }) {
     });
 
     console.log("FILE : ", e.target.files[0]);
-    console.log("CHANGE AVATAR: ", state);
     setUpdate(!update);
-
     //handle preview avatar
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);

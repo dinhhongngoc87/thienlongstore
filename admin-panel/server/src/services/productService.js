@@ -1,6 +1,6 @@
 import db from "../models";
 
-let getAllProduct = () => {
+let getAllProduct = (sort) => {
   return new Promise(async (resolve, reject) => {
     try {
       let products = await db.Product.findAll({
@@ -10,11 +10,27 @@ let getAllProduct = () => {
         attributes: ["id", "catName"],
       });
       let suppliers = await db.Supplier.findAll();
-      resolve({
-        products,
-        categories,
-        suppliers,
-      });
+      if (sort === "undefined") {
+        resolve({
+          products,
+          categories,
+          suppliers,
+        });
+      } else if (sort === "increase") {
+        products = products.sort((a, b) => a.price - b.price);
+        resolve({
+          products,
+          categories,
+          suppliers,
+        });
+      } else {
+        products = products.sort((a, b) => b.price - a.price);
+        resolve({
+          products,
+          categories,
+          suppliers,
+        });
+      }
     } catch (e) {
       reject(e);
     }

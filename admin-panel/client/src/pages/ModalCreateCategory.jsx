@@ -24,16 +24,21 @@ function ModalCreateCategory({ isOpen, toggleModal, createCategory }) {
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("state", state);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("catName", state.catName);
-    createCategory(formData);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    createCategory(formData, config);
   };
   return (
     <>
+      {console.log("state", state)}
       <Modal
         size="lg"
         centered

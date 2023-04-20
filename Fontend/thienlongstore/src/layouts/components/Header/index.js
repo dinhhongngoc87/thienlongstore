@@ -17,32 +17,38 @@ import Image from '../../../components/Image';
 import Button from '../../../components/Button';
 import Menu from '../../../components/Popper/Menu';
 import { faKeyboard } from '@fortawesome/free-regular-svg-icons';
-import { PaperPlaneIcon, Message, CartIcon } from '../../../components/Icons';
+import { PaperPlaneIcon, Message, CartIcon, Invoice } from '../../../components/Icons';
 import Search from '../Search';
 import config from '../../../config';
 import { useModal } from '../../../hooks';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
 // bind styles trả về một function cho cx
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header(props) {
     const [currentUser, setCurrentUser] = useState(false);
     const { isShowing, toggle } = useModal();
-    console.log('loginOpen: ', isShowing);
     const deleteStorage = () => {
         localStorage.setItem('user', '');
     };
     const userMenu = [
         {
             icon: <FontAwesomeIcon icon={faUser} />,
-            title: 'View propfile',
-            to: '/@ngoc',
+            title: 'Thông tin tài khoản',
+            to: '/thongtintaikhoan',
+        },
+        {
+            icon: <Invoice icon={faUser} />,
+            title: 'Đơn hàng',
+            to: '/donhang',
         },
         {
             icon: <FontAwesomeIcon icon={faSignOut} />,
-            title: 'Logout',
+            title: 'Đăng xuất',
             to: '/login',
             openLogin: isShowing,
             onClick: deleteStorage,
@@ -105,7 +111,6 @@ function Header() {
                             <Tippy content="Inbox">
                                 <button className={cx('action-btn')}>
                                     <Message />
-                                    <span className={cx('badge')}>12</span>
                                 </button>
                             </Tippy>
                         </>
@@ -137,7 +142,7 @@ function Header() {
                             >
                                 <Image
                                     className={cx('user-avatar')}
-                                    src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/89fd0c44132bbba327884036922fd33d~c5_100x100.jpeg?x-expires=1675324800&x-signature=4cWcv34lUsaP7M8xMk48j4sDib8%3D"
+                                    src="https://tse3.mm.bing.net/th?id=OIP.1t0yqXqVIbHOgylnja4pdQHaHa&pid=Api&P=0"
                                     alt="Nguyen Van A"
                                 />
                             </Menu>
@@ -165,11 +170,19 @@ function Header() {
                     )}
 
                     <Link style={{ marginLeft: '15px' }} to="/cart">
-                        <CartIcon />
+                        <div className={cx('cartBtn')}>
+                            <CartIcon />
+                            <span className={cx('numberProInCart')}>{props.cartAr.length}</span>
+                        </div>
                     </Link>
                 </div>
             </div>
         </header>
     );
 }
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        cartAr: state.cart.cartAr,
+    };
+};
+export default connect(mapStateToProps)(Header);

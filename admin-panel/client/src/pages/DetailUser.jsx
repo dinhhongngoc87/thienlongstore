@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -120,6 +120,7 @@ function DetailUser() {
             controlId="formGridPassword"
             style={{ position: "relative" }}
           >
+            {console.log("AVATR PREVIEW : ", avatarPreview)}
             {avatarPreview ? (
               <Image
                 class="img-thumbnail"

@@ -21,6 +21,7 @@ function SignUp({ toggle }) {
         password2: '',
         isShowPassword: false,
         errMessage: '',
+        roleId: 'R2',
     });
     const handleOnchange = (e) => {
         setState({
@@ -50,6 +51,7 @@ function SignUp({ toggle }) {
                 state.email,
                 state.password1,
                 state.password2,
+                state.roleId,
             );
             if (data.data && data.data.errCode !== 0) {
                 setState({

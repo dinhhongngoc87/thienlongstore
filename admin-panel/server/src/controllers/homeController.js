@@ -74,6 +74,11 @@ let getEditCRUD = async (req, res) => {
     return res.send("from EDIT page");
   }
 };
+
+let getUserById = async (req, res) => {
+  let response = await CRUDServices.getUserInfoById(req.query.id);
+  res.send(response);
+};
 //update user
 let putCRUD = async (req, res) => {
   console.log("EDIT CONTROLLER body: ", req.body);
@@ -105,4 +110,5 @@ module.exports = {
   getEditCRUD: getEditCRUD,
   getDeleteCRUD: getDeleteCRUD,
   putCRUD: putCRUD,
+  getUserById: getUserById,
 };

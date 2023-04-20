@@ -1,5 +1,4 @@
 import Home from '../pages/Home';
-import Search from '../pages/Search';
 import config from '../config';
 import DungCuHocTap from '../pages/DungCuHocTap';
 import DoChoi from '../pages/DoChoi';
@@ -11,6 +10,10 @@ import ProductDetail from '../pages/ProductDetail';
 import { HeaderOnly } from '../layouts';
 import { Login, SignUp } from '../pages/Auth';
 import Sach from '../pages/Sach';
+import DatHangThanhCong from '../pages/DatHangThanhCong';
+import KetQuaTimKiem from '../pages/KetQuaTimKiem';
+import ThongTinTaiKhoan from '../pages/ThongTinTaiKhoan';
+import DonHang from '../pages/DonHang';
 //public routes
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -22,9 +25,12 @@ const publicRoutes = [
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.signup, component: SignUp, layout: null },
     { path: config.routes.cart, component: CartCheckout, layout: HeaderOnly },
+    { path: config.routes.thongtintaikhoan, component: ThongTinTaiKhoan, layout: HeaderOnly },
+    { path: config.routes.donhang, component: DonHang, layout: HeaderOnly },
+    { path: config.routes.dathangthanhcong, component: DatHangThanhCong, layout: HeaderOnly },
     { path: config.routes.chitietsanpham, component: ProductDetail, layout: HeaderOnly },
+    { path: config.routes.ketquatimkiem, component: KetQuaTimKiem, layout: HeaderOnly },
     { path: config.routes.sach, component: Sach },
-    { path: config.routes.search, component: Search, layout: null },
 ];
 //private routes
 const privateRoutes = [];

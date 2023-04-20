@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { deleteProduct, buyProduct } from '../../store/actions';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {
@@ -14,80 +13,90 @@ import {
     MDBTypography,
     MDBTextArea,
 } from 'mdb-react-ui-kit';
-import Button from '../../components/Button';
 import './Cart.module.scss';
-import { CartContext } from '../../context/CartProvider';
-import { useContext } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Button from '../../components/Button';
+import { deleteProduct, buyProduct, changeProductQuantity } from '../../store/actions';
 
 function CartCheckout(props) {
-    const [cartItems, setCartItem] = useContext(CartContext);
-    const [totalCharge, setTotalCharge] = useState(0);
-    const [productsId, setProductId] = useState([props.cart]);
     const completeFormData = new FormData();
-    const [user, setUser] = useState();
+    const navigate = useNavigate();
+    const [user, setUser] = useState({
+        id: '',
+        email: '',
+    });
     const [state, setState] = useState({
         address: '',
         userName: '',
         phone: '',
-        products: cartItems.map((p) => ({
-            id: p.id,
-            productName: p.productName,
-            price: p.price,
-            qty: p?.qtyInCart || 1,
-        })),
+        products: props.cartRedux,
+        errMessage: '',
     });
     completeFormData.append('products', state.products);
 
     useEffect(() => {
-        const Currentuser = localStorage.getItem('user');
-        console.log(user);
-        setUser(Currentuser);
+        const user_email = localStorage.getItem('user');
+        const user_id = localStorage.getItem('user_id');
+        setUser({ ...user, id: user_id, email: user_email });
     }, []);
-    console.log('STATE: ', state);
-
     const handleChange = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value,
+            errMessage: '',
         });
     };
     const handleChangeQty = async (e, product) => {
-        // setState({3
-        //     ...state,
-        // });
-        // console.log('change value: ', e.target.value);
-        product.qtyInCart = e.target.value;
-        await setState({
-            ...state,
-            products: cartItems.map((p) => ({
-                id: p.id,
-                productName: p.productName,
-                price: p.price,
-                qty: p.qtyInCart || 1,
-            })),
-        });
-        // console.log('qty: ', product.qtyInCart);
-        // console.log('CART ITEM: ', cartItems);
-        // console.log('product state: ', state.products);
-
-        // axios.post(`/post-order-crud`, {
-        //     address: state.address,
-        //     userName: state.userName,
-        //     phone: state.phone,
-        //     products: state.products,
-        // });
+        if (Number(e.target.value) > product.quantity) {
+            e.target.value = product.quantity;
+            toast.warn('Quá số lượng cho phép', {
+                position: 'top-center',
+                autoClose: 100,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+        } else {
+            props.changeProductQuantity({
+                product: product,
+                qty: e.target.value,
+            });
+        }
     };
 
     const handleClickBuyNow = async (e) => {
         e.preventDefault();
-        console.log('PRODUCT ORDER ', state);
-        axios.post(`/post-order-crud`, {
-            address: state.address,
-            userName: state.userName,
-            phone: state.phone,
-            products: state.products,
-            email: user,
-        });
+        axios
+            .post(`/post-order-crud`, {
+                address: state.address,
+                userName: state.userName,
+                phone: state.phone,
+                products: state.products,
+                email: user.email,
+                user_id: user.id,
+                totalMoney: props.cartRedux.reduce((acc, current) => {
+                    return acc + parseFloat(current.qtyIncart * current.price);
+                }, 0),
+            })
+            .then((response) => {
+                if (response.data.errCode !== 0) {
+                    setState({ ...state, errMessage: response.data.message });
+                }
+                if (response.data.errCode === 0) {
+                    navigate('/reviewdonhang', {
+                        state: {
+                            order: response.data.createdOrder.order,
+                            products: response.data.createdOrder.products,
+                        },
+                    });
+                }
+            });
     };
     return (
         <section className="h-100 h-custom">
@@ -105,13 +114,17 @@ function CartCheckout(props) {
                                         >
                                             Sản phẩm của bạn
                                         </MDBTypography>
-                                        {cartItems.map((product) => (
-                                            <div key={product.id} className="d-flex align-items-center mb-5">
+                                        {props.cartRedux.map((product) => (
+                                            <div
+                                                key={product.id}
+                                                className="d-flex align-items-center mb-5"
+                                                style={{ borderBottom: '1px solid #ccc' }}
+                                            >
                                                 <div className="flex-shrink-0">
                                                     <MDBCardImage
                                                         src={product.images}
                                                         fluid
-                                                        style={{ width: '150px' }}
+                                                        style={{ width: '100px' }}
                                                         alt="Generic placeholder image"
                                                     />
                                                 </div>
@@ -119,12 +132,12 @@ function CartCheckout(props) {
                                                 <div className="flex-grow-1 ms-3">
                                                     <a
                                                         href="#!"
-                                                        // onClick={() => props.deleteProduct(product)}
-                                                        onClick={() => {
-                                                            setCartItem(
-                                                                cartItems.filter((item) => item.id !== product.id),
-                                                            );
-                                                        }}
+                                                        onClick={() => props.deleteProduct(product)}
+                                                        // onClick={() => {
+                                                        //     setCartItem(
+                                                        //         cartItems.filter((item) => item.id !== product.id),
+                                                        //     );
+                                                        // }}
                                                         className="float-end text-black"
                                                     >
                                                         <MDBIcon style={{ color: '#bbb' }} fas icon="times" />
@@ -134,12 +147,14 @@ function CartCheckout(props) {
                                                         style={{ fontSize: '1.6rem' }}
                                                         className="text-primary"
                                                     >
-                                                        {product.productName}
+                                                        <Link to={`/sanpham/chitietsanpham?id=${product.id}`}>
+                                                            {product.productName}
+                                                        </Link>
                                                     </MDBTypography>
 
                                                     <div className="d-flex align-items-center">
                                                         <p className="fw-bold mb-0 me-5 pe-3">
-                                                            {parseFloat(product.price).toLocaleString()}
+                                                            {parseFloat(product.price).toLocaleString()}đ
                                                         </p>
 
                                                         <div className="def-number-input number-input safari_only">
@@ -149,9 +164,9 @@ function CartCheckout(props) {
                                                             ></button> */}
                                                             <input
                                                                 className="quantity fw-bold text-black"
-                                                                min={0}
-                                                                defaultValue={product?.qtyInCart || 1}
-                                                                value={state.products.qty}
+                                                                min={1}
+                                                                defaultValue={product?.qtyIncart || 1}
+                                                                // value={product.qtyIncart}
                                                                 onChange={(e) => handleChangeQty(e, product)}
                                                                 type="number"
                                                             />
@@ -163,9 +178,7 @@ function CartCheckout(props) {
 
                                                         <div className="d-flex align-items-center">
                                                             <div className="d-flex align-items-left">
-                                                                <p className="fw-bold mb-0 me-5 pe-3 mb-30">
-                                                                    {product?.totalprice}
-                                                                </p>
+                                                                <p className="fw-bold mb-0 me-5 pe-3 mb-30"></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -191,14 +204,14 @@ function CartCheckout(props) {
                                             className="d-flex justify-content-between p-2 mb-2"
                                             style={{ backgroundColor: '#e1f5fe' }}
                                         >
-                                            <MDBTypography tag="h3" className="fw-bold mb-0">
-                                                Total:
-                                                {cartItems
+                                            <MDBTypography tag="h3" style={{ color: 'red' }} className="fw-bold mb-0">
+                                                Tổng tiền:
+                                                {props.cartRedux
                                                     .reduce((acc, current) => {
-                                                        console.log(acc);
-                                                        return acc + parseFloat(current.qtyInCart * current.price);
+                                                        return acc + parseFloat(current.qtyIncart * current.price);
                                                     }, 0)
                                                     .toLocaleString()}
+                                                đ
                                             </MDBTypography>
                                             <MDBTypography tag="h3" className="fw-bold mb-0"></MDBTypography>
                                         </div>
@@ -242,6 +255,15 @@ function CartCheckout(props) {
                                                 style={{ fontSize: '1.6rem' }}
                                                 size="lg"
                                             />
+                                            <div
+                                                style={{
+                                                    color: 'red',
+                                                    textAlign: 'center',
+                                                    fontSize: '16px',
+                                                }}
+                                            >
+                                                {state.errMessage}
+                                            </div>
 
                                             <Button
                                                 onClick={(e) => handleClickBuyNow(e)}
@@ -271,14 +293,14 @@ function CartCheckout(props) {
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
+            <ToastContainer newestOnTop={false} rtl={false} pauseOnFocusLoss theme="light" />
         </section>
     );
 }
 
 const mapStateToProps = (state) => {
     return {
-        cart: state.cart.cartAr,
-        totalprice: state.cart.totalprice,
+        cartRedux: state.cart.cartAr,
     };
 };
 
@@ -286,6 +308,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         deleteProduct: (product_current) => dispatch(deleteProduct(product_current)),
         buyProduct: (product_current) => dispatch(buyProduct(product_current)),
+        changeProductQuantity: (data) => dispatch(changeProductQuantity(data)),
     };
 };
 
