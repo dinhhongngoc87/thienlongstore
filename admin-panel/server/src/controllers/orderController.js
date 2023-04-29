@@ -3,24 +3,26 @@ import order from "../models/order";
 import orderService from "../services/orderService";
 //post information of order
 let handlePostOrder = async (req, res) => {
+  console.log(res);
   let data = req.body;
-  if (data) {
-    if (!data.address || !data.userName || !data.phone) {
-      return res.status(200).json({
-        errCode: 1,
-        message: "Vui lòng điền đủ thông tin",
-      });
-    }
-    if (data.totalMoney === 0) {
-      return res.status(200).json({
-        errCode: 1,
-        message: "Hãy thêm sản phẩm vào giỏ",
-      });
-    } else {
-      let message = await orderService.createNewOrder(data);
-      return res.send(message);
-    }
-  }
+  console.log(data);
+  // if (data) {
+  //   if (!data.address || !data.userName || !data.phone) {
+  //     return res.status(200).json({
+  //       errCode: 1,
+  //       message: "Vui lòng điền đủ thông tin",
+  //     });
+  //   }
+  //   if (data.totalMoney === 0) {
+  //     return res.status(200).json({
+  //       errCode: 1,
+  //       message: "Hãy thêm sản phẩm vào giỏ",
+  //     });
+  //   } else {
+  //     let message = await orderService.createNewOrder(data);
+  //     return res.send(message);
+  //   }
+  // }
 };
 //get all order
 let handleGetOrder = async (req, res) => {

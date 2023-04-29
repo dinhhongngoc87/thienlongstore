@@ -9,6 +9,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
 import cartReducer from './cartReducer';
 import productReducer from './productReducer';
+import chatReducer from './chatReducer';
 
 const persistCommonConfig = {
     storage: storage,
@@ -30,6 +31,11 @@ const productPersistConfig = {
     key: 'product',
     whitelist: ['productList'],
 };
+const chatPersistConfig = {
+    ...persistCommonConfig,
+    key: 'chat',
+    whitelist: ['isOpenChat'],
+};
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (history) =>
     combineReducers({
@@ -38,4 +44,5 @@ export default (history) =>
         user: persistReducer(userPersistConfig, userReducer),
         cart: persistReducer(cartPersistConfig, cartReducer),
         product: persistReducer(productPersistConfig, productReducer),
+        chat: persistReducer(chatPersistConfig, chatReducer),
     });

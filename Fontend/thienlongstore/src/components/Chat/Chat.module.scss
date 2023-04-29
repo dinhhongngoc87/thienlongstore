@@ -1,0 +1,71 @@
+.container {
+    position: fixed;
+    width: 350px;
+    height: 450px;
+    bottom: 5px;
+    right: 100px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+}
+
+.header {
+    height: 50px;
+    line-height: 50px;
+    background-color: aliceblue;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+
+    img {
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    span {
+        span {
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    }
+
+    button {
+        background-color: unset;
+        font-weight: 600;
+
+
+    }
+}
+
+.body {
+    height: 100%;
+    background-color: white;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 50px;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+
+    #send-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    button {
+        background-color: transparent;
+
+        .send-icon {
+            color: #ccc;
+
+        }
+
+        .send-icon.active {
+            color: #1A94FF;
+        }
+    }
+}

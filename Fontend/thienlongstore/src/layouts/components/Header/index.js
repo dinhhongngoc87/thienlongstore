@@ -25,6 +25,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { setOpenChat } from '../../../store/actions/chartActions';
 
 // bind styles trả về một function cho cx
 const cx = classNames.bind(styles);
@@ -32,6 +33,8 @@ const cx = classNames.bind(styles);
 function Header(props) {
     const [currentUser, setCurrentUser] = useState(false);
     const { isShowing, toggle } = useModal();
+    const [isOpenChat, setIsOpenChat] = useState(false);
+
     const deleteStorage = () => {
         localStorage.setItem('user', '');
     };
@@ -103,13 +106,14 @@ function Header(props) {
                 <div className={cx('actions')}>
                     {currentUser ? (
                         <>
-                            <Tippy content="Message">
-                                <button className={cx('action-btn')}>
-                                    <PaperPlaneIcon />
-                                </button>
-                            </Tippy>
                             <Tippy content="Inbox">
-                                <button className={cx('action-btn')}>
+                                <button
+                                    className={cx('action-btn')}
+                                    onClick={() => {
+                                        console.log(props.isOpenChat);
+                                        props.setOpenChat();
+                                    }}
+                                >
                                     <Message />
                                 </button>
                             </Tippy>
@@ -183,6 +187,14 @@ function Header(props) {
 const mapStateToProps = (state) => {
     return {
         cartAr: state.cart.cartAr,
+        isOpenChat: state.chat.isOpenChat,
     };
 };
-export default connect(mapStateToProps)(Header);
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setOpenChat: () => dispatch(setOpenChat()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

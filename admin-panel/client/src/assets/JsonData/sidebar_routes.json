@@ -25,6 +25,11 @@
         "icon": "bx bx-cart"
     },
     {
+        "display_name": "Tin nhắn",
+        "route": "/messages",
+        "icon": "bx bx-message"
+    },
+    {
         "display_name": "settings",
         "route": "/settings",
         "icon": "bx bx-cog"

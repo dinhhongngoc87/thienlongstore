@@ -23,8 +23,8 @@ function Home(props) {
     return (
         <>
             <div className={cx('row', 'brand-img-list')}>
-                {images.map((imageUrl) => {
-                    return <img src={imageUrl} alt="image_brand" />;
+                {images.map((imageUrl, index) => {
+                    return <img key={index} src={imageUrl} alt="image_brand" />;
                 })}
             </div>
             <div className={cx('banner')}>

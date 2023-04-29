@@ -20,6 +20,8 @@ let initWebRoutes = (app) => {
   router.get("/delete-crud", homeController.getDeleteCRUD);
   router.post("/put-crud", upload.single("avatar"), homeController.putCRUD);
   router.get("/get-user-by-id", homeController.getUserById);
+  router.post("/post-message", homeController.postMessage);
+
   //LOGIN
   router.post("/api/login", userController.handleLogin);
   //SEARCH
@@ -44,7 +46,7 @@ let initWebRoutes = (app) => {
   );
   router.post("/api/put-category-crud", categoryController.handlePutCategory);
   //ORDER
-  router.post("/post-order-crud", orderController.handlePostOrder);
+  router.post("/post-order", orderController.handlePostOrder);
   router.get("/get-orders-crud", orderController.handleGetOrder);
   router.get("/get-order-detail", orderController.getOrderDetail);
   router.get("/get-orders-by-type", orderController.getOrderByType);

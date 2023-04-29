@@ -85,14 +85,12 @@ function DetailProduct() {
     });
     // history.push("/customers");
   };
-  console.log(state);
 
   const handleChange = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("STATE: ", state);
   };
   const changeValueCategory = (e) => {
     setState({

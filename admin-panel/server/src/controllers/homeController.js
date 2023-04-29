@@ -102,6 +102,9 @@ let getDeleteCRUD = async (req, res) => {
     return res.send(`faild`);
   }
 };
+let postMessage = async (req, res) => {
+  console.log(res.body);
+};
 module.exports = {
   getHomePage: getHomePage,
   getCRUD: getCRUD,
@@ -111,4 +114,5 @@ module.exports = {
   getDeleteCRUD: getDeleteCRUD,
   putCRUD: putCRUD,
   getUserById: getUserById,
+  postMessage: postMessage,
 };

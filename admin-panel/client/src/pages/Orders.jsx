@@ -180,7 +180,6 @@ const Orders = () => {
         </div>
         <div className="row">
           <Search setSearchValue={setSearchValue} />
-          {console.log("SEARCH VALUE: ", searchValue)}
         </div>
       </div>
       {renderComponent()}

@@ -42,7 +42,6 @@ const Customers = () => {
     fetch("/api/get-all-categories")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setCategories(data.categories);
       });
   }, [isUpdate]);
@@ -57,10 +56,7 @@ const Customers = () => {
   };
 
   const doEditCategory = (formData, config) => {
-    console.log("check user from child : ", config);
     axios.post("/api/put-category-crud", formData, config).then((response) => {
-      console.log("RES: ", response);
-
       toast.success(response.data.message, {
         position: "top-right",
         autoClose: 2000,
@@ -82,7 +78,6 @@ const Customers = () => {
     axios
       .post("/api/put-category-crud", formdata, config)
       .then((response) => {
-        console.log("RES: ", response);
         if (response.data.errCode === 0 && response.status === 200) {
           toast.success(response.data, {
             position: "top-right",
@@ -111,7 +106,6 @@ const Customers = () => {
         }
       })
       .catch((e) => {
-        console.log(e);
         if (e.response.data) {
           toast.error(e.response.data.message, {
             position: "top-center",
@@ -128,11 +122,9 @@ const Customers = () => {
   };
 
   const toggleEditModal = () => {
-    console.log("Toggle");
     setState({ ...state, isOpenEditModal: !state.isOpenEditModal });
   };
   const toggleCreateModal = () => {
-    console.log("Toggle");
     setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
   };
   const handleDelete = (id) => {

@@ -34,8 +34,6 @@ function ModalDetailOrder({ isOpen, toggleModal, currentOrder }) {
   const toggle = () => toggleModal();
   return (
     <>
-      {console.log("ORDER PRODUCTS : ", products)}
-      {console.log("ORDER  : ", state.orders)}
       <Modal
         size="lg"
         centered

@@ -22,7 +22,7 @@ import Button from '../../components/Button';
 import { deleteProduct, buyProduct, changeProductQuantity } from '../../store/actions';
 
 function CartCheckout(props) {
-    const completeFormData = new FormData();
+    // const completeFormData = new FormData();
     const navigate = useNavigate();
     const [user, setUser] = useState({
         id: '',
@@ -35,7 +35,8 @@ function CartCheckout(props) {
         products: props.cartRedux,
         errMessage: '',
     });
-    completeFormData.append('products', state.products);
+
+    // completeFormData.append('products', state.products);
 
     useEffect(() => {
         const user_email = localStorage.getItem('user');
@@ -72,8 +73,11 @@ function CartCheckout(props) {
 
     const handleClickBuyNow = async (e) => {
         e.preventDefault();
+        axios('/post-message', {
+            message: 'hello',
+        });
         axios
-            .post(`/post-order-crud`, {
+            .post(`/post-order`, {
                 address: state.address,
                 userName: state.userName,
                 phone: state.phone,
@@ -122,7 +126,7 @@ function CartCheckout(props) {
                                             >
                                                 <div className="flex-shrink-0">
                                                     <MDBCardImage
-                                                        src={product.images}
+                                                        src={`http://localhost:3000/${product.images}`}
                                                         fluid
                                                         style={{ width: '100px' }}
                                                         alt="Generic placeholder image"
@@ -268,11 +272,11 @@ function CartCheckout(props) {
                                             <Button
                                                 onClick={(e) => handleClickBuyNow(e)}
                                                 primary
-                                                type="submit"
+                                                // type="submit"
                                                 extraLarge
                                                 size="lg"
                                             >
-                                                Buy now
+                                                Đặt hàng
                                             </Button>
 
                                             <MDBTypography

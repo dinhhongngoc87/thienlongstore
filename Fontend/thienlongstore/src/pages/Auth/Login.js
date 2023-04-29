@@ -12,8 +12,7 @@ import { Eye, EyeSlash } from '../../components/Icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
-function Login({ toggle }) {
-    const userReducer = useSelector((state) => state.user.userReducer);
+function Login(props) {
     const dispatch = useDispatch();
     const userRef = useRef();
     const navigate = useNavigate();
@@ -68,7 +67,7 @@ function Login({ toggle }) {
             }
             if (data.data && data.data.errCode === 0) {
                 if (data.data.user.user.email) {
-                    // dispatch(userReducer.userLoginSuccess(data.data.user.user));
+                    props.userLoginSuccess(data.data.user.user);
                     localStorage.setItem('user', data.data.user.user.email);
                     localStorage.setItem('user_id', data.data.user.user.id);
                 }
@@ -99,15 +98,6 @@ function Login({ toggle }) {
     };
     return (
         <>
-            {/* {success ? (
-                <session>
-                    <h1>You are logged in !</h1>
-                    <br></br>
-                    <p>
-                        <Link to="/">Go to home</Link>
-                    </p>
-                </session>
-            ) : ( */}
             <div className={cx('wrapper')}>
                 <form onSubmit={handleSubmit} className={cx('form')} method="POST">
                     <h3 className={cx('title')}>Đăng nhập</h3>
@@ -172,7 +162,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (path) => dispatch(push(path)),
-        // userLoginFail: () => dispatch(actions.userLoginFail()),
         userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
     };
 };

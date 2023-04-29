@@ -96,7 +96,6 @@ function ModalCreateProduct({ isOpen, toggleModal, createProduct }) {
   };
   return (
     <>
-      {console.log("re-render: ", state)}
       <Modal
         size="lg"
         centered

@@ -19,7 +19,6 @@ function Menu({
 }) {
   const [history, setHistory] = useState([{ data: items }]); // đồng bộ cấu trúc của phần tử cha và con
   const current = history[history.length - 1];
-  console.log("ITEM MENU : ", items);
   if (onClick) {
   }
   const renderItems = () => {

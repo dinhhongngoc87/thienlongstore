@@ -56,7 +56,6 @@ const Customers = () => {
     fetch("/get-crud")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setUsers(data);
         setCurrentItems(data.slice(0, 4));
       });
@@ -86,7 +85,6 @@ const Customers = () => {
     );
   };
   const doEditUser = (formdata, config) => {
-    console.log("check user from child : ", config);
     axios.post("/put-crud", formdata, config).then((response) => {
       toast.success("Successfully", {
         position: "top-right",
@@ -106,7 +104,6 @@ const Customers = () => {
     });
   };
   const doCreateUser = (formdata, config) => {
-    console.log("check user from child : ", config);
     axios
       .post("/post-crud", formdata, config)
       .then((response) => {
@@ -138,7 +135,6 @@ const Customers = () => {
         }
       })
       .catch((e) => {
-        console.log(e);
         if (e.response.data) {
           toast.error(e.response.data.message, {
             position: "top-center",
@@ -155,11 +151,9 @@ const Customers = () => {
   };
 
   const toggleEditModal = () => {
-    console.log("Toggle");
     setState({ ...state, isOpenEditModal: !state.isOpenEditModal });
   };
   const toggleCreateModal = () => {
-    console.log("Toggle");
     setState({ ...state, isOpenCreateModal: !state.isOpenCreateModal });
   };
   const handleDelete = (id) => {

@@ -72,7 +72,6 @@ const Products = (props) => {
       ...state,
       isOpenCreateProduct: true,
     });
-    console.log(state);
   };
   const handleDelete = (id) => {
     axios
@@ -82,7 +81,6 @@ const Products = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
         if (response.status === 200 && response.data.errCode === 0) {
           setUpdate(!update);
           toast.success(response.data.message, {
@@ -105,7 +103,6 @@ const Products = (props) => {
     axios
       .post("/api/put-product-crud", formdata, config)
       .then((response) => {
-        console.log(response);
         if (response.data.errCode === 0 && response.status === 200) {
           toast.success(response.data.message, {
             position: "top-right",
@@ -137,7 +134,6 @@ const Products = (props) => {
         }
       })
       .catch((e) => {
-        console.log(e);
         if (e.response.data) {
           toast.error(e.response.data.message, {
             position: "top-right",
@@ -153,11 +149,9 @@ const Products = (props) => {
       });
   };
   const doCreatProduct = (formdata, config) => {
-    console.log(config);
     axios
       .post("/api/put-product-crud", formdata, config)
       .then((response) => {
-        console.log(response);
         if (response.data.errCode === 0 && response.status === 200) {
           setState({
             ...state,
@@ -189,7 +183,6 @@ const Products = (props) => {
         }
       })
       .catch((e) => {
-        console.log(e);
         if (e.response.data) {
           toast.error(e.response.data.message, {
             position: "top-right",

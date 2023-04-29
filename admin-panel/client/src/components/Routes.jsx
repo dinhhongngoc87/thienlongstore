@@ -10,7 +10,7 @@ import DetailUser from "../pages/DetailUser";
 import DetailProduct from "../pages/DetailProduct";
 import CreateUser from "../pages/CreateUser";
 import Orders from "../pages/Orders";
-import PendingOrder from "../pages/PendingOrder";
+import Messages from "../pages/Messages";
 const Routes = () => {
   return (
     <Switch>
@@ -19,6 +19,7 @@ const Routes = () => {
       <Route path="/products" component={Products} />
       <Route path="/categories" component={Categories} />
       <Route path="/orders" component={Orders} />
+      <Route path="/messages" component={Messages} />
       <Route path="/detail-user" component={DetailUser} />
       <Route path="/detail-product" component={DetailProduct} />
       <Route path="/create-user" component={CreateUser} />

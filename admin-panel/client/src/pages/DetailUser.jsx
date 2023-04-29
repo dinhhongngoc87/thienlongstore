@@ -50,7 +50,6 @@ function DetailUser() {
     fetch(`/edit-user-crud?id=${user_id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setState(data);
       });
   }, []);
@@ -67,8 +66,6 @@ function DetailUser() {
       avatar: e.target.files[0],
     });
 
-    console.log("FILE : ", e.target.files[0]);
-    console.log("CHANGE AVATAR: ", state);
     setUpdate(!update);
 
     //handle preview avatar
@@ -120,7 +117,6 @@ function DetailUser() {
             controlId="formGridPassword"
             style={{ position: "relative" }}
           >
-            {console.log("AVATR PREVIEW : ", avatarPreview)}
             {avatarPreview ? (
               <Image
                 class="img-thumbnail"

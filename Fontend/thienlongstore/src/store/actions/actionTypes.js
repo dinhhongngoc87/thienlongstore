@@ -21,6 +21,8 @@ const actionTypes = Object.freeze({
     GET_ALL_PRODUCT: 'get_all_product',
     GET_PRODUCTS_BY_CATID: 'get_products_by_catid',
     FETCH_PRODUCT: 'fetch_product',
+    //CHAT
+    SET_OPEN_CHAT: 'set_open_chat',
 });
 
 export default actionTypes;

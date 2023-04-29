@@ -7,6 +7,7 @@ const sequelize = new Sequelize("stationery_store", "root", null, {
   logging: false,
 });
 let createNewOrder = (data) => {
+  console.log(data);
   let createdOrder = {};
   createdOrder.products = data.products;
   return new Promise(async (resolve, reject) => {

@@ -10,7 +10,7 @@ const initFilter = {
     price: '0',
 };
 function DoChoi(props) {
-    const listProduct = props.productsRedux.filter((p) => p.catId === 5);
+    const listProduct = props.productsRedux.filter((p) => p.catId === 7);
     const [products, setProducts] = useState(listProduct);
     const [filter, setFilter] = useState(initFilter);
     const [sort, setSort] = useState('');

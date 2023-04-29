@@ -11,17 +11,21 @@ import { createStore } from "redux";
 import rootReducer from "./redux/reducers";
 
 import Layout from "./components/layout/Layout";
+import SocketProvider from "./context/SocketProvider";
 
 const store = createStore(rootReducer);
 
 document.title = "Admin";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <Layout />
-    </React.StrictMode>
-  </Provider>,
+  <SocketProvider>
+    <Provider store={store}>
+      <React.StrictMode>
+        <Layout />
+      </React.StrictMode>
+    </Provider>
+    ,
+  </SocketProvider>,
   document.getElementById("root")
 );
 

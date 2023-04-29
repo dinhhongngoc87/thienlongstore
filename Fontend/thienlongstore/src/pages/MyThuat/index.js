@@ -10,7 +10,7 @@ const initFilter = {
     price: '0',
 };
 function MyThuat(props) {
-    const listProduct = props.productsRedux.filter((p) => p.catId === 4);
+    const listProduct = props.productsRedux.filter((p) => p.catId === 6);
     const [products, setProducts] = useState(listProduct);
     const [filter, setFilter] = useState(initFilter);
     const [sort, setSort] = useState('');

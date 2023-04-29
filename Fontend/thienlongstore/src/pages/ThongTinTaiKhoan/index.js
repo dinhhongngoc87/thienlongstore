@@ -8,10 +8,11 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import ModalEditUser from '../../components/ModalEditUser';
+import { connect } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
-function ThongTinTaiKhoan() {
+function ThongTinTaiKhoan(props) {
     const [state, setState] = useState({
         user: {},
     });
@@ -20,13 +21,13 @@ function ThongTinTaiKhoan() {
     });
 
     useEffect(() => {
-        axios.get(`get-user-by-id/`, { params: { id: localStorage.getItem('user_id') } }).then((response) => {
-            console.log(response);
-            setState({
-                ...state,
-                user: response.data.user,
-            });
-        });
+        // axios.get(`get-user-by-id/`, { params: { id: localStorage.getItem('user_id') } }).then((response) => {
+        //     console.log(response);
+        //     setState({
+        //         ...state,
+        //         user: response.data.user,
+        //     });
+        // });
     }, [isOpenModal.isOpenEditModal]);
     const handleOnclickEdit = () => {
         setIsOpenModal({ ...state, isOpenEditModal: true });
@@ -57,38 +58,38 @@ function ThongTinTaiKhoan() {
         <>
             <div className={cx('user-infor-container')}>
                 <div className={cx('avatar')}>
-                    {state.user.avatar && <Image src={`http://localhost:3000/${state.user.avatar}`} alt="" />}
+                    <Image src={`http://localhost:3001/${props.userRedux.avatar}`} alt=""></Image>
                     <h3
                         style={{
                             fontWeight: '600',
                             fontFamily: 'Roboto',
                             marginTop: '10px',
                         }}
-                    >{`${state.user.firstName?.charAt(0).toUpperCase() + state.user.firstName?.slice(1)} ${
-                        state.user.lastName?.charAt(0).toUpperCase() + state.user.lastName?.slice(1)
+                    >{`${props.userRedux.firstName?.charAt(0).toUpperCase() + props.userRedux.firstName?.slice(1)} ${
+                        props.userRedux.lastName?.charAt(0).toUpperCase() + props.userRedux.lastName?.slice(1)
                     }`}</h3>
-                    <span>{state.user.email}</span>
+                    <span>{props.userRedux.email}</span>
                 </div>
                 <div className={cx('infor')}>
                     <div className={cx('input-group')}>
                         <label>Họ</label>
-                        <input type="text" readOnly value={state.user.firstName} name="firstName" />
+                        <input type="text" readOnly value={props.userRedux.firstName} name="firstName" />
                     </div>
                     <div className={cx('input-group')}>
                         <label>Tên</label>
-                        <input type="text" readOnly value={state.user.lastName} name="lastName" />
+                        <input type="text" readOnly value={props.userRedux.lastName} name="lastName" />
                     </div>
                     <div className={cx('input-group')}>
                         <label>Email</label>
-                        <input type="text" readOnly value={state.user.email} name="email" />
+                        <input type="text" readOnly value={props.userRedux.email} name="email" />
                     </div>
                     <div className={cx('input-group')}>
                         <label>Số điện thoại</label>
-                        <input type="text" readOnly value={state.user.phone} name="phone" />
+                        <input type="text" readOnly value={props.userRedux.phone} name="phone" />
                     </div>
                     <div className={cx('input-group')}>
                         <label>Địa chỉ</label>
-                        <input type="text" readOnly value={state.user.address} name="address" />
+                        <input type="text" readOnly value={props.userRedux.address} name="address" />
                     </div>
                     <div style={{ border: 'none' }} className={cx('input-group')}>
                         <button className={cx('edit-btn')} onClick={handleOnclickEdit}>
@@ -97,7 +98,7 @@ function ThongTinTaiKhoan() {
                     </div>
                     {isOpenModal.isOpenEditModal ? (
                         <ModalEditUser
-                            userInfor={state.user}
+                            userInfor={props.userRedux}
                             isOpen={isOpenModal.isOpenEditModal}
                             toggleModal={toggleEditModal}
                             editUser={doEditUser}
@@ -111,5 +112,9 @@ function ThongTinTaiKhoan() {
         </>
     );
 }
-
-export default ThongTinTaiKhoan;
+const mapStateToProps = (state) => {
+    return {
+        userRedux: state.user.userInfo,
+    };
+};
+export default connect(mapStateToProps)(ThongTinTaiKhoan);

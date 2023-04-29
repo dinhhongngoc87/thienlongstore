@@ -209,7 +209,6 @@ const Dashboard = () => {
         </td>
         <td>{item.totalQty}</td>
         <td>
-          {console.log("PRODUCT: ", products)}
           {products.map((product) => {
             if (product.id === item.product_Id)
               return parseFloat(product.price * item.totalQty).toLocaleString();

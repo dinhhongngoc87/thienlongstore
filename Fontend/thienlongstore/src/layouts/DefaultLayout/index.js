@@ -6,8 +6,10 @@ import classNames from 'classnames/bind';
 import Footer from '../components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Chat from '../../components/Chat';
+import { connect } from 'react-redux';
 const cx = classNames.bind(styles);
-function DefaultLayout({ children }) {
+function DefaultLayout(props) {
     return (
         <div className={cx('wrapper')}>
             <Header />
@@ -16,7 +18,7 @@ function DefaultLayout({ children }) {
                     <Sidebar />
                     <Slidebar />
                 </div>
-                <div className={cx('content')}>{children}</div>
+                <div className={cx('content')}>{props.children}</div>
             </div>
             <Footer />
             <ToastContainer
@@ -26,8 +28,14 @@ function DefaultLayout({ children }) {
                 pauseOnFocusLoss
                 theme="light"
             />
+            {/* {console.log('from default layout: ', children.props.isOpenChat)} */}
+            {props.isOpenChat && <Chat />}
         </div>
     );
 }
-
-export default DefaultLayout;
+const mapStateToProps = (state) => {
+    return {
+        isOpenChat: state.chat.isOpenChat,
+    };
+};
+export default connect(mapStateToProps)(DefaultLayout);

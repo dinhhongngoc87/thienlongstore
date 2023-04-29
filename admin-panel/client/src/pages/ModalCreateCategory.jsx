@@ -38,7 +38,6 @@ function ModalCreateCategory({ isOpen, toggleModal, createCategory }) {
   };
   return (
     <>
-      {console.log("state", state)}
       <Modal
         size="lg"
         centered

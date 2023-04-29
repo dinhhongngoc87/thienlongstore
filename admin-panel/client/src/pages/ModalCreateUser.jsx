@@ -45,7 +45,6 @@ function ModalCreateUser({ isOpen, toggleModal, userInfor, createUser }) {
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("state", state);
   };
   //handle choose avatar
   const handleChangeAvatar = (e) => {
@@ -54,8 +53,6 @@ function ModalCreateUser({ isOpen, toggleModal, userInfor, createUser }) {
       image: e.target.files[0],
     });
 
-    console.log("FILE : ", e.target.files[0]);
-    console.log("CHANGE image: ", state);
     setUpdate(!update);
 
     //handle preview avatar

@@ -20,7 +20,7 @@ export const UploadIcon = ({ width = '2.2rem', height = '2.2rem', className }) =
     );
 };
 
-export const PaperPlaneIcon = ({ width = '2.2rem', height = '2.2rem', className }) => {
+export const PaperPlaneIcon = ({ width = '2.2rem', height = '2.2rem', className, color }) => {
     return (
         <svg
             className={className}

@@ -39,7 +39,6 @@ function ModalEditUser({ isOpen, toggleModal, userInfor, editUser }) {
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("state", state);
   };
   //handle choose avatar
   const handleChangeAvatar = (e) => {
@@ -48,7 +47,6 @@ function ModalEditUser({ isOpen, toggleModal, userInfor, editUser }) {
       avatar: e.target.files[0],
     });
 
-    console.log("FILE : ", e.target.files[0]);
     setUpdate(!update);
     //handle preview avatar
     const file = e.target.files[0];

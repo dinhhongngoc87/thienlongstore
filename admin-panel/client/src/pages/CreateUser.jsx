@@ -34,7 +34,6 @@ function CreateUser() {
       ...state,
       image: e.target.files[0],
     });
-    console.log(" CHANGE IMAGE: ", state);
 
     //preview
     const file = e.target.files[0];
@@ -46,7 +45,6 @@ function CreateUser() {
       ...state,
       [e.target.name]: e.target.value,
     });
-    console.log("HANEL CHANGE: ", state);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,7 +67,6 @@ function CreateUser() {
       .post("/post-crud", formData, config)
       .then((response) => {
         if (response.data && response.data.errCode === 0) {
-          console.log("Thành công");
           toast.success("Create successfully", {
             position: "top-center",
             autoClose: 2000,
